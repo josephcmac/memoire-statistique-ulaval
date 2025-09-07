@@ -1,0 +1,177 @@
+\PassOptionsToPackage{numbers,sort&compress}{natbib}
+\documentclass[MSc,french]{ulthese}
+\usepackage{ragged2e} % \RaggedRight, \Centering, etc.
+% ----------------------------------------------------------------------
+% ENCODAGE, LANGUE & MICRO‑TYPOGRAPHIE
+
+% ----------------------------------------------------------------------
+\usepackage[T1]{fontenc} % codage de fonte moderne
+\usepackage[utf8]{inputenc} % encodage de la source (pdfLaTeX uniquement)
+\usepackage{csquotes} % guillemets « français »/‹ anglais › …
+\usepackage{microtype} % protrusion & expansion
+%
+
+%----------------------------------------------------------------------
+% POLICES
+% ----------------------------------------------------------------------
+\usepackage{lmodern} % Latin Modern — vectoriel + T1
+% ----------------------------------------------------------------------
+% MATHÉMATIQUES
+
+% ----------------------------------------------------------------------
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{icomma} % espace fine après virgule decimale
+% \usepackage{mathtools} % décommentez pour besoins avancés
+% ----------------------------------------------------------------------
+% TABLEAUX & NOMBRES
+% ----------------------------------------------------------------------
+
+\usepackage{booktabs,longtable,tabularx}
+\usepackage{siunitx}
+\sisetup{
+	output-decimal-marker = {,},
+	detect-all, % détecte famille/gras/italique
+	per-mode = symbol % \si{\per\something}
+}
+% ----------------------------------------------------------------------
+% GRAPHIQUES & FIGURES
+% ----------------------------------------------------------------------
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage{float} % placement précis [H]
+\usepackage{placeins} % \FloatBarrier
+% PGF/TikZ & PGFPLOTS
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tikz-cd}
+% ----------------------------------------------------------------------
+% BIBLIOGRAPHIE
+% ----------------------------------------------------------------------
+\usepackage{chapterbib} % bibliographies par chapitre (nécessite \bibliography)
+% natbib est déjà chargé par la classe ulthese avec nos options ci‑dessus
+% ----------------------------------------------------------------------
+% HYPERLIENS & RÉFÉRENCES CROISÉES
+% ----------------------------------------------------------------------
+\usepackage{xcolor}
+\usepackage[unicode,colorlinks=true,linkcolor=teal,citecolor=teal,urlcolor=teal,
+bookmarksopen=true,bookmarksdepth=3]{hyperref}
+\usepackage{cleveref} % après hyperref
+% ----------------------------------------------------------------------
+% UTILITAIRES
+% ----------------------------------------------------------------------
+\usepackage{etoolbox}
+
+\usepackage{listings}
+\lstset{
+	language=R,
+	basicstyle=\ttfamily\small,
+	keywordstyle=\color{blue}\bfseries,
+	stringstyle=\color{red},
+	commentstyle=\color{green!60!black}\itshape,
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	stepnumber=1,
+	numbersep=5pt,
+	backgroundcolor=\color{gray!10},
+	showstringspaces=false,
+	frame=single,
+	tabsize=2,
+	breaklines=false,
+	breakatwhitespace=false,
+	captionpos=b,
+	escapeinside={\%*}{*)},
+	morekeywords={library, here, fs, janitor, define_constants_gbd, generate_file_paths, generate_output_path, compute_logit_1e5, process_gbd_data, map_dfr, clean_names, filter, mutate, select, distinct, write_csv}
+}
+
+
+
+% ----------------------------------------------------------------------
+% PATCHES
+% ----------------------------------------------------------------------
+\patchcmd{\chapter}{\par}{\par\vspace{1em}}{}{}
+% ----------------------------------------------------------------------
+% CONFIGURATION CSV (optionnel)
+% ----------------------------------------------------------------------
+\usepackage{csvsimple}
+\csvset{
+	separator = {comma},
+	respect all,
+	tabular = {r},
+}
+% ----------------------------------------------------------------------
+% ENVIRONNEMENTS DE THÉORÈMES (noms français)
+% ----------------------------------------------------------------------
+\theoremstyle{definition}
+\newtheorem{theorem}{Théorème}
+\newtheorem{conj}{Conjecture}
+\newtheorem{lemma}[theorem]{Lemme}
+\newtheorem{corollary}[theorem]{Corollaire}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}{Définition}
+\newtheorem{example}[theorem]{Exemple}
+\newtheorem{remark}{Remarque}
+\newtheorem{notation}[theorem]{Notation}
+% ----------------------------------------------------------------------
+% MACROS & NOTATIONS PERSONNALISÉES
+
+
+% ----------------------------------------------------------------------
+
+
+% Extensions graphiques (pdfLaTeX)
+\DeclareGraphicsExtensions{.pdf,.png,.jpg,.eps}
+% ----------------------------------------------------------------------
+% MÉTADONNÉES PDF & PAGE TITRE
+% ----------------------------------------------------------------------
+\hypersetup{
+	pdftitle = {Application de la géométrie de l’information à l’étude épidémiologique des maladies respiratoires chroniques},
+	pdfauthor = {José Manuel Rodríguez Caballero}
+}
+% Info de page‑titre (macros de la classe)
+\titre{Application de la géométrie de l’information à l’étude épidémiologique des maladies respiratoires chroniques}
+\soustitre{L'effet de la toxicité atmosphérique}
+\auteur{José Manuel Rodr\'iguez Caballero}
+\programme{Maîtrise en statistique}
+\direction{M'Hamed Lajmi Lakhal Chaieb}
+\codirection{Karim Barigou}
+\annee{2025}
+% ----------------------------------------------------------------------
+% DOCUMENT
+% ----------------------------------------------------------------------
+\begin{document}
+	\frontmatter % pages liminaires
+	\frontispice % page de couverture officielle
+	\include{chapters/resume}
+	\include{chapters/abstract}
+	\tableofcontents
+	\cleardoublepage
+	\listoftables
+	\cleardoublepage
+	\listoffigures
+	\cleardoublepage
+	\include{chapters/remerciements}
+	\include{chapters/avantpropos}
+	\mainmatter % corps du document
+	\include{chapters/introduction}
+	\include{chapters/preliminaries}
+	\include{chapters/results}
+	\include{chapters/discussion}
+	\include{chapters/conclusions}
+	
+	
+	
+	% -------------------------------------------------
+	% Annexes
+	% -------------------------------------------------
+	\appendix
+	\include{annexes/MoreFigures}
+	
+	\bigskip
+	\nocite{*}
+	\bibliographystyle{plainnat}
+	\bibliography{biblio}
+
+\end{document}

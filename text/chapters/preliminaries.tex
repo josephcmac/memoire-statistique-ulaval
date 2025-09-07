@@ -1,0 +1,21 @@
+\chapter{Préliminaires mathématiques}
+\label{chap:math}
+\section{Géométrie de l'information et distance de Fisher--Rao}
+Donner la définition pour une famille paramétrique $\{p(x;\theta)\}$ :
+\begin{equation}
+	g_{ij}(\theta) = \mathbb{E}_{\theta}\left[ \frac{\partial \log p(X;\theta)}{\partial \theta^i} \frac{\partial \log p(X;\theta)}{\partial \theta^j} \right]
+\end{equation}
+La distance de Fisher--Rao entre $\theta_1$ et $\theta_2$ s'obtient en intégrant la longueur d'une courbe reliant les deux points dans la métrique $g_{ij}$.
+
+
+\section{Divergence de Kullback--Leibler}
+Définition et propriétés de base :
+\begin{equation}
+	D_{KL}(P\|Q) = \int p(x) \log\frac{p(x)}{q(x)}\,dx.
+\end{equation}
+Lien heuristique et relation locale à l'information de Fisher (approximation quadratique).
+
+
+\section{Tailles d'effet : g et d de Cohen}
+Formules et interprétation. Conseils pour calculs sur grands échantillons et corrections de biais.
+

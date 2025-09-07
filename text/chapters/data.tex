@@ -1,0 +1,22 @@
+\chapter{Données et méthodes}
+\label{chap:data_methods}
+\section{Description des données}
+Variables principales : âge, sexe, incidence, prévalence, PM2.5 (proxy arsenic), pays, région, etc. Précisez sources, périodes, et licences si nécessaire.
+
+
+\section{Prétraitement}
+Transformations (log, logit), imputations, normalisations, stratification par tranche d'âge.
+
+
+\section{Mesures et tests statistiques}
+Décrire la méthode pour calculer les distances consécutives et la somme cumulée, tests de normalité (Shapiro--Wilk), ajustements pour tests multiples (Bonferroni / FDR), modèles linéaires pour la prévalence transformée.
+
+
+\section{Exemples d'implémentation en R}
+Liste des packages recommandés : \texttt{tidyverse}, \texttt{data.table}, \texttt{broom}, \texttt{matrixStats}.
+\begin{lstlisting}[caption={Extrait : lecture et résumé de arsenic\_linear.csv}]
+	library(tidyverse)
+	df <- read_csv('arsenic_linear.csv')
+	df %>% glimpse()
+	df %>% select(country, age_group, sex, mu_shapiro, sigma_shapiro) %>% head()
+\end{lstlisting}
