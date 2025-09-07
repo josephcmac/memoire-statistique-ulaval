@@ -1,50 +1,69 @@
 \chapter{Préliminaires mathématiques}
 \label{chap:math}
+Ce chapitre présente brièvement les outils mathématiques utilisés dans les développements ultérieurs : la divergence de Kullback–Leibler, la géométrie de l'information (métrique de Fisher et distance de Fisher–Rao), ainsi que quelques repères sur la notion de taille d'effet.
 
-Ce chapitre rappelle brièvement des outils utilisés ultérieurement : la divergence de Kullback--Leibler, la géométrie de l'information (métrique de Fisher et distance de Fisher--Rao) et des repères sur la taille d'effet.
-
-\section{Divergence de Kullback--Leibler}
-Pour deux lois $P,Q$ de densités $p,q$, \citep{ay2017information}
+\section{Divergence de Kullback–Leibler}
+Pour deux lois de probabilité $P$ et $Q$ ayant respectivement pour densités $p$ et $q$, la divergence de Kullback–Leibler est définie par \citep{ay2017information} :
 \begin{equation}
-	D_{KL}(P\|Q)=\int p(x)\log\frac{p(x)}{q(x)}\,dx.
+	D_{KL}(P\|Q) = \int p(x)\log\frac{p(x)}{q(x)}\,dx.
 \end{equation}
-Propriétés succinctes : $D_{KL}\ge0$ (égalité ssi $P=Q$ p.p.), asymétrie $D_{KL}(P\|Q)\neq D_{KL}(Q\|P)$, sensibilité aux queues de $Q$.
-
-Pour des normales univariées $P=\mathcal{N}(\mu_1,\sigma_1^2)$ et $Q=\mathcal{N}(\mu_2,\sigma_2^2)$, \citep{belov2011distributions}
+Quelques propriétés fondamentales :
+\begin{enumerate}
+	\item $D_{KL}(P\|Q) \ge 0$ ;
+	\item $D_{KL}(P\|Q) = 0$ si et seulement si $P = Q$ presque partout ;
+	\item La divergence est asymétrique : $D_{KL}(P\|Q) = D_{KL}(Q\|P)$ n'est pas toujours vraie.
+\end{enumerate}
+Dans le cas de lois normales univariées $P = \mathcal{N}(\mu_1, \sigma_1^2)$ et $Q = \mathcal{N}(\mu_2, \sigma_2^2)$, on a \citep{belov2011distributions} :
 \begin{equation}
 	D_{\mathrm{KL}}(\mu_{1},\sigma_{1};\mu_{2},\sigma_{2})
 	= \ln\left(\frac{\sigma_{2}}{\sigma_{1}}\right)
 	+ \frac{\sigma_{1}^{2}+(\mu_{2}-\mu_{1})^{2}}{2\sigma_{2}^{2}} - \tfrac{1}{2}.
 	\label{eq:kl_normal}
 \end{equation}
-À l'ordre deux autour de $\theta_0$, $D_{KL}\big(p(\cdot;\theta)\|p(\cdot;\theta_0)\big)\approx\tfrac{1}{2}(\theta-\theta_0)^\top I(\theta_0)(\theta-\theta_0)$ (avec $I$ la matrice d'information de Fisher).
 
-\section{Géométrie de l'information et distance de Fisher--Rao}
-Pour une famille paramétrique $p(x;\theta)$, l'information de Fisher est \citep{ay2017information}
+\section{Géométrie de l'information}
+La géométrie de l'information traite les familles de distributions de probabilité comme des variétés riemanniennes, en utilisant des outils de la géométrie différentielle pour étudier leurs propriétés \citep{ay2017information}.
+
+\subsection{Métrique de Fisher}
+Pour une famille paramétrique de densités $p(x;\theta)$, la matrice d'information de Fisher, qui définit la métrique riemannienne, est donnée par :
 \begin{equation}
-	g_{ij}(\theta)=\mathbb{E}_{\theta}\!\left[\partial_{i}\log p(X;\theta)\,\partial_{j}\log p(X;\theta)\right],
+	g_{ij}(\theta) = \mathbb{E}_{\theta}\!\left[\partial_{i}\log p(X;\theta)\,\partial_{j}\log p(X;\theta)\right].
 \end{equation}
-qui définit une métrique riemannienne sur l'espace des paramètres. La distance de Fisher--Rao $d_{\mathrm{FR}}(\theta_1,\theta_2)$ est la longueur minimale d'une courbe joinant $\theta_1$ et $\theta_2$ pour cette métrique.
 
+\subsection{Distance de Fisher–Rao}
+La distance de Fisher–Rao $d_{\mathrm{FR}}(\theta_1,\theta_2)$ est la longueur minimale d’une courbe reliant $\theta_1$ à $\theta_2$ selon la métrique de Fisher.
 
-Pour $\mathcal{N}(\mu,\sigma^{2})$ (paramètres $(\mu,\sigma)$, $\sigma>0$),
-\begin{equation}
-	I(\mu,\sigma)=\begin{pmatrix} \dfrac{1}{\sigma^{2}} & 0\\[4pt] 0 & \dfrac{2}{\sigma^{2}} \end{pmatrix},
-\end{equation}
-montrant l'orthogonalité locale des directions translation/échelle. Pour deux normales, \citep{nielsen2023simple}
+Pour deux lois normales univariées $\mathcal{N}(\mu_1, \sigma_1^2)$ et $\mathcal{N}(\mu_2, \sigma_2^2)$, la distance de Fisher–Rao est \citep{nielsen2023simple} :
 \begin{equation}
 	d_{\mathrm{FR}}\big((\mu_1,\sigma_1),(\mu_2,\sigma_2)\big)
-	=\sqrt{2}\,\operatorname{acosh}\!\left(1+\frac{(\mu_2-\mu_1)^2+2(\sigma_2-\sigma_1)^2}{4\sigma_1\sigma_2}\right).
+	= \sqrt{2}\,\operatorname{acosh}\!\left(1 + \frac{(\mu_2 - \mu_1)^2 + 2(\sigma_2 - \sigma_1)^2}{4\sigma_1\sigma_2}\right).
 	\label{eq:fr_normal}
 \end{equation}
 
 \section{Taille de l'effet}
-La taille d'effet mesure l'amplitude d'une différence indépendamment de la taille d'échantillon.
+La taille de l'effet quantifie l'ampleur d'une différence indépendamment de la taille de l’échantillon. Elle est utile pour interpréter la pertinence pratique d’un résultat statistique.
 
-\subsection*{Proportions (g de Cohen)}
-Pour une proportion $P$,
+\subsection{Proportions (g de Cohen)}
+Pour une proportion $P$, la taille d’effet selon Cohen est définie par :
 \begin{equation}
-	g = P - \tfrac12.
+	g = P - \tfrac{1}{2}.
 \end{equation}
+Selon les seuils proposés par Jacob Cohen \citep{cohen1992power}, on considère :
+\begin{enumerate}
+	\item $|g| \approx 0{,}05$ : effet faible ;
+	\item $|g| \approx 0{,}15$ : effet moyen ;
+	\item $|g| \approx 0{,}25$ : effet fort.
+\end{enumerate}
 
-Selon Jacob Cohen \citep{cohen1992power}, $g\approx 0,05$ (petit), $0,15$ (moyen), $0,25$ (grand).
+\section{Bootstrapping}
+Le bootstrapping est une méthode de rééchantillonnage statistique qui permet d'estimer la variabilité d'un estimateur ou de construire des intervalles de confiance à partir d'un seul échantillon, sans supposer une forme paramétrique spécifique pour la distribution sous-jacente \citep{tibshirani1993introduction}.
+
+L'approche non paramétrique consiste à générer de multiples échantillons bootstrap en tirant avec remplacement $n$ observations à partir de l'échantillon original de taille $n$. Pour une statistique d'intérêt $\hat{\theta}$, on calcule $\hat{\theta}^*$ pour chaque échantillon bootstrap. La distribution empirique des $\hat{\theta}^*$ approxime la distribution d'échantillonnage de $\hat{\theta}$.
+
+Par exemple, l'écart-type bootstrap d'un estimateur est :
+\begin{equation}
+	\widehat{\mathrm{SE}}_{\mathrm{boot}} = \sqrt{\frac{1}{B-1} \sum_{b=1}^B (\hat{\theta}^{*b} - \bar{\hat{\theta}}^*)^2},
+\end{equation}
+où $B$ est le nombre d'échantillons bootstrap, $\hat{\theta}^{*b}$ est la statistique pour le $b$-ième bootstrap, et $\bar{\hat{\theta}}^*$ est la moyenne des $\hat{\theta}^{*b}$.
+
+Des variantes incluent le bootstrap paramétrique, où les rééchantillons sont tirés d'une distribution ajustée à l'échantillon original.

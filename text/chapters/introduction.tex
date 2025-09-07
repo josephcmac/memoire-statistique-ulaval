@@ -1,12 +1,46 @@
 \chapter{Introduction}
 \label{chap:intro}
-\section{Contexte et motivation}
-Présentez la question scientifique : différences liées au sexe, rôle de la pollution atmosphérique, enjeux pour l'actuariat et la santé publique.
 
+\section{Contexte et motivation}
+
+Certaines maladies respiratoires, telles que le cancer du poumon, la toux chronique et la bronchite, ont été associées à l’ingestion d’arsenic, notamment par l’eau potable ou la fumée de tabac \citep{Parvez2009ArsenicCOPD, Smith2006, RAMSEY2023381, Sengupta14082025}. Selon \citep{RAMSEY2023381}, parmi les toxiques environnementaux, l’arsenic se distingue par sa capacité à provoquer des affections respiratoires malignes et non malignes principalement par voie orale, plutôt que par inhalation. Cette particularité en fait un agent pathogène atypique pour l’appareil respiratoire.
+
+Il serait pertinent d’examiner si, malgré son mode d’action principalement oral, la concentration d’arsenic présente dans les particules fines PM$_{2{,}5}$ en suspension dans l’air constitue un facteur prédictif de maladies respiratoires chroniques. Il est bien établi que les particules fines PM$_{2{,}5}$ pénètrent profondément dans les poumons, irritent et corrodent la paroi alvéolaire, altérant ainsi la fonction pulmonaire \citep{Xing2016PM25}. De plus, l’exposition simultanée aux PM$_{2{,}5}$ (par voie intratrachéale) et à l’arsenic (par voie orale) induit une inflammation pulmonaire chez les souris de laboratoire nettement plus élevée que celle provoquée par chacun de ces agents pris séparément, suggérant un effet synergique \citep{RivasSantiago2024}.
+
+Le présent mémoire s'intéresse principalement à l'effet de la concentration régionale d'arsenic dans les PM$_{2{,}5}$ sur l'incidence et la prévalence des maladies respiratoires chroniques (MRC), qui varient selon les tranches d'âge et le sexe. Une étude préliminaire de l'interaction entre l'âge et le sexe est également réalisée, sans considérer l'impact de l'arsenic dans les PM$_{2{,}5}$. Les différences sexuelles observées sont interprétées dans le cadre de la théorie de Geodakyan, qui postule une plus grande variabilité chez les mâles pour favoriser l'adaptation \citep{Geodakyan18082015} :
+
+\begin{quote}
+	\emph{Tout système s'adaptant à un environnement variable se divise en deux sous-systèmes conjugués, spécialisés selon les tendances conservatrices et opératoires de l'évolution, ce qui augmente la stabilité du système dans son ensemble.}
+\end{quote}
+
+Ces questions scientifiques ont des implications directes pour l'actuariat, où l'adaptation des primes d'assurance santé selon l'âge, le sexe et le niveau de pollution régionale pourrait améliorer la précision des modèles \citep{bolviken2014computation}. En santé publique, elles impliquent une allocation ciblée des ressources, plutôt qu'une répartition uniforme, afin d'optimiser les interventions préventives et thérapeutiques \citep{read2010gender}.
 
 \section{Contributions}
-Récapitulatif des contributions principales (observations empiriques, approche méthodologique, interprétation selon Geodakyan, implications).
 
+Ce mémoire apporte plusieurs contributions dans l'application de la géométrie de l'information à l'étude épidémiologique des maladies respiratoires chroniques.
+
+Sur le plan empirique, les analyses montrent que la somme cumulée des distances de Fisher-Rao entre trajectoires consécutives des paramètres de distribution (moyenne et variance) des incidences est systématiquement plus élevée chez les hommes que chez les femmes, à quelques exceptions près. Cette propriété, observée dans plusieurs pays, suggère une base biologique. Un résultat analogue est obtenu en utilisant la divergence de Kullback-Leibler. Par ailleurs, les variations discrètes (« augmente », « diminue ») par tranche d'âge sont remarquablement consistantes entre pays. La relation entre l'exposition à l'arsenic et l'incidence apparaît dépendante de l'âge, avec une inversion chez les sujets très âgés attribuable à un biais de diagnostic, tandis que la prévalence augmente linéairement avec l'exposition après transformations appropriées.
+
+Sur le plan méthodologique, l'approche mobilise des outils de géométrie de l'information, tels que la distance de Fisher-Rao et la divergence de Kullback-Leibler, pour quantifier les différences sexuelles et environnementales dans les distributions d'incidence. La taille d'effet est évaluée à l'aide du \( g \) de Cohen pour les proportions, et des méthodes de rééchantillonnage comme le bootstrapping sont utilisées pour estimer la variabilité.
+
+Ces observations sont interprétées à la lumière de la théorie évolutive de Geodakyan, qui postule que la plus grande variabilité masculine constitue un mécanisme d'adaptation environnementale, contribuant ainsi au débat sur la validité de cette théorie.
+
+Enfin, les implications pratiques de ces résultats touchent plusieurs domaines : l'actuariat (définition de critères pour l'ajustement des primes santé), l'épidémiologie (extension des méthodes à d'autres pathologies), l'environnement (lien entre changement climatique et augmentation des concentrations d'arsenic dans l'air due à la sécheresse), et les sciences politiques (distribution ciblée des ressources en santé publique).
 
 \section{Plan du mémoire}
-Courte description des chapitres.
+
+Le mémoire est structuré comme suit.
+
+Le \textbf{chapitre~\ref{chap:math}} présente les préliminaires mathématiques, incluant la divergence de Kullback-Leibler, la distance de Fisher-Rao, la taille d'effet et le bootstrapping.
+
+Le \textbf{chapitre~\ref{chap:data}} est consacré à la présentation des données utilisées dans l’étude.
+
+Le \textbf{chapitre~\ref{chap:methods}} détaille la méthodologie de la recherche.
+
+Le \textbf{chapitre~\ref{chap:results}} expose les résultats empiriques issus des analyses de données.
+
+Le \textbf{chapitre~\ref{chap:discussion}}, dédié à la discussion, interprète ces résultats en lien avec la théorie de Geodakyan et explore les implications pratiques.
+
+Enfin, le \textbf{chapitre~\ref{chap:conclusion}}, consacré aux conclusions, synthétise les contributions du mémoire et propose des perspectives pour des travaux futurs.
+
+Des \textbf{annexes} fournissent des figures supplémentaires ainsi que des détails méthodologiques.
