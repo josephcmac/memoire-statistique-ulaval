@@ -155,11 +155,11 @@ bookmarksopen=true,bookmarksdepth=3]{hyperref}
 	\include{chapters/remerciements}
 	\include{chapters/avantpropos}
 	\mainmatter % corps du document
-	\include{chapters/introduction}
-	\include{chapters/preliminaries}
-	\include{chapters/results}
-	\include{chapters/discussion}
-	\include{chapters/conclusions}
+	\input{chapters/introduction}
+	\input{chapters/preliminaries}
+	\input{chapters/results}
+	\input{chapters/discussion}
+	\input{chapters/conclusions}
 	
 	
 	
@@ -167,10 +167,9 @@ bookmarksopen=true,bookmarksdepth=3]{hyperref}
 	% Annexes
 	% -------------------------------------------------
 	\appendix
-	\include{annexes/MoreFigures}
+	\input{annexes/MoreFigures}
 	
 	\bigskip
-	\nocite{*}
 	\bibliographystyle{plainnat}
 	\bibliography{biblio}
 
