@@ -1,22 +1,36 @@
 \chapter{Présentation et nettoyage des données}
 \label{chap:data}
 
-\section{Données brutes}
-Variables principales : âge, sexe, incidence, prévalence, PM2.5 (proxy arsenic), pays, région, etc. Précisez sources, périodes, et licences si nécessaire.
+\section{Données de l'EPA}
 
+\subsection{Données brutes et nettoyage}
 
-\section{Prétraitement}
-Transformations (log, logit), imputations, normalisations, stratification par tranche d'âge.
+Les données brutes, issues de l'Environmental Protection Agency (EPA) \citep{epa_air_quality_system_2024} des États-Unis, consistent en des mesures quotidiennes de concentrations d'arsenic dans les particules fines PM$_{2{,}5}$, collectées de 1990 à 2019. Chaque fichier annuel, tel que \texttt{daily\_HAPS\_2017.csv}, inclut des enregistrements détaillés avec des identifiants géographiques (codes d'État, de comté et de site), des coordonnées spatiales, le paramètre mesuré (« Arsenic PM2.5 LC »), la durée d'échantillonnage, la date locale, l'unité de mesure (microgrammes par mètre cube, notée LC pour « local conditions ») et la valeur maximale observée sur 24 heures. Ces données exhibent une variabilité due aux conditions météorologiques, aux sources d'émission locales et aux protocoles de mesure.
 
+Le nettoyage exclut les régions comme Puerto Rico, les Îles Vierges et le Mexique, pour se concentrer sur les 50 États des États-Unis et le District of Columbia, compatibles avec les données de santé publique. Les observations sont filtrées pour retenir uniquement le paramètre « Arsenic PM2.5 LC » en microgrammes par mètre cube sur 24 heures, assurant une cohérence statistique. Le nom « District Of Columbia » est corrigé en « District of Columbia » pour uniformité nomenclaturelle.
 
-\section{Données propres}
-Décrire les données propres
+Les données annuelles sont concaténées en un ensemble unique, avec renommage des variables : région (nom de l'État ou DC) et valeur (concentration maximale quotidienne).
 
-\section{Exemples d'implémentation en R}
-Liste des packages recommandés : \texttt{tidyverse}, \texttt{data.table}, \texttt{broom}, \texttt{matrixStats}.
-\begin{lstlisting}[caption={Extrait : lecture et résumé de arsenic\_linear.csv}]
-	library(tidyverse)
-	df <- read_csv('arsenic_linear.csv')
-	df %>% glimpse()
-	df %>% select(country, age_group, sex, mu_shapiro, sigma_shapiro) %>% head()
-\end{lstlisting}
+Pour estimer la moyenne des concentrations par région, une approche bootstrap non paramétrique est appliquée. L'ensemble des données (toutes observations quotidiennes de 1990 à 2019) est rééchantillonné avec remise 1 000 fois (B = 1 000), en utilisant des graines pseudo-aléatoires pour la reproductibilité. Pour chaque rééchantillon, les valeurs sont groupées par région et le logarithme (en base 10) de la moyenne arithmétique est calculé. Pour chaque région, l'estimateur du paramètre $\mu$ est la moyenne des 1 000 logarithmes des moyennes bootstrap, offrant un estimateur ponctuel robuste de la concentration typique, atténuant la variabilité temporelle et les valeurs aberrantes. L'écart type des logarithmes des moyennes bootstrap fournit une estimation du paramètre $\sigma$. Le test de normalité de Shapiro-Wilk est appliqué à la distribution des logarithmes des moyennes bootstrap pour évaluer la normalité de la distribution d'échantillonnage.
+
+Ces résultats par région ($\mu$, $\sigma$, le nombre d'échantillons bootstrap $B$, statistique $W$ et la valeur $p$ de Shapiro-Wilk) sont enregistrés dans le fichier \texttt{arsenic\_pm2.5\_locations.csv}.
+
+\subsection{Données nettoyées}
+
+Pour chaque région $s$ (État ou district aux États-Unis), on considère la variable aléatoire $C_s \sim \mathcal{N}\left(\mu_s, \sigma_s^2 \right)$. Les paramètres $\mu_s$ sont visualisées sur la carte dans la Figure \ref{fig:arsenic-map}, qui illustre les concentrations moyennes par État. Les paramètres $\left(\mu_s, \sigma_s\right)$ 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{figures/arsenic_map/arsenic_map.png}
+	\caption{Concentrations moyennes d'arsenic PM$_{2{,}5}$ par État aux États-Unis (1990-2019).}
+	\label{fig:arsenic-map}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{figures/arsenic_Poincare/arsenic_Poincare.png}
+	\caption{Paramètres $(\mu, \sigma)$ par État aux États-Unis (1990-2019).}
+	\label{fig:arsenic_Poincare}
+\end{figure}
+
+\section{Données du GBD-2021}
