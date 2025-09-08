@@ -13,7 +13,10 @@ Les données annuelles sont concaténées en un ensemble unique, avec renommage 
 
 Pour estimer la moyenne des concentrations par région, une approche bootstrap non paramétrique est appliquée. L'ensemble des données (toutes observations quotidiennes de 1990 à 2019) est rééchantillonné avec remise 1 000 fois (B = 1 000), en utilisant des graines pseudo-aléatoires pour la reproductibilité. Pour chaque rééchantillon, les valeurs sont groupées par région et le logarithme (en base 10) de la moyenne arithmétique est calculé. Pour chaque région, l'estimateur du paramètre $\mu$ est la moyenne des 1 000 logarithmes des moyennes bootstrap, offrant un estimateur ponctuel robuste de la concentration typique, atténuant la variabilité temporelle et les valeurs aberrantes. L'écart type des logarithmes des moyennes bootstrap fournit une estimation du paramètre $\sigma$. Le test de normalité de Shapiro-Wilk est appliqué à la distribution des logarithmes des moyennes bootstrap pour évaluer la normalité de la distribution d'échantillonnage.
 
-Ces résultats par région ($\mu$, $\sigma$, le nombre d'échantillons bootstrap $B$, statistique $W$ et la valeur $p$ de Shapiro-Wilk) sont enregistrés dans le fichier \texttt{arsenic\_pm2.5\_locations.csv}.
+Ces résultats par région ($\mu$, $\sigma$, le nombre d'échantillons bootstrap $B$, statistique $W$ et la valeur $p$ de Shapiro-Wilk) sont enregistrés dans le fichier :
+\begin{center}
+	 \texttt{arsenic\_pm2.5\_locations.csv}
+\end{center}
 
 \subsection{Données nettoyées}
 
@@ -33,4 +36,18 @@ Pour chaque région $s$ (État ou district aux États-Unis), on considère la va
 	\label{fig:arsenic_Poincare}
 \end{figure}
 
-\section{Données du GBD-2021}
+\section{Données du GBD-2021} \label{sec:gbd}
+\subsection{Données brutes et nettoyage}
+Les données brutes proviennent de l'étude Global Burden of Disease (GBD) 2021 de l'Institute for Health Metrics and Evaluation (IHME) \citep{IHME2024GBD}, et consistent en des estimations de prévalence par 100\,000 habitants, avec bornes inférieures et supérieures d'intervalles de confiance à 95\,\%, pour les États-Unis. Ces estimations sont stratifiées par région (États ou district), année (de 1990 à 2021), tranche d'âge (chacune contenant 5 ans), et sexe (mâle et femelle). Les données sont réparties sur plusieurs fichiers CSV, chacun couvrant une partie des estimations.
+
+Le nettoyage commence par la lecture et la concaténation des fichiers pour le pays « US ». Les tranches d'âge catégorielles sont associées à leurs points moyens (par exemple, « <5 years » à 2, « 5-9 years » à 7, etc.) pour obtenir des valeurs entières. Les années sont converties en entiers.
+
+Pour modéliser la prévalence, une transformation log-odds en base 10 est appliquée aux bornes inférieures et supérieures : $\log_{10} \left( \frac{x}{10^5 - x} \right)$, où $x$ est la valeur par 100\,000. Sur cette échelle transformée, la moyenne $\mu$ est estimée comme la moyenne des bornes transformées, et l'écart type $\sigma$ comme $(U - L) / (2 \times z_{0,975})$, où $U$ et $L$ sont les bornes transformées, en supposant un intervalle de confiance à 95\,\% pour une distribution normale et $z_{0,975} \approx 1{,}96$ est le quantile $0,975$ de la distribution normale standard.
+
+Les colonnes finales incluent le pays, la région, l'année, l'âge (point moyen d'une tranche de 5 ans), le sexe, $\mu$ et $\sigma$. L'ensemble nettoyé est enregistré dans le fichier : 
+\begin{center}
+	 \texttt{IHME-GBD\_2021\_CLEAN\_prevalence.csv}
+\end{center}
+
+\subsection{Données nettoyées}
+Pour chaque combinaison de région $s$, année $t$, âge $a$ et sexe $g$ aux États-Unis, la variable aléatoire transformée $P_{s,t,a,g}$ (log-odds de la prévalence) suit une distribution $\mathcal{N}(\mu_{s,t,a,g}, \sigma_{s,t,a,g}^2)$.
