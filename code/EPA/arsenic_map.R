@@ -9,7 +9,7 @@ main_aux <- function() {
     scale_fill_viridis_c(
       name = expression(atop(Log[10]~"( Arsenic "~PM[2,5]~"("*mu*" g/ m"^3*") )")),
       option = "plasma",
-      n.breaks = 6   # 5–7 bins usually works well
+      n.breaks = 6
     ) +
     guides(
       fill = guide_colorbar(
@@ -40,7 +40,7 @@ main <- function() {
   ggsave(
     filename = out_file,
     plot = main_aux(),
-    width = 7,   # inches
+    width = 7, 
     height = 4.5,
     dpi = 300
   )
