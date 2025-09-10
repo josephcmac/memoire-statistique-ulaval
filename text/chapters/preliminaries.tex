@@ -1,9 +1,9 @@
 \chapter{Préliminaires mathématiques}
 \label{chap:math}
-Ce chapitre présente brièvement les outils mathématiques utilisés dans les développements ultérieurs : la divergence de Kullback–Leibler, la géométrie de l'information (métrique de Fisher et distance de Fisher–Rao), ainsi que quelques repères sur la notion de taille d'effet.
+Ce chapitre présente brièvement les outils mathématiques utilisés dans les développements ultérieurs.
 
 \section{Divergence de Kullback–Leibler}
-Pour deux lois de probabilité $P$ et $Q$ ayant respectivement pour densités $p$ et $q$, la divergence de Kullback–Leibler est définie par \citep{ay2017information} :
+Pour deux lois de probabilité $P$ et $Q$ ayant respectivement pour densités $p$ et $q$, la \emph{divergence de Kullback–Leibler} est définie par \citep{ay2017information} :
 \begin{equation}
 	D_{KL}(P\|Q) = \int p(x)\log\frac{p(x)}{q(x)}\,dx.
 \end{equation}
@@ -21,17 +21,17 @@ Dans le cas de lois normales univariées $P = \mathcal{N}(\mu_1, \sigma_1^2)$ et
 	\label{eq:kl_normal}
 \end{equation}
 
-\section{Géométrie de l'information}
+\section{Distance de Fisher Rao}
 La géométrie de l'information traite les familles de distributions de probabilité comme des variétés riemanniennes, en utilisant des outils de la géométrie différentielle pour étudier leurs propriétés \citep{ay2017information}.
 
 \subsection{Métrique de Fisher}
-Pour une famille paramétrique de densités $p(x;\theta)$, la matrice d'information de Fisher, qui définit la métrique riemannienne, est donnée par :
+Pour une famille paramétrique de densités $p(x;\theta)$, la \emph{matrice d'information de Fisher}, qui définit la métrique riemannienne, est donnée par :
 \begin{equation}
 	g_{ij}(\theta) = \mathbb{E}_{\theta}\!\left[\partial_{i}\log p(X;\theta)\,\partial_{j}\log p(X;\theta)\right].
 \end{equation}
 
 \subsection{Distance de Fisher–Rao}
-La distance de Fisher–Rao $d_{\mathrm{FR}}(\theta_1,\theta_2)$ est la longueur minimale d’une courbe reliant $\theta_1$ à $\theta_2$ selon la métrique de Fisher.
+La \emph{distance de Fisher–Rao} $d_{\mathrm{FR}}(\theta_1,\theta_2)$ est la longueur minimale d’une courbe reliant $\theta_1$ à $\theta_2$ selon la métrique de Fisher.
 
 Pour deux lois normales univariées $\mathcal{N}(\mu_1, \sigma_1^2)$ et $\mathcal{N}(\mu_2, \sigma_2^2)$, la distance de Fisher–Rao est \citep{nielsen2023simple} :
 \begin{equation}
@@ -41,10 +41,10 @@ Pour deux lois normales univariées $\mathcal{N}(\mu_1, \sigma_1^2)$ et $\mathca
 \end{equation}
 
 \section{Taille de l'effet}
-La taille de l'effet quantifie l'ampleur d'une différence indépendamment de la taille de l’échantillon. Elle est utile pour interpréter la pertinence pratique d’un résultat statistique.
+La \emph{taille de l'effet} quantifie l'ampleur d'une différence indépendamment de la taille de l’échantillon. Elle est utile pour interpréter la pertinence pratique d’un résultat statistique.
 
 \subsection{Proportions (g de Cohen)}
-Pour une proportion $P$, la taille d’effet selon Cohen est définie par :
+Pour une proportion $P$, la taille d’effet selon la statistique \emph{g de Cohen} est définie par :
 \begin{equation}
 	g = P - \tfrac{1}{2}.
 \end{equation}
@@ -56,7 +56,7 @@ Selon les seuils proposés par Jacob Cohen \citep{cohen1992power}, on considère
 \end{enumerate}
 
 \section{Bootstrapping}
-Le bootstrapping est une méthode de rééchantillonnage statistique qui permet d'estimer la variabilité d'un estimateur ou de construire des intervalles de confiance à partir d'un seul échantillon, sans supposer une forme paramétrique spécifique pour la distribution sous-jacente \citep{tibshirani1993introduction}.
+Le \emph{bootstrapping} est une méthode de rééchantillonnage statistique qui permet d'estimer la variabilité d'un estimateur ou de construire des intervalles de confiance à partir d'un seul échantillon, sans supposer une forme paramétrique spécifique pour la distribution sous-jacente \citep{tibshirani1993introduction}.
 
 L'approche non paramétrique consiste à générer de multiples échantillons bootstrap en tirant avec remplacement $n$ observations à partir de l'échantillon original de taille $n$. Pour une statistique d'intérêt $\hat{\theta}$, on calcule $\hat{\theta}^*$ pour chaque échantillon bootstrap. La distribution empirique des $\hat{\theta}^*$ approxime la distribution d'échantillonnage de $\hat{\theta}$.
 
@@ -67,3 +67,26 @@ Par exemple, l'écart-type bootstrap d'un estimateur est :
 où $B$ est le nombre d'échantillons bootstrap, $\hat{\theta}^{*b}$ est la statistique pour le $b$-ième bootstrap, et $\bar{\hat{\theta}}^*$ est la moyenne des $\hat{\theta}^{*b}$.
 
 Des variantes incluent le bootstrap paramétrique, où les rééchantillons sont tirés d'une distribution ajustée à l'échantillon original.
+
+\section{Régression robuste}
+La régression robuste \citep{andersen2008modern} vise à estimer les paramètres d'un modèle linéaire en minimisant l'impact des valeurs aberrantes, contrairement à la méthode des moindres carrés ordinaire qui est sensible à ces anomalies. Elle est particulièrement utile dans les contextes où les données peuvent contenir des outliers ou être distribuées selon une loi à queues épaisses \citep{taleb2020statistical}.
+
+\subsection{Point de rupture}
+Le \emph{point de rupture} \citep{rousseeuw2003robust} d'un estimateur est une mesure de sa robustesse, définie formellement comme la plus petite fraction $\epsilon \in [0,1]$ de données contaminées qui peut faire diverger l'estimateur de manière arbitraire. Pour un échantillon de taille $n$, le point de rupture fini-échantillon est $\epsilon^* = \min\{k/n\}$ où $k$ est le plus petit entier tel que, en remplaçant $k$ observations par des valeurs arbitraires choisies de manière défavorable, la norme de l'estimateur puisse devenir arbitrairement grande.
+
+\subsection{Estimateur de Theil-Sen}
+L'estimateur de Theil-Sen \citep{theil1950rank, sen1968estimates}, également connu sous le nom de méthode de la médiane unique, calcule les pentes des lignes reliant toutes les paires de points distincts dans l'échantillon. Pour un échantillon de taille $n$, cela produit $n(n-1)/2$ pentes (en supposant des valeurs $x$ distinctes). La pente du modèle est la médiane de ces valeurs. L'ordonnée à l'origine est ensuite obtenue comme la médiane des intercepts calculés pour chaque point en utilisant cette pente.
+ 
+\subsection{Médianes répétées de Siegel}
+ La méthode des médianes répétées de Siegel \citep{siegel1982robust} est une extension plus efficace de l'estimateur de Theil-Sen pour la régression linéaire simple. Elle vise à estimer la pente et l'ordonnée à l'origine d'un modèle linéaire en minimisant l'impact des valeurs aberrantes, avec un point de rupture asymptotique de 50 \% \citep{rousseeuw2003robust}, ce qui signifie qu'elle peut tolérer jusqu'à la moitié des données contaminées sans diverger.
+ 
+ Considérons un échantillon de données bivariées \((x_i, y_i)\) pour \(i = 1, \dots, n\), où les \(x_i\) sont supposés distincts. L'estimation de la pente \(\beta\) se déroule en deux étapes imbriquées :
+ 
+ 1. Pour chaque point \(i\), calculez la médiane des pentes partielles formées avec tous les autres points : \(\text{med}_j \left( \frac{y_j - y_i}{x_j - x_i} \right)\) pour \(j \neq i\). Cela produit \(n\) médianes partielles (une par point \(i\)).
+ 
+ 2. La pente estimée \(\hat{\beta}\) est alors la médiane de ces \(n\) médianes partielles : \(\hat{\beta} = \text{med}_i \left( \text{med}_j \frac{y_j - y_i}{x_j - x_i} \right)\).
+ 
+ L'ordonnée à l'origine \(\hat{\alpha}\) est estimée de manière analogue : pour chaque point \(i\), calculez la médiane des intercepts partielles \(y_j - \hat{\beta} x_j\) pour \(j \neq i\), puis prenez la médiane de ces \(n\) valeurs.
+ 
+ Cette approche confère une haute robustesse car chaque médiane partielle est résistante aux valeurs aberrantes affectant un sous-ensemble des paires, et la médiane globale renforce cette propriété. Lorsque les erreurs sont normalement distribuées sans valeurs aberrantes, l'estimateur reste cohérent avec les moindres carrés ordinaires.
+ 
