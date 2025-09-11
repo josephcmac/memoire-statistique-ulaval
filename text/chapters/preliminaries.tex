@@ -90,3 +90,14 @@ L'estimateur de Theil-Sen \citep{theil1950rank, sen1968estimates}, également co
  
  Cette approche confère une haute robustesse car chaque médiane partielle est résistante aux valeurs aberrantes affectant un sous-ensemble des paires, et la médiane globale renforce cette propriété. Lorsque les erreurs sont normalement distribuées sans valeurs aberrantes, l'estimateur reste cohérent avec les moindres carrés ordinaires.
  
+ \subsection{Déviation absolue médiane (MAD)}
+ 
+ La déviation absolue médiane (MAD) est un estimateur robuste de l'échelle, introduit par \citep{hampel1974influence}, et défini pour un échantillon univarié $\{x_1, \dots, x_n\}$ comme suit :
+ \[
+ \mathrm{MAD}_n = b \cdot \mathrm{med}_{i=1}^n |x_i - \mathrm{med}_{j=1}^n x_j|,
+ \]
+ où $\mathrm{med}$ désigne la médiane et $b \approx 1,4826$ est une constante de correction assurant la consistance de l'estimateur avec l'écart-type $\sigma$ sous une distribution gaussienne.
+ 
+ Cette constante $b$ découle des propriétés de la distribution normale. Pour une variable aléatoire $X \sim \mathcal{N}(\mu, \sigma^2)$, la médiane des écarts absolus à la médiane est égale à $\Phi^{-1}(3/4) \sigma$, où $\Phi$ est la fonction de répartition cumulative de la loi normale centrée réduite. Comme $\Phi^{-1}(0,75) \approx 0,6745$, on obtient $b = 1 / \Phi^{-1}(0,75) \approx 1,4826$. Ainsi, $\text{MAD}_n$ converge en espérance vers $\sigma$ lorsque $n \to \infty$.
+ 
+ La MAD possède un point de rupture de 50 \% et une efficacité gaussienne de 37 \%, ce qui en fait un outil fondamental en statistique robuste, bien que des alternatives plus efficaces existent \citep{rousseeuw1993alternatives}.

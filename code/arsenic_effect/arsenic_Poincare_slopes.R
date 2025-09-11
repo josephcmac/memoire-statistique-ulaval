@@ -14,18 +14,17 @@ create_graphics <- function(df, sex0, period) {
     coef_name == "arsenic"
     ) |>
     select(age, Estimate, MAD) |>
-    mutate(sigma = 1.4826*MAD) %>%
     mutate(
       Estimate_next = lead(Estimate), 
-      sigma_next = lead(sigma),
+      MAD_next = lead(MAD),
       color = color_age(n())
       ) |>
     ggplot() +
-    geom_segment(aes(x = Estimate, y = sigma, xend = Estimate_next, yend = sigma_next, color=color),
+    geom_segment(aes(x = Estimate, y = MAD, xend = Estimate_next, yend = MAD_next, color=color),
                  arrow = arrow(length = unit(0.02, "npc"))) +
-    geom_point(aes(Estimate, sigma)) +
+    geom_point(aes(Estimate, MAD)) +
     xlim(0, 0.04) +
-    ylim(0, 0.1) +
+    ylim(0, 0.075) +
     labs(
       title = "Modèles des pentes triées par tranche d'âge",
       subtitle = paste0("Sexe : ", ifelse(sex0=="Male", "mâle", "femelle"),"; Période : ",period),

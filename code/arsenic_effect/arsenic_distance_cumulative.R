@@ -39,7 +39,6 @@ process_sex <- function(df, f) {
     df_male = df |> filter(sex == "Male", response == "mu", 
                            coef_name == "arsenic") |>
       select(age, Estimate, MAD) |>
-      mutate(MAD = 1.4826*MAD) |>
       rename(mu := Estimate, sigma := MAD),
     df_female = df |> filter(sex == "Female", response == "mu", 
                              coef_name == "arsenic") |>
