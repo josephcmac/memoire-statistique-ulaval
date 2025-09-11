@@ -4,12 +4,12 @@ library(ggplot2)
 
 create_graphics <- function(df, country, sex0, period, L_min, L_max) {
   df |> filter(sex == sex0, response == "mu", coef_name == "arsenic") |>
-    select(age, estimate, ci_low, ci_high ) |>
+    select(age, Estimate, ci_low, ci_high ) |>
     ggplot() +
     geom_hline(yintercept = 0, color = "red", linetype = "dotted") +
-    geom_line(aes(age, estimate)) +
+    geom_line(aes(age, Estimate)) +
     geom_segment(aes(x=age, y=ci_low, xend=age, yend=ci_high), color="gray") +
-    geom_point(aes(age, estimate)) +
+    geom_point(aes(age, Estimate)) +
     ylim( min(L_min, 0), max(L_max, 0) ) +
     labs(
       title = expression("Pente de l'effet de l'arsenic " ~ PM[2.5] ~ " par tranche d'âge"),

@@ -8,9 +8,9 @@ library(here)
 extract_stats_aux <- function(sm, ci, response) {
   data.frame(
     coef_name = rownames(sm),
-    estimate = sm[,1],
-    mad_se = sm[,2],
-    t_value = sm[,3],
+    Estimate = sm[,1],
+    MAD = sm[,2],
+    V_value = sm[,3],
     p_value = sm[,4],
     ci_low = ci[,1],
     ci_high = ci[,2],
@@ -83,7 +83,7 @@ main <- function() {
       rename(arsenic = mu),
     combos = expand.grid(age = 5*(1:19) - 3, sex = c("Male", "Female"))
   ) %>%
-    select(age, sex, response, coef_name, estimate, mad_se, t_value, p_value, ci_low, ci_high, n_obs) |>
+    select(age, sex, response, coef_name, Estimate, MAD, V_value, p_value, ci_low, ci_high, n_obs) |>
   write_csv(fs::path(here::here("data", "clean", "arsenic_regression_stats"), ext="csv"))
 }
 
