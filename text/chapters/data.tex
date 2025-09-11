@@ -5,27 +5,27 @@
 
 \subsection{Données brutes et nettoyage}
 
-Les données brutes, issues de l'Environmental Protection Agency (EPA) \citep{epa_air_quality_system_2024} des États-Unis, consistent en des mesures quotidiennes de concentrations d'arsenic dans les particules fines PM$_{2{,}5}$, collectées de 1990 à 2019. Chaque fichier annuel, tel que \texttt{daily\_HAPS\_2017.csv}, inclut des enregistrements détaillés avec des identifiants géographiques (codes d'État, de comté et de site), des coordonnées spatiales, le paramètre mesuré (« Arsenic PM2.5 LC »), la durée d'échantillonnage, la date locale, l'unité de mesure (microgrammes par mètre cube, notée LC pour « local conditions ») et la valeur maximale observée sur 24 heures. Ces données exhibent une variabilité due aux conditions météorologiques, aux sources d'émission locales et aux protocoles de mesure.
+Les données brutes, issues de l'Environmental Protection Agency (EPA) \citep{epa_air_quality_system_2024} des États-Unis, consistent en des mesures quotidiennes de concentrations d'arsenic dans les particules fines PM$_{2.5}$, collectées de 1990 à 2019. Chaque fichier annuel, tel que \texttt{daily\_HAPS\_2017.csv}, inclut des enregistrements avec des identifiants géographiques (codes d'État, de comté et de site), des coordonnées spatiales, le paramètre mesuré (« Arsenic PM2.5 LC »), la durée d'échantillonnage, la date locale, l'unité de mesure (microgrammes par mètre cube, notée LC pour « local conditions ») et la valeur maximale observée sur 24 heures. Ces données exhibent une variabilité due aux conditions météorologiques, aux sources d'émission locales et aux protocoles de mesure.
 
-Le nettoyage exclut les régions comme Puerto Rico, les Îles Vierges et le Mexique, pour se concentrer sur les 50 États des États-Unis et le District of Columbia, compatibles avec les données de santé publique. Les observations sont filtrées pour retenir uniquement le paramètre « Arsenic PM2.5 LC » en microgrammes par mètre cube sur 24 heures, assurant une cohérence statistique. Le nom « District Of Columbia » est corrigé en « District of Columbia » pour uniformité nomenclaturelle.
+Le nettoyage exclut les régions comme Puerto Rico, les Îles Vierges et le Mexique, pour se concentrer sur les 50 États des États-Unis et le District of Columbia, compatibles avec les données de santé publique. Les observations sont filtrées pour retenir uniquement le paramètre « Arsenic PM2.5 LC » en microgrammes par mètre cube sur 24 heures. Le nom « District Of Columbia » est corrigé en « District of Columbia » pour uniformité.
 
 Les données annuelles sont concaténées en un ensemble unique, avec renommage des variables : région (nom de l'État ou DC) et valeur (concentration maximale quotidienne).
 
-Pour estimer la moyenne des concentrations par région, une approche bootstrap non paramétrique est appliquée. L'ensemble des données (toutes observations quotidiennes de 1990 à 2019) est rééchantillonné avec remise 1 000 fois (B = 1 000), en utilisant des graines pseudo-aléatoires pour la reproductibilité. Pour chaque rééchantillon, les valeurs sont groupées par région et le logarithme (en base 10) de la moyenne arithmétique est calculé. Pour chaque région, l'estimateur du paramètre $\mu$ est la moyenne des 1 000 logarithmes des moyennes bootstrap, offrant un estimateur ponctuel robuste de la concentration typique, atténuant la variabilité temporelle et les valeurs aberrantes. L'écart type des logarithmes des moyennes bootstrap fournit une estimation du paramètre $\sigma$. Le test de normalité de Shapiro-Wilk est appliqué à la distribution des logarithmes des moyennes bootstrap pour évaluer la normalité de la distribution d'échantillonnage.
+Pour estimer la moyenne des concentrations par région, une approche bootstrap non paramétrique est appliquée. L'ensemble des données (observations quotidiennes de 1990 à 2019) est rééchantillonné avec remplacement 1\,000 fois ($B = 1\,000$), en utilisant des graines pseudo-aléatoires pour la reproductibilité. Pour chaque rééchantillon, les valeurs sont groupées par région et le logarithme (en base 10) de la moyenne arithmétique est calculé. Pour chaque région, l'estimateur du paramètre $\mu$ est la moyenne des 1\,000 logarithmes des moyennes bootstrap, offrant un estimateur ponctuel robuste de la concentration typique, atténuant la variabilité temporelle et les valeurs aberrantes. L'écart-type des logarithmes des moyennes bootstrap fournit une estimation du paramètre $\sigma$. Le test de normalité de Shapiro-Wilk est appliqué à la distribution des logarithmes des moyennes bootstrap pour évaluer la normalité de la distribution d'échantillonnage.
 
-Ces résultats par région ($\mu$, $\sigma$, le nombre d'échantillons bootstrap $B$, statistique $W$ et la valeur $p$ de Shapiro-Wilk) sont enregistrés dans le fichier :
+Ces résultats par région ($\mu$, $\sigma$, le nombre d'échantillons bootstrap $B$, statistique $W$ et valeur $p$ de Shapiro-Wilk) sont enregistrés dans le fichier :
 \begin{center}
-	 \texttt{arsenic\_pm2.5\_locations.csv}
+	\texttt{arsenic\_pm2.5\_locations.csv}
 \end{center}
 
 \subsection{Données nettoyées}
 
-Pour chaque région $s$ (État ou district aux États-Unis), on considère la variable aléatoire $C_s \sim \mathcal{N}\left(\mu_s, \sigma_s^2 \right)$. Les paramètres $\mu_s$ sont visualisées sur la carte dans la Figure \ref{fig:arsenic-map}, qui illustre les concentrations moyennes par État. Les paramètres $\left(\mu_s, \sigma_s\right)$ 
+Soit $\mathcal{S}$ l'ensemble des régions d'un pays donné. Pour les États-Unis, chaque région est un État ou DC. Pour chaque région $s \in \mathcal{S}$, on considère la variable aléatoire $C_s \sim \mathcal{N}(\mu_s, \sigma_s^2)$. Les paramètres $\mu_s$ sont visualisés sur la carte de la Figure \ref{fig:arsenic-map}, qui illustre les concentrations moyennes par État. Les paramètres $(\mu_s, \sigma_s)$ sont représentés dans la Figure \ref{fig:arsenic_Poincare}.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\textwidth]{figures/arsenic_map/arsenic_map.png}
-	\caption{Concentrations moyennes d'arsenic PM$_{2{,}5}$ par État aux États-Unis (1990-2019).}
+	\caption{Concentrations moyennes d'arsenic PM$_{2.5}$ par État aux États-Unis (1990-2019).}
 	\label{fig:arsenic-map}
 \end{figure}
 
@@ -36,18 +36,24 @@ Pour chaque région $s$ (État ou district aux États-Unis), on considère la va
 	\label{fig:arsenic_Poincare}
 \end{figure}
 
-\section{Données du GBD-2021} \label{sec:gbd}
+\section{Données du GBD-2021}
+\label{sec:gbd}
+
+L'incidence est le nombre de nouveaux cas pour 100\,000 éléments de la population satisfaisant des caractéristiques données. La prévalence est le nombre de cas existants pour 100\,000 éléments de la population satisfaisant des caractéristiques données \citep{rothman2024epidemiology, kleinbaum1991epidemiologic}.
+
 \subsection{Données brutes et nettoyage}
-Les données brutes proviennent de l'étude Global Burden of Disease (GBD) 2021 de l'Institute for Health Metrics and Evaluation (IHME) \citep{IHME2024GBD}, et consistent en des estimations de prévalence par 100\,000 habitants, avec bornes inférieures et supérieures d'intervalles de confiance à 95\,\%, pour les États-Unis. Ces estimations sont stratifiées par région (États ou district), année (de 1990 à 2021), tranche d'âge (chacune contenant 5 ans), et sexe (mâle et femelle). Les données sont réparties sur plusieurs fichiers CSV, chacun couvrant une partie des estimations.
+
+Les données brutes proviennent de l'étude Global Burden of Disease (GBD) 2021 de l'Institute for Health Metrics and Evaluation (IHME) \citep{IHME2024GBD}, et consistent en des estimations d'incidence par 100\,000 habitants, avec bornes inférieures et supérieures d'intervalles de confiance à 95\,\%, pour les États-Unis. Ces estimations sont stratifiées par région (États ou district), année (de 1990 à 2021), tranche d'âge (chacune contenant 5 ans) et sexe (mâle et femelle). Les données sont réparties sur plusieurs fichiers CSV, chacun couvrant une partie des estimations.
 
 Le nettoyage commence par la lecture et la concaténation des fichiers pour le pays « US ». Les tranches d'âge catégorielles sont associées à leurs points moyens (par exemple, « <5 years » à 2, « 5-9 years » à 7, etc.) pour obtenir des valeurs entières. Les années sont converties en entiers.
 
-Pour modéliser la prévalence, une transformation log-odds en base 10 est appliquée aux bornes inférieures et supérieures : $\log_{10} \left( \frac{x}{10^5 - x} \right)$, où $x$ est la valeur par 100\,000. Sur cette échelle transformée, la moyenne $\mu$ est estimée comme la moyenne des bornes transformées, et l'écart type $\sigma$ comme $(U - L) / (2 \times z_{0,975})$, où $U$ et $L$ sont les bornes transformées, en supposant un intervalle de confiance à 95\,\% pour une distribution normale et $z_{0,975} \approx 1{,}96$ est le quantile $0,975$ de la distribution normale standard.
+Pour modéliser l'incidence, une transformation log-odds en base 10 est appliquée aux bornes inférieures et supérieures : $\log_{10} \left( \frac{x}{10^5 - x} \right)$, où $x$ est la valeur par 100\,000. Sur cette échelle transformée, la moyenne $\mu$ est estimée comme la moyenne des bornes transformées, et l'écart-type $\sigma$ comme $(U - L) / (2 \times z_{0,975})$, où $U$ et $L$ sont les bornes transformées, en supposant un intervalle de confiance à 95\,\% pour une distribution normale et $z_{0,975} \approx 1{,}96$ est le quantile $0,975$ de la distribution normale standard.
 
-Les colonnes finales incluent le pays, la région, l'année, l'âge (point moyen d'une tranche de 5 ans), le sexe, $\mu$ et $\sigma$. L'ensemble nettoyé est enregistré dans le fichier : 
+Les colonnes finales incluent le pays, la région, l'année, l'âge (point moyen d'une tranche de 5 ans), le sexe, $\mu$ et $\sigma$. L'ensemble nettoyé est enregistré dans le fichier :
 \begin{center}
-	 \texttt{IHME-GBD\_2021\_CLEAN\_prevalence.csv}
+	\texttt{IHME-GBD\_2021\_CLEAN\_incidence.csv}
 \end{center}
 
 \subsection{Données nettoyées}
-Pour chaque combinaison de région $s$, année $t$, âge $a$ et sexe $g$ aux États-Unis, la variable aléatoire transformée $P_{s,t,a,g}$ (log-odds de la prévalence) suit une distribution $\mathcal{N}(\mu_{s,t,a,g}, \sigma_{s,t,a,g}^2)$.
+
+Soient $\mathcal{T}$, $\mathcal{A}$ et $\mathcal{G}$ les ensembles des années, tranches d'âges et sexes, respectivement. Pour chaque combinaison de région $s \in \mathcal{S}$, année $t \in \mathcal{T}$, âge $a \in \mathcal{A}$ et sexe $g \in \mathcal{G}$ aux États-Unis, la variable aléatoire transformée $I_{s,t,a,g}$ (log-cotes de l'incidence) suit une distribution $\mathcal{N}(\mu_{s,t,a,g}, \sigma_{s,t,a,g}^2)$.

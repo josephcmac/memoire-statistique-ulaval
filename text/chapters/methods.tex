@@ -1,36 +1,96 @@
 \chapter{Méthodes}
 \label{chap:methods}
 
-\section{Usage de l'intelligence artificielle générative}
-\label{sec:ia}
+\section{L'effet de l'âge stratifié par le sexe}
 
-Des outils d'intelligence artificielle générative (p.ex. ChatGPT-o1 Pro, Grok4-heavy) ont été sollicités ponctuellement pour la reformulation de textes, la génération de brouillons, l'aide au prototypage de code et la recherche documentaire. Toutes les analyses, les choix méthodologiques et les interprétations présentés dans ce mémoire ont été réalisés et validés par l'auteur.
+Les approches méthodologiques reposent sur une modélisation géométrique raffinée, appliquée aux données d'incidence des maladies respiratoires chroniques issues de GBD-2021, stratifiées par âge et sexe. Elles s'inscrivent dans le cadre probabiliste défini au chapitre sur les données, où chaque quadruplet $(s,t,a,g) \in \mathcal{S} \times \mathcal{T} \times \mathcal{A} \times \mathcal{G}$ est associé à une variable aléatoire $I_{s,t,a,g} \sim \mathcal{N}(\mu_{s,t,a,g}, \sigma_{s,t,a,g}^2)$ représentant la transformée logit (en base 10) du taux d'incidence.
 
-Les principaux \emph{prompts} utilisés sont les suivants :
+\subsection{Agrégation de données}
 
-\begin{enumerate}
-	\item \textbf{Rédaction en \LaTeX{}} :
-	\begin{quote}
-		« Vous êtes un statisticien professionnel. Sans changer les idées, améliorez l'orthographe, la grammaire et le style du texte suivant en \LaTeX{} (français natif). »
-	\end{quote}
-	\item \textbf{Programmation en R} :
-	\begin{quote}
-		« Vous êtes un statisticien professionnel. Comment transformer les données décrites ci-dessous en R en suivant les bonnes pratiques ? »
-	\end{quote}
-	\item \textbf{Recherche documentaire / moteur de recherche} :
-	\begin{quote}
-		« Vous êtes un statisticien professionnel. Proposez des références et un bref résumé des travaux scientifiques pertinents sur [sujet]. »
-	\end{quote}
-	\item \textbf{Vérification et correction} :
-	\begin{quote}
-		« Vous êtes un statisticien professionnel. Y a-t-il des erreurs factuelles, méthodologiques ou syntaxiques dans le passage ci-dessous ? »
-	\end{quote}
-		\item \textbf{Transformation de format} :
-	\begin{quote}
-		« Convertissez les références ci-dessous au format BibTeX. »
-	\end{quote}
-\end{enumerate}
+Soit $n = \# (\mathcal{S} \times \mathcal{T})$ le nombre d'événements spatio-temporels. Pour chaque paire $(a,g) \in \mathcal{A} \times \mathcal{G}$, on considère $B = 100\,000$ échantillons avec remplacement de $(s,t) \in \mathcal{S} \times \mathcal{T}$, où le $b$-ème échantillon est noté
+\[
+(s_1^{(b)}, t_1^{(b)}), (s_2^{(b)}, t_2^{(b)}), \dots, (s_n^{(b)}, t_n^{(b)}),
+\]
+pour $b = 1, 2, \dots, B$. Pour le $b$-ème échantillon, on calcule la moyenne :
+\[
+I_{a,g}^{(b)} = \frac{1}{n} \sum_{i=1}^n I_{s_i^{(b)}, t_i^{(b)}, a, g}^{(b,i)},
+\]
+où $I_{s_i^{(b)}, t_i^{(b)}, a, g}^{(b,i)}$ est une réalisation de $I_{s_i^{(b)}, t_i^{(b)}, a, g}$. On calcule ensuite la moyenne $\mu_{a,g}$ et l'écart-type $\sigma_{a,g}$ de la suite $I_{a,g}^{(1)}, I_{a,g}^{(2)}, \dots, I_{a,g}^{(B)}$. Le taux d'incidence $i_{a,g}$ est obtenu par l'inverse de la transformation logit (en base 10) :
+\[
+i_{a,g} = \frac{10^5}{1 + 10^{-\mu_{a,g}}},
+\]
+avec des intervalles de confiance à 95\,\% dérivés des quantiles empiriques (2,5\,\% et 97,5\,\%) des valeurs simulées transformées, assurant une quantification précise de l'incertitude sur l'échelle originale des taux par 100\,000 habitants.
 
-Les suggestions bibliographiques ou synthèses proposées par l'intelligence artificielle générative ont fait l'objet d'une vérification systématique dans les sources primaires et les bases de données académiques avant d'être retenues. Les \emph{prompts} non triviaux ainsi que les sorties pertinentes ont été archivés dans le dépôt de travail associé au mémoire. Il n'est pas jugé pertinent de conserver les \emph{prompts} triviaux\footnote{L'un des objectifs de l'intelligence artificielle générative est de réduire la charge de travail académique. Accorder trop d'importance aux utilisations triviales de cette technologie est contraire à son objectif. Bien entendu, les applications non triviales doivent être documentées.}, tels que les corrections grammaticales, les recherches documentaires simples, qui peuvent être effectuées via Google ou la correction des erreurs en R. Seuls les \emph{prompts} liés à l'interprétation des données ou à des propositions méthodologiques ont été conservés. Aucune donnée individuelle identifiable ni information confidentielle n’a été transmise à des services externes sans garanties appropriées.
+\subsection{Dynamique hyperbolique}
 
+Les couples $(\mu_{a,g}, \sigma_{a,g})$ sont projetés dans le demi-plan hyperbolique de Poincaré $\mathbb{H} = \{ z \in \mathbb{C} \mid \Im(z) > 0 \}$, via $z_{a,g} = \mu_{a,g} + i \sigma_{a,g}$. Cette représentation exploite la structure riemannienne de l'espace des distributions normales univariées, modélisé comme une variété hyperbolique. Pour chaque sexe $g \in \mathcal{G}$, la fonction $a \mapsto (\mu_{a,g}, \sigma_{a,g})$ est interprétée comme la trajectoire d'une particule sur cette variété, avec la tranche d'âge $a$ jouant le rôle du temps.
 
+\subsection{Dynamique symbolique}
+
+Pour explorer les variations qualitatives, des indicateurs directionnels sont introduits sur la base des différences entre tranches d'âge consécutives (espacées de 5 ans) :
+\begin{eqnarray}
+	S_{a,g}^{(\mu)} &=& \mathrm{sign}(\mu_{a,g} - \mu_{a-5,g}), \\
+	S_{a,g}^{(\sigma)} &=& \mathrm{sign}(\sigma_{a,g} - \sigma_{a-5,g}),
+\end{eqnarray}
+pour $a \geq 7$. Ces signes binaires, calculés pour chaque pays, mettent en évidence des motifs qualitatifs dans les données, moins apparents dans les analyses continues.
+
+\subsection{Distance de Fisher-Rao}
+
+La dissimilarité entre deux lois $\mathcal{N}(\mu_1, \sigma_1^2)$ et $\mathcal{N}(\mu_2, \sigma_2^2)$ est mesurée par la distance de Fisher-Rao, donnée par la formule \eqref{eq:fr_normal} du chapitre \ref{chap:math}, qui capture les géodésiques de la variété statistique. Les longueurs totales des trajectoires le long des âges, agrégées par sexe, quantifient les évolutions globales : une distance plus grande indique une évolution plus marquée, \emph{ceteris paribus}.
+
+\subsection{Divergence de Kullback-Leibler}
+
+En complément, la dissimilarité est évaluée par la divergence de Kullback-Leibler, dirigée de la première vers la seconde, définie par \eqref{eq:kl_normal} du chapitre \ref{chap:math}. Cette mesure asymétrique quantifie l'information perdue lors de l'approximation d'une distribution par une autre. Les divergences totales le long des trajectoires par âges, agrégées par sexe, évaluent les évolutions directionnelles : une valeur plus élevée signale une asymétrie accrue dans les changements, \emph{ceteris paribus}.
+
+\subsection{Comparaisons transnationales}
+
+Les résultats pour les États-Unis sont comparés à ceux du Royaume-Uni, de la Norvège et de l'Italie, en évaluant les divergences dans les trajectoires hyperboliques, les motifs symboliques, la distance de Fisher-Rao et la divergence de Kullback-Leibler. Cette analyse, ancrée dans les mêmes hypothèses probabilistes, identifie des invariants ou hétérogénéités liées à des contextes socio-économiques distincts.
+
+\section{L'effet du sexe stratifié par l'âge}
+
+Les approches méthodologiques reposent sur une modélisation géométrique raffinée, appliquée aux données d'incidence des MRC issues de GBD-2021, stratifiées par âge. Elles s'inscrivent dans le cadre probabiliste défini au chapitre sur les données, où chaque quadruplet $(s,t,a) \in \mathcal{S} \times \mathcal{T} \times \mathcal{A}$ est associé à des variables aléatoires pour les mâles et les femelles.
+
+\subsection{Agrégation de données}
+
+La statistique $g$ de Cohen est définie par la formule \eqref{eq:g_cohen} du chapitre \ref{chap:math}. Soit $n = \# (\mathcal{S} \times \mathcal{T})$. Pour chaque âge $a \in \mathcal{A}$, on considère $B = 100\,000$ échantillons avec remplacement de $(s,t) \in \mathcal{S} \times \mathcal{T}$, où le $b$-ème échantillon est noté
+\[
+(s_1^{(b)}, t_1^{(b)}), (s_2^{(b)}, t_2^{(b)}), \dots, (s_n^{(b)}, t_n^{(b)}).
+\]
+Pour le $b$-ème échantillon, on génère les réalisations $I_{s_i^{(b)}, t_i^{(b)}, a, \mathrm{mâle}}^{(b,i)}$ et $I_{s_i^{(b)}, t_i^{(b)}, a, \mathrm{femelle}}^{(b,i)}$ pour $i = 1, \dots, n$. On calcule ensuite la statistique g de Cohen $g_a^{(b)}$ à partir de la formule 
+
+\begin{equation}
+	g_a^{(b)} = \frac{1}{2n}\sum_{i=1}^n \mathrm{sign} \left(I_{s_i^{(b)}, t_i^{(b)}, a, \mathrm{mâle}}^{(b,i)} -
+	I_{s_i^{(b)}, t_i^{(b)}, a, \mathrm{femelle}}^{(b,i)}
+	 \right).
+\end{equation}
+
+La valeur finale est
+\[
+g_a = \frac{1}{B} \sum_{b=1}^B g_a^{(b)}.
+\]
+La distribution bootstrap de $g_a$ est approximée par $\mathcal{N}(\mu_a, \sigma_a^2)$, avec $\mu_a$ et $\sigma_a$ estimés à partir des $g_a^{(b)}$. Les intervalles de confiance à 95\,\% sont dérivés des quantiles empiriques (2,5\,\% et 97,5\,\%) des $g_a^{(b)}$.
+
+\subsection{Dynamique hyperbolique}
+
+Les couples $(\mu_a, \sigma_a)$ sont projetés dans le demi-plan hyperbolique de Poincaré $\mathbb{H} = \{ z \in \mathbb{C} \mid \Im(z) > 0 \}$, via $z_a = \mu_a + i \sigma_a$. La fonction $a \mapsto (\mu_a, \sigma_a)$ est interprétée comme la trajectoire d'une particule sur cette variété hyperbolique.
+
+\subsection{Dynamique symbolique}
+
+Des indicateurs directionnels sont introduits sur la base des différences entre tranches d'âge consécutives :
+\begin{eqnarray}
+	S_a^{(\mu)} &=& \mathrm{sign}(\mu_a - \mu_{a-5}), \\
+	S_a^{(\sigma)} &=& \mathrm{sign}(\sigma_a - \sigma_{a-5}),
+\end{eqnarray}
+pour $a \geq 7$. Ces signes binaires, calculés pour chaque pays, mettent en évidence des motifs qualitatifs.
+
+\subsection{Distance de Fisher-Rao}
+
+La dissimilarité entre deux lois $\mathcal{N}(\mu_1, \sigma_1^2)$ et $\mathcal{N}(\mu_2, \sigma_2^2)$ est mesurée par la distance de Fisher-Rao, donnée par \eqref{eq:fr_normal} du chapitre \ref{chap:math}. Les longueurs totales des trajectoires le long des âges quantifient les évolutions globales : une distance plus grande indique une évolution plus marquée, \emph{ceteris paribus}.
+
+\subsection{Divergence de Kullback-Leibler}
+
+La dissimilarité est évaluée par la divergence de Kullback-Leibler (KL), dirigée, définie par \eqref{eq:kl_normal} du chapitre \ref{chap:math}. Les divergences totales le long des trajectoires par âges évaluent les évolutions directionnelles : une valeur plus élevée signale une asymétrie accrue, \emph{ceteris paribus}.
+
+\subsection{Comparaisons transnationales}
+
+Les résultats pour les États-Unis sont comparés à ceux du Royaume-Uni, de la Norvège et de l'Italie, en évaluant les divergences dans les trajectoires hyperboliques, les motifs symboliques, la distance de Fisher-Rao et la divergence de Kullback-Leibler. Cette analyse identifie des invariants ou hétérogénéités liées à des contextes socio-économiques distincts.
