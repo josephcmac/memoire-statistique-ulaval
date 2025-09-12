@@ -2,12 +2,15 @@ library(tidyverse)
 library(usmap)
 library(here)
 
-main_aux <- function() {
-  read_csv(fs::path(here::here("data", "clean", "arsenic_pm2.5_locations"), ext="csv")) %>%
+main_aux <- function(age0, sex0) {
+  read_csv(fs::path(here::here("data", "clean", "IHME-GBD_2021_CLEAN_prevalence"),ext="csv")) %>%
+    group_by(age, sex, location) |>
+    summarise(mu = mean(mu)) |>
+    filter(age == age0, sex == sex0) |>
     rename(state = location) %>%
     plot_usmap(data = ., values = "mu", include = c(state.abb, "DC")) +
     scale_fill_viridis_c(
-      name = expression(atop(Log[10]~"( Arsenic "~PM[2,5]~"("*mu*" g/ m"^3*") )")),
+      name = expression(atop(Logit[10]~"(prévalance des MRC)")),
       option = "plasma",
       n.breaks = 6
     ) +
@@ -29,17 +32,18 @@ main_aux <- function() {
       legend.text = element_text(size = 9)
     ) +
     labs(
-      title = expression("Logarithme de l'Arsenic "~PM[2.5]~" moyen par État (1990–2019)"),
+      title = expression(Logit[10]~"(prévalance des MRC), Période : 1990–2019"),
+      subtitle = paste0("Âge : ", age0, "; Sexe : ", ifelse(sex0 == "Male", "mâle", "femelle")),
       caption = "Source : EPA; Visualisation : José Manuel Rodríguez Caballero"
     )
 }
 
 main <- function() {
-  out_file <- here::here("text", "figures", "arsenic_map", "arsenic_map.png")
+  out_file <- here::here("text", "figures", "GBD_map", "GBD_map.png")
   dir.create(dirname(out_file), recursive = TRUE, showWarnings = FALSE)
   ggsave(
     filename = out_file,
-    plot = main_aux(),
+    plot = main_aux(age0 = 47, sex = "Male"),
     width = 7, 
     height = 4.5,
     dpi = 300

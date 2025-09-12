@@ -123,30 +123,86 @@ image ici
 
 \section{L'effet de l'arsenic PM$_{2.5}$}
 
-\subsection{Agrégation de données}
+\subsection{Distribution géographique}
 
-Les paramètres agrégés de prévalence ($\mu_{s,a,g}$, $\sigma_{s,a,g}$) par région, âge et sexe sont obtenus comme décrit.
+Les paramètres $\mu_s$ sont visualisés sur la carte de la Figure \ref{fig:arsenic-map}, qui illustre les concentrations moyennes par État. Les paramètres $(\mu_s, \sigma_s)$ sont représentés dans la Figure \ref{fig:arsenic_Poincare}.
 
-\subsection{Régression linéaire robuste}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{figures/arsenic_map/arsenic_map.png}
+	\caption{Concentrations moyennes d'arsenic PM$_{2.5}$ par État aux États-Unis (1990-2019). Code générateur : \texttt{arsenic\_map.R}.}
+	\label{fig:arsenic-map}
+\end{figure}
 
-Les estimations des pentes $\hat{\beta}_{a,g}$, ordonnées à l'origine $\hat{\alpha}_{a,g}$, intervalles de confiance, MAD des résidus et statistiques de test pour les modèles sur $\mu_{s,a,g}$ et $\log_{10} \sigma_{s,a,g}$ en fonction de $\mu_s$ sont présentées dans le tableau suivant.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{figures/arsenic_Poincare/arsenic_Poincare.png}
+	\caption{Paramètres $(\mu_s, \sigma_s)$ par État aux États-Unis (1990-2019). Code générateur : \texttt{arsenic\_Poincare.R}.}
+	\label{fig:arsenic_Poincare}
+\end{figure}
 
-%\input{tables/regression_siegel.tex}
-table ici
+Les paramètres $\mu_{s,a,g}$ sont visualisés sur la carte de la Figure \ref{fig:GBD-map}, qui illustre les concentrations moyennes par État. Les paramètres $(\mu_{s,a,g}$, $\sigma_{s,a,g})$ sont représentés dans la Figure \ref{fig:GBD_Poincare}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{figures/GBD_map/GBD_map.png}
+	\caption{Log-cotes de la prévalence des MRC par État aux États-Unis (1990-2019). Code générateur : \texttt{GBD\_map.R}}
+	\label{fig:GBD-map}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{figures/GBD_Poincare/GBD_Poincare.png}
+	\caption{Paramètres $(\mu_{s,a,g}, \sigma_{s,a,g})$ par État aux États-Unis (1990-2019). Code générateur : \texttt{GBD\_Poincare.R}}
+	\label{fig:GBD_Poincare}
+\end{figure}
 
 \subsection{Quantification géométrique des trajectoires}
 
-Les trajectoires dans le demi-plan de Poincaré des $\hat{\beta}_{a,g}$ + $i \cdot \mathrm{MAD}_{a,g}$ par âge et sexe, les sommes cumulées des distances de Fisher-Rao et divergences de Kullback-Leibler par sexe, ainsi que les trajectoires agrégées par clusters de régions ordonnées par $\mu_s$ sont présentées à la Figure \ref{fig:trajectoires-arsenic}.
+Les trajectoires dans le demi-plan de Poincaré des $\hat{\beta}_{a,g}$ + $i \cdot \mathrm{MAD}_{a,g}$ par âge et sexe, les sommes cumulées des distances de Fisher-Rao et divergences de Kullback-Leibler par sexe, ainsi que les trajectoires agrégées par clusters de régions ordonnées par $\mu_s$ sont présentées dans les Figures \ref{fig:trajectoires-arsenic-males} et \ref{fig:trajectoires-arsenic-females}.
 
-%\begin{figure}[H]
-%\centering
-%\includegraphics[width=0.8\textwidth]{figures/trajectoires_arsenic/trajectoires_arsenic.png}
-%\caption{Trajectoires des effets de l'arsenic par âge et sexe.}
-%\label{fig:trajectoires-arsenic}
-%\end{figure}
-image ici
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/arsenic_Poincare_slopes/Male.png}
+\caption{Trajectoires des effets de l'arsenic sur l'incidence des MRC par âge pour les mâles. Code générateur : \texttt{arsenic\_Poincare\_slopes.R}.}
+\label{fig:trajectoires-arsenic-males}
+\end{figure}
 
-Les sommes cumulées des distances de Fisher-Rao et divergences de Kullback-Leibler pour les trajectoires des effets de l'arsenic sont présentées dans le tableau suivant.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/arsenic_Poincare_slopes/Female.png}
+	\caption{Trajectoires des effets de l'arsenic sur l'incidence des MRC par âge pour les femelles. Code générateur : \texttt{arsenic\_Poincare\_slopes.R}.}
+	\label{fig:trajectoires-arsenic-females}
+\end{figure}
 
-%\input{tables/fr_kl_arsenic.tex}
-table ici
+Les intervales de confiance des $\hat{\beta}_{a,g}$ sont présentés dans les Figures \ref{fig:CI-arsenic-males} et \ref{fig:CI-arsenic-females}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/arsenic_data_analysis/Male.png}
+	\caption{CI des pentes par âge pour les mâles. Code générateur : \texttt{arsenic\_data\_analysis.R}.}
+	\label{fig:CI-arsenic-males}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/arsenic_data_analysis/Female.png}
+	\caption{CI des pentes par âge pour les femelles. Code générateur : \texttt{arsenic\_data\_analysis.R}.}
+	\label{fig:CI-arsenic-females}
+\end{figure}
+
+Les sommes cumulées des distances de Fisher-Rao et divergences de Kullback-Leibler pour les trajectoires des effets de l'arsenic sont présentées dans le Figures \ref{fig:arsenic_distance_cumulative:Fisher-Rao} et \ref{fig:arsenic_distance_cumulative:Kullback-Leibler}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/arsenic_distance_cumulative/Fisher-Rao.png}
+	\caption{Distance de Fisher-Rao cumulée. Code générateur : \texttt{arsenic\_distance\_cumulative.R}.}
+	\label{fig:arsenic_distance_cumulative:Fisher-Rao}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/arsenic_distance_cumulative/Kullback-Leibler.png}
+	\caption{Divergence de Kullback-Leibler cumulée. Code générateur : \texttt{arsenic\_distance\_cumulative.R}.}
+	\label{fig:arsenic_distance_cumulative:Kullback-Leibler}
+\end{figure}
