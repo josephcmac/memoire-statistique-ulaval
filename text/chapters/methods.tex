@@ -8,22 +8,22 @@ Les approches méthodologiques reposent sur une modélisation géométrique raff
 \subsection{Agrégation de données}
 
 Soit $n = \# (\mathcal{S} \times \mathcal{T})$ le nombre d'événements spatio-temporels. Pour chaque paire $(a,g) \in \mathcal{A} \times \mathcal{G}$, on considère $B = 100\,000$ échantillons avec remplacement de $(s,t) \in \mathcal{S} \times \mathcal{T}$, où le $b$-ème échantillon est noté
-\[
+\begin{equation}
 (s_1^{(b)}, t_1^{(b)}), (s_2^{(b)}, t_2^{(b)}), \dots, (s_n^{(b)}, t_n^{(b)}),
-\]
+\end{equation}
 pour $b = 1, 2, \dots, B$. Pour le $b$-ème échantillon, on calcule la moyenne :
-\[
+\begin{equation}
 I_{a,g}^{(b)} = \frac{1}{n} \sum_{i=1}^n I_{s_i^{(b)}, t_i^{(b)}, a, g}^{(b,i)},
-\]
+\end{equation}
 où $I_{s_i^{(b)}, t_i^{(b)}, a, g}^{(b,i)}$ est une réalisation de $I_{s_i^{(b)}, t_i^{(b)}, a, g}$. On calcule ensuite la moyenne $\mu_{a,g}$ et l'écart-type $\sigma_{a,g}$ de la suite $I_{a,g}^{(1)}, I_{a,g}^{(2)}, \dots, I_{a,g}^{(B)}$. Le taux d'incidence $i_{a,g}$ est obtenu par l'inverse de la transformation logit (en base 10) :
-\[
+\begin{equation}
 i_{a,g} = \frac{10^5}{1 + 10^{-\mu_{a,g}}},
-\]
+\end{equation}
 avec des intervalles de confiance à 95\,\% dérivés des quantiles empiriques (2,5\,\% et 97,5\,\%) des valeurs simulées transformées, assurant une quantification précise de l'incertitude sur l'échelle originale des taux par 100\,000 habitants.
 
 \subsection{Dynamique hyperbolique}
 
-Les couples $(\mu_{a,g}, \sigma_{a,g})$ sont projetés dans le demi-plan hyperbolique de Poincaré $\mathbb{H} = \{ z \in \mathbb{C} \mid \Im(z) > 0 \}$, via $z_{a,g} = \mu_{a,g} + i \sigma_{a,g}$. Cette représentation exploite la structure riemannienne de l'espace des distributions normales univariées, modélisé comme une variété hyperbolique. Pour chaque sexe $g \in \mathcal{G}$, la fonction $a \mapsto (\mu_{a,g}, \sigma_{a,g})$ est interprétée comme la trajectoire d'une particule sur cette variété, avec la tranche d'âge $a$ jouant le rôle du temps.
+Les couples $(\mu_{a,g}, \sigma_{a,g})$ sont projetés dans le demi-plan hyperbolique de Poincaré $\mathbb{H} = \{ z \in \mathbb{C} \mid \Im(z) > 0 \}$, par $z_{a,g} = \mu_{a,g} + i \sigma_{a,g}$. Cette représentation exploite la structure riemannienne de l'espace des distributions normales univariées, modélisé comme une variété hyperbolique. Pour chaque sexe $g \in \mathcal{G}$, la fonction $a \mapsto (\mu_{a,g}, \sigma_{a,g})$ est interprétée comme la trajectoire d'une particule sur cette variété, avec la tranche d'âge $a$ jouant le rôle du temps.
 
 \subsection{Dynamique symbolique}
 
@@ -53,9 +53,9 @@ Les approches méthodologiques reposent sur une modélisation géométrique raff
 \subsection{Agrégation de données}
 
 La statistique $g$ de Cohen est définie par la formule \eqref{eq:g_cohen} du chapitre \ref{chap:math}. Soit $n = \# (\mathcal{S} \times \mathcal{T})$. Pour chaque âge $a \in \mathcal{A}$, on considère $B = 100\,000$ échantillons avec remplacement de $(s,t) \in \mathcal{S} \times \mathcal{T}$, où le $b$-ème échantillon est noté
-\[
+\begin{equation}
 (s_1^{(b)}, t_1^{(b)}), (s_2^{(b)}, t_2^{(b)}), \dots, (s_n^{(b)}, t_n^{(b)}).
-\]
+\end{equation}
 Pour le $b$-ème échantillon, on génère les réalisations $I_{s_i^{(b)}, t_i^{(b)}, a, \mathrm{mâle}}^{(b,i)}$ et $I_{s_i^{(b)}, t_i^{(b)}, a, \mathrm{femelle}}^{(b,i)}$ pour $i = 1, \dots, n$. On calcule ensuite la statistique g de Cohen $g_a^{(b)}$ à partir de la formule 
 
 \begin{equation}
@@ -65,14 +65,14 @@ Pour le $b$-ème échantillon, on génère les réalisations $I_{s_i^{(b)}, t_i^
 \end{equation}
 
 La valeur finale est
-\[
+\begin{equation}
 g_a = \frac{1}{B} \sum_{b=1}^B g_a^{(b)}.
-\]
+\end{equation}
 La distribution bootstrap de $g_a$ est approximée par $\mathcal{N}(\mu_a, \sigma_a^2)$, avec $\mu_a$ et $\sigma_a$ estimés à partir des $g_a^{(b)}$. Les intervalles de confiance à 95\,\% sont dérivés des quantiles empiriques (2,5\,\% et 97,5\,\%) des $g_a^{(b)}$.
 
 \subsection{Dynamique hyperbolique}
 
-Les couples $(\mu_a, \sigma_a)$ sont projetés dans le demi-plan hyperbolique de Poincaré $\mathbb{H} = \{ z \in \mathbb{C} \mid \Im(z) > 0 \}$, via $z_a = \mu_a + i \sigma_a$. La fonction $a \mapsto (\mu_a, \sigma_a)$ est interprétée comme la trajectoire d'une particule sur cette variété hyperbolique.
+Les couples $(\mu_a, \sigma_a)$ sont projetés dans le demi-plan hyperbolique de Poincaré $\mathbb{H} = \{ z \in \mathbb{C} \mid \Im(z) > 0 \}$, par $z_a = \mu_a + i \sigma_a$. La fonction $a \mapsto (\mu_a, \sigma_a)$ est interprétée comme la trajectoire d'une particule sur cette variété hyperbolique.
 
 \subsection{Dynamique symbolique}
 
@@ -94,3 +94,28 @@ La dissimilarité est évaluée par la divergence de Kullback-Leibler (KL), diri
 \subsection{Comparaisons transnationales}
 
 Les résultats pour les États-Unis sont comparés à ceux du Royaume-Uni, de la Norvège et de l'Italie, en évaluant les divergences dans les trajectoires hyperboliques, les motifs symboliques, la distance de Fisher-Rao et la divergence de Kullback-Leibler. Cette analyse identifie des invariants ou hétérogénéités liées à des contextes socio-économiques distincts.
+
+\section{L'effet de l'arsenic PM$_{2.5}$ sur la prévalence des maladies respiratoires chroniques}
+Les approches méthodologiques reposent sur une modélisation probabiliste appliquée aux données de prévalence des maladies respiratoires chroniques issues de GBD-2021, stratifiées par région, année, âge et sexe. Elles s'inscrivent dans le cadre défini au chapitre sur les données, où chaque quadruplet $(s, t, a, g) \in \mathcal{S} \times \mathcal{T} \times \mathcal{A} \times \mathcal{G}$ est associé à une variable aléatoire $P_{s,t,a,g} \sim \mathcal{N}(\mu_{s,t,a,g}, \sigma_{s,t,a,g}^2)$ représentant la transformée logit (en base 10) du taux de prévalence. Les concentrations d'arsenic dans les PM$_{2.5}$, notées $C_s \sim \mathcal{N}(\mu_s, \sigma_s^2)$, sont issues des données de l'EPA agrégées par région $s \in \mathcal{S}$.
+
+\subsection{Agrégation de données}
+Pour chaque combinaison de région $s \in \mathcal{S}$, âge $a \in \mathcal{A}$ et sexe $g \in \mathcal{G}$, la prévalence agrégée $P_{s,a,g}$ est obtenue comme la moyenne des $P_{s,t,a,g}$ sur toutes les années $t \in \mathcal{T}$ :
+\begin{eqnarray}
+\mu_{s,a,g} &=& \frac{1}{n} \sum_{k=1}^n \mu_{s,t_k,a,g}, \\
+\sigma_{s,a,g} &=& \frac{1}{n} \sqrt{\sum_{k=1}^n \sigma_{s,t_k,a,g}^2},
+\end{eqnarray}
+où $n = \#\mathcal{T}$ et les éléments de $\mathcal{T}$ sont notés : $t_1 < t_2 < ... < t_n$. Cette agrégation réduit la variabilité temporelle en combinant les moyennes et en ajustant les écarts-types pour refléter l'incertitude cumulée, fournissant une mesure stable de la prévalence régionale stratifiée par âge et sexe.
+
+\subsection{Régression linéaire robuste}
+Pour chaque paire $(a, g) \in \mathcal{A} \times \mathcal{G}$, la relation entre la concentration d'arsenic $C_s$ (représentée par $\mu_s$) et la prévalence agrégée $P_{s,a,g}$ est modélisée par régression linéaire robuste par la méthode des médianes répétées de Siegel. Deux modèles distincts sont ajustés : l'un pour la moyenne $\mu_{s,a,g}$ en fonction de $\mu_s$, et l'autre pour le logarithme (base 10) de l'écart-type $\log_{10} \sigma_{s,a,g}$ en fonction de $\mu_s$. Cette approche duale capture à la fois les effets sur le niveau central et sur la dispersion de la prévalence.
+
+L'estimation des paramètres (pente $\hat{\beta}_{a,g}$ et ordonnée à l'origine $\hat{\alpha}_{a,g}$) repose sur des médianes itérées des pentes et intercepts partiels, assurant une robustesse aux valeurs aberrantes avec un point de rupture asymptotique de 50\,\%. Les intervalles de confiance à 95\,\% sont dérivés des quantiles empiriques obtenus par rééchantillonnage bootstrap non paramétrique ($B = 1\,000$), où les régions sont tirées avec remplacement et les régressions réexécutées.
+
+La déviation absolue médiane (MAD) des résidus est calculée pour quantifier la dispersion robuste autour de chaque modèle ajusté, en appliquant la constante de correction pour la consistance gaussienne. Des statistiques de test (valeur V et p-valeur) évaluent la significativité des coefficients, complétant l'analyse par une mesure de l'évidence contre l'hypothèse nulle d'absence d'effet.
+
+\subsection{Quantification géométrique des trajectoires}
+Les pentes estimées $\hat{\beta}_{a,g}$ pour chaque âge $a$ et sexe $g$ sont projetées dans le demi-plan de Poincaré $\mathbb{H} = \{ z \in \mathbb{C} \mid \Im(z) > 0 \}$, par $z_{a,g} = \hat{\beta}_{a,g} + i \cdot \mathrm{MAD}_{a,g}$, où la composante imaginaire représente la dispersion robuste des résidus. Cette représentation modélise les évolutions par âge comme des trajectoires sur une variété hyperbolique, facilitant l'analyse des dynamiques.
+
+Les dissimilarités entre tranches d'âge consécutives sont mesurées par la distance de Fisher-Rao et la divergence de Kullback-Leibler, calculées sur les distributions normales associées aux points $(\mu, \sigma)$, où $\mu = \hat{\beta}_{a,g}$ et $\sigma = \mathrm{MAD}_{a,g}$. Les sommes cumulées de ces mesures quantifient l'évolution globale des effets de l'arsenic au fil de l'âge, avec des comparaisons entre sexes pour identifier des patterns différenciés.
+
+Par ailleurs, les régions sont ordonnées par niveau croissant de concentration d'arsenic $\mu_s$, puis regroupées en clusters de tailles variables (1, 3 ou 17 régions par groupe). Pour chaque cluster, des moyennes et écarts-types agrégés de la prévalence sont calculés, formant des trajectoires dans le plan $(\mu, \sigma)$. Ces chemins visualisent l'effet progressif de l'exposition, avec des segments reliant les points agrégés et des barres d'erreur indiquant l'incertitude.

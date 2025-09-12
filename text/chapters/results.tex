@@ -1,26 +1,152 @@
 \chapter{Résultats}
 \label{chap:results}
-\section{Trajectoires des paramètres et Fisher--Rao}
-Insérez figures : trajectoires mu/sigma par âge et sexe, histogrammes de la somme cumulée des distances.
 
+Ce chapitre présente les résultats empiriques obtenus à partir des analyses décrites dans le chapitre \ref{chap:methods}. Les résultats sont organisés en sections correspondant aux approches méthodologiques principales.
 
-\section{Divergence de Kullback--Leibler}
-Comparaison des tendances observées avec la métrique KL.
+\section{L'effet de l'âge stratifié par le sexe}
 
+\subsection{Agrégation de données}
 
-\section{Taille d'effet (g de Cohen) par tranche d'âge}
-Graphiques et interprétation (prédominance masculine/enfance, inversion adolescence/jeunes adultes, variabilité >50 ans).
+Les taux d'incidence agrégés par âge et sexe, obtenus après transformation inverse logit et bootstrapping ($B = 100\,000$), sont présentés à la Figure \ref{fig:incidence-age-sexe}.
 
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=0.8\textwidth]{figures/incidence_age_sexe/incidence_age_sexe.png}
+%\caption{Taux d'incidence agrégés des MRC par âge et sexe aux États-Unis (1990-2021), avec intervalles de confiance à 95\,\%.}
+%\label{fig:incidence-age-sexe}
+%\end{figure}
+image ici
 
-\section{Prévalence vs Incidence et exposition (PM2.5)}
-Présentez le modèle linéaire sur la prévalence après transformation (log / logit), tableau des coefficients et diagnostics de résidus (Shapiro). Exemple d'insertion d'un tableau extrait du CSV :
-%\begin{table}[H]
-%	\centering
-%	\caption{Extrait : résultats linéaires (arsenic\_linear.csv)}
-%	\csvautotabular{arsenic_linear.csv}
-%	\label{tab:arsenic_linear}
-%\end{table}
+\subsection{Dynamique hyperbolique}
 
+Les trajectoires dans le demi-plan de Poincaré des paramètres ($\mu$, $\sigma$) par âge et sexe sont présentées à la Figure \ref{fig:poincare-age-sexe}.
 
-\section{Analyses par pays et robustesse}
-Comparer les signes (+1/-1) des changements par tranche d'âge et discuter de la robustesse.
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=0.8\textwidth]{figures/poincare_age_sexe/poincare_age_sexe.png}
+%\caption{Trajectoires hyperboliques des paramètres ($\mu$, $\sigma$) par âge et sexe.}
+%\label{fig:poincare-age-sexe}
+%\end{figure}
+image ici
+
+\subsection{Dynamique symbolique}
+
+Les indicateurs directionnels $S_{a,g}^{(\mu)}$ et $S_{a,g}^{(\sigma)}$ pour chaque pays sont présentés dans le tableau suivant.
+
+%\input{tables/symbolique_age_sexe.tex}
+table ici
+
+\subsection{Distance de Fisher-Rao}
+
+La somme cumulée des distances de Fisher-Rao le long des trajectoires par sexe pour chaque pays est présentée dans le tableau suivant.
+
+%\input{tables/fr_cumule_sexe.tex}
+table ici
+
+\subsection{Divergence de Kullback-Leibler}
+
+La somme cumulée des divergences de Kullback-Leibler le long des trajectoires par sexe pour chaque pays est présentée dans le tableau suivant.
+
+%\input{tables/kl_cumule_sexe.tex}
+table ici
+
+\subsection{Comparaisons transnationales}
+
+Les trajectoires hyperboliques par pays et sexe sont présentées à la Figure \ref{fig:comparaison-pays-age}.
+
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=0.8\textwidth]{figures/comparaison_pays_age/comparaison_pays_age.png}
+%\caption{Comparaison des trajectoires hyperboliques par pays et sexe.}
+%\label{fig:comparaison-pays-age}
+%\end{figure}
+image ici
+
+\section{L'effet du sexe stratifié par l'âge}
+
+\subsection{Agrégation de données}
+
+La statistique $g$ de Cohen pour les différences sexuelles par âge est présentée à la Figure \ref{fig:cohen-g-age}.
+
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=0.8\textwidth]{figures/cohen_g_age/cohen_g_age.png}
+%\caption{Statistique $g$ de Cohen pour les différences sexuelles par âge, avec intervalles de confiance.}
+%\label{fig:cohen-g-age}
+%\end{figure}
+image ici
+
+\subsection{Dynamique hyperbolique}
+
+La trajectoire dans le demi-plan de Poincaré des paramètres ($\mu$, $\sigma$) de $g$ par âge est présentée à la Figure \ref{fig:poincare-sexe-age}.
+
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=0.8\textwidth]{figures/poincare_sexe_age/poincare_sexe_age.png}
+%\caption{Trajectoire hyperbolique des paramètres de $g$ par âge.}
+%\label{fig:poincare-sexe-age}
+%\end{figure}
+image ici
+
+\subsection{Dynamique symbolique}
+
+Les indicateurs directionnels $S_a^{(\mu)}$ et $S_a^{(\sigma)}$ pour chaque pays sont présentés dans le tableau suivant.
+
+%\input{tables/symbolique_sexe_age.tex}
+table ici
+
+\subsection{Distance de Fisher-Rao}
+
+La longueur cumulée des trajectoires de Fisher-Rao par pays est présentée dans le tableau suivant.
+
+%\input{tables/fr_cumule_age.tex}
+table ici
+
+\subsection{Divergence de Kullback-Leibler}
+
+La somme cumulée des divergences de Kullback-Leibler par pays est présentée dans le tableau suivant.
+
+%\input{tables/kl_cumule_age.tex}
+table ici
+
+\subsection{Comparaisons transnationales}
+
+La statistique $g$ de Cohen par pays et âge est présentée à la Figure \ref{fig:comparaison-pays-sexe}.
+
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=0.8\textwidth]{figures/comparaison_pays_sexe/comparaison_pays_sexe.png}
+%\caption{Comparaison de $g$ de Cohen par pays et âge.}
+%\label{fig:comparaison-pays-sexe}
+%\end{figure}
+image ici
+
+\section{L'effet de l'arsenic PM$_{2.5}$ sur la prévalence des maladies respiratoires chroniques}
+
+\subsection{Agrégation de données}
+
+Les paramètres agrégés de prévalence ($\mu_{s,a,g}$, $\sigma_{s,a,g}$) par région, âge et sexe sont obtenus comme décrit.
+
+\subsection{Régression linéaire robuste}
+
+Les estimations des pentes $\hat{\beta}_{a,g}$, ordonnées à l'origine $\hat{\alpha}_{a,g}$, intervalles de confiance, MAD des résidus et statistiques de test pour les modèles sur $\mu_{s,a,g}$ et $\log_{10} \sigma_{s,a,g}$ en fonction de $\mu_s$ sont présentées dans le tableau suivant.
+
+%\input{tables/regression_siegel.tex}
+table ici
+
+\subsection{Quantification géométrique des trajectoires}
+
+Les trajectoires dans le demi-plan de Poincaré des $\hat{\beta}_{a,g}$ + $i \cdot \mathrm{MAD}_{a,g}$ par âge et sexe, les sommes cumulées des distances de Fisher-Rao et divergences de Kullback-Leibler par sexe, ainsi que les trajectoires agrégées par clusters de régions ordonnées par $\mu_s$ sont présentées à la Figure \ref{fig:trajectoires-arsenic}.
+
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=0.8\textwidth]{figures/trajectoires_arsenic/trajectoires_arsenic.png}
+%\caption{Trajectoires des effets de l'arsenic par âge et sexe.}
+%\label{fig:trajectoires-arsenic}
+%\end{figure}
+image ici
+
+Les sommes cumulées des distances de Fisher-Rao et divergences de Kullback-Leibler pour les trajectoires des effets de l'arsenic sont présentées dans le tableau suivant.
+
+%\input{tables/fr_kl_arsenic.tex}
+table ici
