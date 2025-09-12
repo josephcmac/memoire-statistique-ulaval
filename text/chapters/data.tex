@@ -5,7 +5,7 @@
 
 \subsection{Données brutes et nettoyage}
 
-Les données brutes, issues de l'Environmental Protection Agency (EPA) \citep{epa_air_quality_system_2024} des États-Unis, consistent en des mesures quotidiennes de concentrations d'arsenic dans les particules fines PM$_{2.5}$, collectées de 1990 à 2019. Chaque fichier annuel, tel que \texttt{daily\_HAPS\_2017.csv}, inclut des enregistrements avec des identifiants géographiques (codes d'État, de comté et de site), des coordonnées spatiales, le paramètre mesuré (« Arsenic PM2.5 LC »), la durée d'échantillonnage, la date locale, l'unité de mesure (microgrammes par mètre cube, notée LC pour « local conditions ») et la valeur maximale observée sur 24 heures. Ces données exhibent une variabilité due aux conditions météorologiques, aux sources d'émission locales et aux protocoles de mesure.
+Les données brutes, issues de l'Environmental Protection Agency (EPA) \citep{epa_air_quality_system_2024} des États-Unis, consistent en des mesures quotidiennes de concentrations d'arsenic dans les particules fines PM$_{2,5}$, collectées de 1990 à 2019. Chaque fichier annuel, tel que \texttt{daily\_HAPS\_2017.csv}, inclut des enregistrements avec des identifiants géographiques (codes d'État, de comté et de site), des coordonnées spatiales, le paramètre mesuré (« Arsenic PM2.5 LC »), la durée d'échantillonnage, la date locale, l'unité de mesure (microgrammes par mètre cube, notée LC pour « local conditions ») et la valeur maximale observée sur 24 heures. Ces données exhibent une variabilité due aux conditions météorologiques, aux sources d'émission locales et aux protocoles de mesure.
 
 Le nettoyage exclut les régions comme Puerto Rico, les Îles Vierges et le Mexique, pour se concentrer sur les 50 États des États-Unis et le District of Columbia, compatibles avec les données de santé publique. Les observations sont filtrées pour retenir uniquement le paramètre « Arsenic PM2.5 LC » en microgrammes par mètre cube sur 24 heures. Le nom « District Of Columbia » est corrigé en « District of Columbia » pour uniformité.
 
@@ -20,7 +20,7 @@ Ces résultats par région ($\mu$, $\sigma$, le nombre d'échantillons bootstrap
 
 \subsection{Données nettoyées}
 
-Soit $\mathcal{S}$ l'ensemble des régions d'un pays donné. Pour les États-Unis, chaque région est un État ou DC. Pour chaque région $s \in \mathcal{S}$, on considère la variable aléatoire $C_s \sim \mathcal{N}(\mu_s, \sigma_s^2)$. Les paramètres $\mu_s$ sont visualisés sur la carte de la Figure \ref{fig:arsenic-map}, qui illustre les concentrations moyennes par État. Les paramètres $(\mu_s, \sigma_s)$ sont représentés dans la Figure \ref{fig:arsenic_Poincare}.
+Soit $\mathcal{S}$ l'ensemble des régions d'un pays donné. Pour les États-Unis, chaque région est un État ou DC. Pour chaque région $s \in \mathcal{S}$, on considère la variable aléatoire $C_s \sim \mathcal{N}(\mu_s, \sigma_s^2)$, représentant le logarithme (en base 10) de la moyenne arithmétique de la concentration quotidienne d'arsenic PM$_{2,5}$. Les paramètres $\mu_s$ sont visualisés sur la carte de la Figure \ref{fig:arsenic-map}, qui illustre les concentrations moyennes par État. Les paramètres $(\mu_s, \sigma_s)$ sont représentés dans la Figure \ref{fig:arsenic_Poincare}.
 
 \begin{figure}[H]
 	\centering
