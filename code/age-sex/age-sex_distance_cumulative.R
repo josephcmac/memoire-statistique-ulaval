@@ -36,16 +36,10 @@ process <- function(df_male, df_female, f) {
 
 process_sex <- function(df, f) {
   process(
-    df_male = df |> filter(sex == "Male", response == "mu", 
-                           coef_name == "arsenic") |>
-      arrange(age) |>
-      select(age, Estimate, MAD) |>
-      rename(mu := Estimate, sigma := MAD),
-    df_female = df |> filter(sex == "Female", response == "mu", 
-                             coef_name == "arsenic") |>
-      arrange(age) |>
-      select(age, Estimate, MAD) |>
-      rename(mu := Estimate, sigma := MAD),
+    df_male = df |> filter(country == "US", sex == "Male") |>
+      arrange(age) |> select(age, mu, sigma),
+    df_female = df |> filter(country == "US", sex == "Female") |>
+      arrange(age) |> select(age, mu, sigma),
     f = f
   )
 }
@@ -69,7 +63,7 @@ plot_df <- function(u, title, y_lab) {
 main_aux <- function(f, title, y_lab, file_name) {
   process_sex(
     df = readr::read_csv(fs::path(here::here("data", "clean", 
-                              "arsenic_regression_stats"), ext = "csv")), 
+                "IHME-GBD_2021_CLEAN_incidence_bootstrapping"), ext = "csv")), 
     f = f
     ) |>
     plot_df(
@@ -77,7 +71,7 @@ main_aux <- function(f, title, y_lab, file_name) {
       y_lab = y_lab
     ) %>%
     ggsave(
-      filename = fs::path(here::here("text", "figures", "arsenic_distance_cumulative", file_name), ext = "png"), 
+      filename = fs::path(here::here("text", "figures", "age-sex_distance_cumulative", file_name), ext = "png"), 
       plot = .
     )
 }
@@ -87,13 +81,13 @@ main <- function() {
   c(
     main_aux(
       f = Fisher_Rao,
-      title = "Distance de Fisher-Rao cumulée entre pentes consécutives", 
+      title = "Distance de Fisher-Rao cumulée entre âges consécutives", 
       y_lab = "Distance de Fisher-Rao cumulée",
       file_name = "Fisher-Rao"
     ),
     main_aux(
       f = Kullback_Leibler,
-      title = "Divergence de Kullback-Leibler cumulée entre pentes consécutives",
+      title = "Divergence de Kullback-Leibler cumulée entre âges consécutives",
       y_lab = "Divergence de Kullback-Leibler cumulée",
       file_name = "Kullback-Leibler"
     ) 
@@ -101,3 +95,5 @@ main <- function() {
 }
 
 main()
+
+

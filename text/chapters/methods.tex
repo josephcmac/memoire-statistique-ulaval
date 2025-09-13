@@ -7,7 +7,7 @@ Les approches méthodologiques reposent sur une modélisation géométrique raff
 
 \subsection{Agrégation de données}
 
-Soit $n = \# (\mathcal{S} \times \mathcal{T})$ le nombre d'événements spatio-temporels. Pour chaque paire $(a,g) \in \mathcal{A} \times \mathcal{G}$, on considère $B = 100\,000$ échantillons avec remplacement de $(s,t) \in \mathcal{S} \times \mathcal{T}$, où le $b$-ème échantillon est noté
+Soit $n = \# (\mathcal{S} \times \mathcal{T})$ le nombre d'événements spatio-temporels. Pour chaque paire $(a,g) \in \mathcal{A} \times \mathcal{G}$, on considère $B = 1\,000$ échantillons avec remplacement de $(s,t) \in \mathcal{S} \times \mathcal{T}$, où le $b$-ème échantillon est noté
 \begin{equation}
 (s_1^{(b)}, t_1^{(b)}), (s_2^{(b)}, t_2^{(b)}), \dots, (s_n^{(b)}, t_n^{(b)}),
 \end{equation}
@@ -42,17 +42,13 @@ La dissimilarité entre deux lois $\mathcal{N}(\mu_1, \sigma_1^2)$ et $\mathcal{
 
 En complément, la dissimilarité est évaluée par la divergence de Kullback-Leibler, dirigée de la première vers la seconde, définie par \eqref{eq:kl_normal} du chapitre \ref{chap:math}. Cette mesure asymétrique quantifie l'information perdue lors de l'approximation d'une distribution par une autre. Les divergences totales le long des trajectoires par âges, agrégées par sexe, évaluent les évolutions directionnelles : une valeur plus élevée signale une asymétrie accrue dans les changements, \emph{ceteris paribus}.
 
-\subsection{Comparaisons transnationales}
-
-Les résultats pour les États-Unis sont comparés à ceux du Royaume-Uni, de la Norvège et de l'Italie, en évaluant les divergences dans les trajectoires hyperboliques, les motifs symboliques, la distance de Fisher-Rao et la divergence de Kullback-Leibler. Cette analyse, ancrée dans les mêmes hypothèses probabilistes, identifie des invariants ou hétérogénéités liées à des contextes socio-économiques distincts.
-
 \section{L'effet du sexe stratifié par l'âge}
 
 Les approches méthodologiques reposent sur une modélisation géométrique raffinée, appliquée aux données d'incidence des MRC issues de GBD-2021, stratifiées par âge. Elles s'inscrivent dans le cadre probabiliste défini au chapitre sur les données, où chaque quadruplet $(s,t,a) \in \mathcal{S} \times \mathcal{T} \times \mathcal{A}$ est associé à des variables aléatoires pour les mâles et les femelles.
 
 \subsection{Agrégation de données}
 
-La statistique $g$ de Cohen est définie par la formule \eqref{eq:g_cohen} du chapitre \ref{chap:math}. Soit $n = \# (\mathcal{S} \times \mathcal{T})$. Pour chaque âge $a \in \mathcal{A}$, on considère $B = 100\,000$ échantillons avec remplacement de $(s,t) \in \mathcal{S} \times \mathcal{T}$, où le $b$-ème échantillon est noté
+La statistique $g$ de Cohen est définie par la formule \eqref{eq:g_cohen} du chapitre \ref{chap:math}. Soit $n = \# (\mathcal{S} \times \mathcal{T})$. Pour chaque âge $a \in \mathcal{A}$, on considère $B = 1\,000$ échantillons avec remplacement de $(s,t) \in \mathcal{S} \times \mathcal{T}$, où le $b$-ème échantillon est noté
 \begin{equation}
 (s_1^{(b)}, t_1^{(b)}), (s_2^{(b)}, t_2^{(b)}), \dots, (s_n^{(b)}, t_n^{(b)}).
 \end{equation}
@@ -90,10 +86,6 @@ La dissimilarité entre deux lois $\mathcal{N}(\mu_1, \sigma_1^2)$ et $\mathcal{
 \subsection{Divergence de Kullback-Leibler}
 
 La dissimilarité est évaluée par la divergence de Kullback-Leibler, dirigée, définie par \eqref{eq:kl_normal} du chapitre \ref{chap:math}. Les divergences totales le long des trajectoires par âges évaluent les évolutions directionnelles : une valeur plus élevée signale une asymétrie accrue, \emph{ceteris paribus}.
-
-\subsection{Comparaisons transnationales}
-
-Les résultats pour les États-Unis sont comparés à ceux du Royaume-Uni, de la Norvège et de l'Italie, en évaluant les divergences dans les trajectoires hyperboliques, les motifs symboliques, la distance de Fisher-Rao et la divergence de Kullback-Leibler. Cette analyse identifie des invariants ou hétérogénéités liées à des contextes socio-économiques distincts.
 
 \section{L'effet de l'arsenic PM$_{2.5}$}
 Les approches méthodologiques reposent sur une modélisation probabiliste appliquée aux données de prévalence des maladies respiratoires chroniques issues de GBD-2021, stratifiées par région, année, âge et sexe. Elles s'inscrivent dans le cadre défini au chapitre sur les données, où chaque quadruplet $(s, t, a, g) \in \mathcal{S} \times \mathcal{T} \times \mathcal{A} \times \mathcal{G}$ est associé à une variable aléatoire $P_{s,t,a,g} \sim \mathcal{N}(\mu_{s,t,a,g}, \sigma_{s,t,a,g}^2)$ représentant la transformée logit (en base 10) du taux de prévalence. Les concentrations d'arsenic dans les PM$_{2.5}$, notées $C_s \sim \mathcal{N}(\mu_s, \sigma_s^2)$, sont issues des données de l'EPA agrégées par région $s \in \mathcal{S}$.
