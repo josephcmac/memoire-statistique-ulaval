@@ -58,7 +58,7 @@ plot_df <- function(u, title, y_lab) {
     geom_line(aes(age, u_female), color="pink") +
     labs(
       title = title,
-      subtitle = "Mâles : bleu; Femelles : rose",
+      subtitle = "Mâles : bleu; Femelles : rose; Période : 1990-2019",
       x = "Tranche d'âge (± 2 ans)",
       y = y_lab,
       caption = "Source : EPA & IHME; Visualisation : José Manuel Rodríguez Caballero"

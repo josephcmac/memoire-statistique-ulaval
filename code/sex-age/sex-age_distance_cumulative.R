@@ -8,37 +8,28 @@ Kullback_Leibler <- function(mu1, sigma1, mu2, sigma2) {
   log(sigma2 / sigma1) + (sigma1^2 + (mu1 - mu2)^2) / (2 * sigma2^2) - 0.5
 }
 
-create_df <- function(age, d_male, d_female) {
+create_df <- function(age, d) {
   data.frame(
     age = age,
-    u_male = cumsum(d_male),
-    u_female = cumsum(d_female)
+    u = cumsum(d)
   )
 }
 
-process <- function(df_male, df_female, f) {
+process <- function(df, f) {
   create_df(
-    age = tail(df_male,-1)$age,
-    d_male = sapply(2:nrow(df_male), function(i) 
+    age = tail(df,-1)$age,
+    d = sapply(2:nrow(df), function(i) 
       f(
-        mu1=df_male$mu[i-1], sigma1=df_male$sigma[i-1],
-        mu2=df_male$mu[i], sigma2=df_male$sigma[i]
-        )
-      ),
-    d_female = sapply(2:nrow(df_female), function(i) 
-      f(
-        mu1=df_female$mu[i-1], sigma1=df_female$sigma[i-1],
-        mu2=df_female$mu[i], sigma2=df_female$sigma[i]
+        mu1=df$mu[i-1], sigma1=df$sigma[i-1],
+        mu2=df$mu[i], sigma2=df$sigma[i]
         )
       )
   )
 }
 
-process_sex <- function(df, f) {
+process_country <- function(df, f) {
   process(
-    df_male = df |> filter(country == "US", sex == "Male") |>
-      arrange(age) |> select(age, mu, sigma),
-    df_female = df |> filter(country == "US", sex == "Female") |>
+    df = df |> filter(country == "US") |>
       arrange(age) |> select(age, mu, sigma),
     f = f
   )
@@ -46,13 +37,11 @@ process_sex <- function(df, f) {
 
 plot_df <- function(u, title, y_lab) {
   ggplot(u) +
-    geom_point(aes(age, u_male), color="blue") +
-    geom_line(aes(age, u_male), color="blue") +
-    geom_point(aes(age, u_female), color="pink") +
-    geom_line(aes(age, u_female), color="pink") +
+    geom_point(aes(age, u), color="orange") +
+    geom_line(aes(age, u), color="orange") +
     labs(
       title = title,
-      subtitle = "Mâles : bleu; Femelles : rose; Période : 1990-2019",
+      subtitle = "Période : 1990-2019",
       x = "Tranche d'âge (± 2 ans)",
       y = y_lab,
       caption = "Source : EPA & IHME; Visualisation : José Manuel Rodríguez Caballero"
@@ -61,9 +50,9 @@ plot_df <- function(u, title, y_lab) {
 }
 
 main_aux <- function(f, title, y_lab, file_name) {
-  process_sex(
+  process_country(
     df = readr::read_csv(fs::path(here::here("data", "clean", 
-                "IHME-GBD_2021_CLEAN_incidence_bootstrapping"), ext = "csv")), 
+                "IHME-GBD_2021_CLEAN_incidence_g_Cohen"), ext = "csv")), 
     f = f
     ) |>
     plot_df(
@@ -71,7 +60,7 @@ main_aux <- function(f, title, y_lab, file_name) {
       y_lab = y_lab
     ) %>%
     ggsave(
-      filename = fs::path(here::here("text", "figures", "age-sex_distance_cumulative", file_name), ext = "png"), 
+      filename = fs::path(here::here("text", "figures", "sex-age_distance_cumulative", file_name), ext = "png"), 
       plot = .
     )
 }

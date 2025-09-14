@@ -1,92 +1,108 @@
 library(tidyverse)
-library(here)
 library(fs)
+library(here)
 
 inverse_logit_per_100k <- function(logit_value) {
   1e5 / (1 + 10^(-logit_value))
 }
 
-create_plot <- function(df, country, sex0, period, L_min, L_max) {
+create_table_aux <- function(df, u, v) {
   df |>
-    arrange(age) |>
-    ggplot() +
-    geom_line(aes(age, inverse_logit_per_100k(mu)), color = "black") +
-    geom_point(aes(age, inverse_logit_per_100k(mu)), color = "black") +
-    geom_errorbar(aes(age, inverse_logit_per_100k(mu),
-                      ymin = inverse_logit_per_100k(ci_low),
-                      ymax = inverse_logit_per_100k(ci_high)),
-                  color = "gray", width = 0.2) +
-    ylim(inverse_logit_per_100k(L_min), inverse_logit_per_100k(L_max)) +
+    mutate(
+      val = inverse_logit_per_100k(mu),
+      lower = inverse_logit_per_100k(mu + u*sigma), 
+      upper = inverse_logit_per_100k(mu + v*sigma)
+    ) |>
+    select(-mu,-sigma)
+}
+
+create_table <- function(df, country0, sex0, alpha) {
+  create_table_aux(
+    df =  df |>
+      filter(country == country0, sex == sex0) |>
+      select(age, mu, sigma), 
+    u = qnorm(alpha/2), 
+    v = qnorm(1-alpha/2)
+    )
+}
+
+create_extended_table_sex <- function(df, country_list, sex1, alpha) {
+  Reduce(f = rbind,
+         x = map(country_list, function(x) 
+           create_table(df=df, country0 = x, sex0 = sex1, alpha = alpha) |>
+             mutate(country=x, sex=sex1)
+         ),
+         init = data.frame()
+  )
+}
+
+create_extended_table <- function(df, country_list, sex_list, alpha) {
+  Reduce(f = rbind,
+         x = map(sex_list, function(x) 
+           create_extended_table_sex(df=df, country_list=country_list, sex1 = x, 
+                                     alpha = alpha) 
+           ),
+         init = data.frame()
+  )
+}
+
+create_graphics_sex <- function(df, sex_label, period_label, y_min, y_max, dodge_width=1) {
+  df |> 
+    rename(pays := country) |>
+    ggplot(aes(x = age, y = val, color = pays)) +
+    geom_line(linewidth=0.1) +
+    geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2, 
+                  position = position_dodge(width = dodge_width)) +
     labs(
-      title = "Taux d'incidence des MRC par âge",
-      subtitle = paste0("Pays : ", country, "; Sexe : ", ifelse(sex0 == "Male", "mâle", "femelle"), "; Période : ", period),
-      caption = "Source : EPA & IHME; Visualisation : José Manuel Rodríguez Caballero",
-      x = "Tranche d'âge (± 2 ans)", y = "Nouveaux cas de MRC pour 100 000 personnes"
-    ) +
+      title = "95% CI des taux d'incidence des MRC par tranche d'âge",
+      subtitle = paste0("Sexe : ", sex_label,"; Période : ", period_label),
+      x = "Âge (± 2 ans)", y = "Nouveaux cas pour 100 000",
+      caption = "Source : GBD-2021\nVisualisation : José Manuel Rodríguez Caballero") +
+    ylim(y_min, y_max) +
     theme_bw()
 }
 
-summarise_per_age <- function(df_sex, q=qnorm(0.975)) {
-  df_sex |>
-    mutate(age = as.numeric(age)) |>
-    group_by(age) |>
-    summarise(
-      mu = mean(mu),
-      sigma = sqrt(sum(sigma^2)) / n(),
-      .groups = "drop"
-    ) |>
-    mutate(
-      ci_low = mu - q * sigma,
-      ci_high = mu + q * sigma
-    )
-}
-
-
-process_data_3 <- function(df_male, df_female, L_min, L_max, country = "US", start_year = 1990, end_year = 2019) {
+create_all_graphics <- function(df) {
   list(
-    "Male" = create_plot(df = df_male, country = country, sex0 = "Male", period = paste(start_year, "-", end_year), L_min = L_min, L_max = L_max),
-    "Female" = create_plot(df = df_female, country = country, sex0 = "Female", period = paste(start_year, "-", end_year), L_min = L_min, L_max = L_max)
-  )
-}
-  
-
-process_data_2 <- function(df_male, df_female, country = "US", start_year = 1990, end_year = 2019) {
-  process_data_3(
-    df_male=df_male, 
-    df_female=df_female, 
-    L_min=min(c(df_male$ci_low, df_female$ci_low)), 
-    L_max=max(c(df_male$ci_high, df_female$ci_high)), 
-    country = "US", start_year = 1990, end_year = 2019)
-}
-  
-
-process_data_1 <- function(df_filtered, country = "US", start_year = 1990, end_year = 2019) {
-  process_data_2(
-    df_male = df_filtered |> filter(sex == "Male") |> summarise_per_age(),
-    df_female = df_filtered |> filter(sex == "Female") |> summarise_per_age()
+    "Male" = df |> filter(sex == "Male") |>
+      create_graphics_sex(
+        sex_label = "Mâle",
+        period_label = "1990-2019",
+        y_min=0, y_max=6000
+      ),
+   "Female" = df |> filter(sex == "Female") |>
+      create_graphics_sex(
+        sex_label = "Femelle",
+        period_label = "1990-2019",
+        y_min=0, y_max=6000
+      )
   )
 }
 
-process_data <- function(df, country = "US", start_year = 1990, end_year = 2019) {
-  process_data_1(df_filtered = df |>
-                   filter(year >= start_year & year <= end_year, country == !!country))
-}
 
-save_plots <- function(plot_list) {
-  sapply(names(plot_list), function(name) {
+save_graphics <- function(l) {
+  map(names(l), function(n) 
     ggsave(
-      filename = fs::path(here::here("text", "figures", "age-sex_data_analysis"), name, ext = "png"),
-      plot = plot_list[[name]]
+      filename = path(here("text", "figures", "age-sex_data_analysis",
+                                n), ext = "png"),
+      plot = l[[n]]
+      )
     )
-  })
 }
 
-main <- function(start_year = 1990, end_year = 2019) {
-  process_data(
-    df = readr::read_csv(here::here("data", "clean", "IHME-GBD_2021_CLEAN_incidence.csv")),
-    start_year = start_year, 
-    end_year = end_year) |>
-    save_plots()
+main <- function() {
+  read_csv(file = path(here("data", "clean", "IHME-GBD_2021_CLEAN_incidence_bootstrapping"),
+                       ext = "csv")) |>
+    mutate(age = as.integer(age)) |>
+    create_extended_table(
+      country_list = c("US", "UK", "NO", "IT"),
+      sex_list = c("Male", "Female"),
+      alpha = 0.05
+    ) |> 
+    create_all_graphics() |>
+    save_graphics()  
 }
+
 
 main()
+
