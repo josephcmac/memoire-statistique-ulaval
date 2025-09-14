@@ -1,6 +1,24 @@
 \chapter{Conclusion et perspectives}
 \label{chap:conclusion}
-Résumé synthétique, recommandations pour actuariat / santé publique, pistes futures (autres polluants, analyses causales longitudinales).
 
+Ce chapitre synthétise les principaux résultats de ce mémoire, met en lumière ses contributions et propose des perspectives pour des travaux futurs. Les analyses effectuées, fondées sur la géométrie de l'information et appliquées aux données d'incidence et de prévalence des maladies respiratoires chroniques, ont révélé des patterns robustes liés à l'âge, au sexe et à l'exposition à l'arsenic dans les PM$_{2,5}$.
 
-%
+\section{Synthèse des résultats principaux}
+
+Les résultats empiriques démontrent une variabilité plus élevée chez les hommes que chez les femmes dans les trajectoires des paramètres de distribution des incidences des MRC. Spécifiquement, la somme cumulée des distances de Fisher-Rao entre trajectoires consécutives est systématiquement supérieure chez les hommes, une propriété vérifiée sur des données provenant de plusieurs pays (Figures~\ref{fig:age-sex_FR_cumulative} et~\ref{fig:sex-age_distance_cumulative-Fisher-Rao}). Un résultat analogue émerge avec la divergence de Kullback-Leibler (Figures~\ref{fig:age-sex_KL_cumulative} et~\ref{fig:sex-age_distance_cumulative-Kullback-Leibler}), suggérant que ces mesures capturent une caractéristique biologique intrinsèque des populations.
+
+Ces observations s'interprètent à travers la théorie évolutive de Geodakyan, qui postule une plus grande variabilité phénotypique chez les mâles pour favoriser l'adaptation environnementale. La taille d'effet mesurée par la statistique $g$ de Cohen révèle une prédominance masculine pendant l'enfance, féminine à l'adolescence et chez les jeunes adultes, puis une variabilité selon les pays à partir de 50 ans, avec une tendance générale vers une prédominance masculine (Figure~\ref{fig:sex-age_plot_country-sex}). Les variations par tranche d'âge, codées en signes d'augmentation ou de diminution pour $\mu$ et $\sigma$, sont consistantes entre pays (Tables~\ref{tab:age-sex-symbol-mu-male} à~\ref{tab:age-sex-symbol-sigma-female} et Tables~\ref{tab:age-sex-symbol-mu} à~\ref{tab:age-sex-symbol-sigma}).
+
+Concernant l'effet de l'arsenic dans les PM$_{2,5}$, la relation avec la prévalence augmente linéairement avec l'exposition après transformations\footnote{La transformation log pour la concentration moyenne d'arsenic PM$_{2,5}$ et la transformation log-cotes pour la prévalence.}, confirmant un lien causal sous-jacent (Figures~\ref{fig:arsenic-map}, \ref{fig:arsenic_Poincare}, \ref{fig:GBD-map} et~\ref{fig:GBD_Poincare}.
+
+\section{Contributions}
+
+Ce mémoire contribue à l'intégration de la géométrie de l'information en épidémiologie, en démontrant l'utilité des distances de Fisher-Rao et des divergences de Kullback-Leibler pour quantifier les différences sexuelles et environnementales dans les MRC. Il renforce empiriquement la théorie de Geodakyan en fournissant des preuves quantitatives cohérentes entre pays. De plus, il met en évidence le rôle modulateur de l'arsenic aérien, en distinguant incidence et prévalence pour corriger les biais potentiels.
+
+\section{Perspectives}
+
+Les implications pratiques ouvrent plusieurs avenues. En actuariat, les modèles de tarification des primes d'assurance santé pourraient incorporer ces interactions âge-sexe-pollution pour une évaluation plus précise des risques régionaux. En épidémiologie, les méthodes proposées s'étendent à d'autres pathologies, contribuant au débat sur la validité de la théorie de Geodakyan via des prédictions a priori de variabilité accrue chez les hommes.
+
+Sur le plan environnemental, les liens avec le changement climatique – notamment l'augmentation des concentrations d'arsenic due à la sécheresse – motivent des recherches sur les impacts indirects sur la santé humaine. En sciences politiques et santé publique, ces résultats plaident pour une allocation ciblée des ressources, priorisant les groupes vulnérables basés sur des données empiriques plutôt qu'une répartition uniforme.
+
+Des travaux futurs pourraient intégrer d'autres polluants, utiliser des données longitudinales individuelles pour affiner les proxies d'exposition, ou appliquer ces approches à des contextes globaux pour valider la généralisabilité.

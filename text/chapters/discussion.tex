@@ -1,3 +1,38 @@
 \chapter{Discussion}
 \label{chap:discussion}
-Rassembler les résultats, discuter des limites (biais de diagnostic, confondeurs, limites des mesures PM2.5 comme proxy d'arsenic), implications théoriques (Geodakyan) et pratiques.
+
+Ce chapitre discute et synthétise les résultats présentés au chapitre \ref{chap:results}, identifie les limites de l'étude et explore leurs implications théoriques et pratiques. Les analyses, fondées sur la géométrie de l'information, portent sur les données d'incidence et de prévalence des maladies respiratoires chroniques, stratifiées par âge, sexe et exposition régionale à l'arsenic contenu dans les PM$_{2,5}$.
+
+\section{Synthèse des résultats}
+
+Les résultats empiriques mettent en évidence des motifs cohérents des variations des MRC selon l'âge et le sexe, ainsi qu'un effet modérateur de l'exposition à l'arsenic. Dans l'analyse de l'effet de l'âge, stratifiée par sexe, les intervalles de confiance des taux d'incidence (Figure \ref{fig:CI-age-sex}) montrent une évolution en \emph{U} — une incidence plus élevée chez les plus jeunes et chez les plus âgés. Les trajectoires hyperboliques dans le demi-plan de Poincaré (Figures \ref{fig:age-sex_Poincare_US_UK} et \ref{fig:age-sex_Poincare_NO_IT}) révèlent une tendance au mouvement antihoraire.
+
+Les signes des différences des paramètres $\mu$ et $\sigma$ (Tables \ref{tab:age-sex-symbol-mu-male}, \ref{tab:age-sex-symbol-mu-female}, \ref{tab:age-sex-symbol-sigma-male} et \ref{tab:age-sex-symbol-sigma-female}) suggèrent une constance du phénomène biologique entre pays.
+
+Les sommes cumulées des distances de Fisher–Rao (Figure \ref{fig:age-sex_FR_cumulative}) et des divergences de Kullback–Leibler (Figure \ref{fig:age-sex_KL_cumulative}) sont systématiquement plus élevées chez les hommes que chez les femmes — une caractéristique observée de manière robuste à travers plusieurs pays.
+
+Concernant l'effet du sexe, stratifié par âge, les intervalles de confiance de la statistique $g$ de Cohen (Figure \ref{fig:sex-age_plot_country-sex}) indiquent une prédominance masculine pendant l'enfance, une prédominance féminine à l'adolescence et chez les jeunes adultes, puis une variabilité inter-pays à partir de 50 ans, avec une tendance générale vers une prédominance masculine chez les sujets plus âgés. Les trajectoires hyperboliques associées confirment ces différences de dynamique entre sexes (Figure \ref{fig:sex-age_Poincare}). Les variations par tranche d'âge, codées par signes d'augmentation ou de diminution pour $\mu$ et $\sigma$, sont par ailleurs similaires entre pays (Tables \ref{tab:age-sex-symbol-mu} et \ref{tab:age-sex-symbol-sigma}).
+
+Pour l'effet de l'arsenic dans les PM$*{2,5}$, les cartes et représentations géographiques (Figures \ref{fig:arsenic-map} et \ref{fig:arsenic_Poincare}) ainsi que les log-cotes de prévalence (Figures \ref{fig:GBD-map} et \ref{fig:GBD_Poincare}) soulignent des variations régionales marquées. Les intervalles de confiance des pentes $\hat{\beta}*{a,g}$ (Figure \ref{fig:CI-arsenic}) montrent une relation monotone entre l'exposition à l'arsenic présent dans les PM$_{2,5}$ et la prévalence des MRC ; cette relation dépend toutefois de l'âge et du sexe.
+
+Les trajectoires dans le demi-plan de Poincaré (Figure \ref{fig:trajectoires-arsenic}), ainsi que les distances cumulées de Fisher–Rao (Figure \ref{fig:arsenic_distance_cumulative-Fisher-Rao}) et de Kullback–Leibler (Figure \ref{fig:arsenic_distance_cumulative-Kullback-Leibler}), montrent une variabilité plus prononcée chez les hommes.
+
+\section{Limites de l'étude}
+
+Des facteurs confondants potentiels — tabagisme, exposition à d'autres polluants atmosphériques (par exemple ozone, dioxyde d'azote) ou déterminants socio-économiques — n'ont pas été contrôlés et pourraient influencer les associations observées. 
+
+L'utilisation de concentrations régionales d'arsenic dans les PM$_{2,5}$ comme proxy d'exposition présente des limites : ces mesures agrégées n'ont pas de résolution individuelle, et bien que des effets synergiques avec les PM$_{2,5}$ soient documentés, la voie d'exposition principale de l'arsenic reste souvent orale plutôt qu'inhalatoire.
+
+De plus, les bases de données utilisées (GBD-2021 et EPA), couvrant la période 1990–2019, comportent des incertitudes de modélisation et une résolution spatiale limitée. L'approche par bootstrap employée pour estimer la variabilité suppose une indépendance qui pourrait être violée en présence de corrélations temporelles ou spatiales non modélisées. Enfin, cette décrit des corrélations et ne permet pas d'établir des relations causales.
+
+\section{Implications théoriques}
+
+Ces résultats s'inscrivent dans le cadre de la théorie évolutive de Geodakyan, qui postule une plus grande variabilité phénotypique chez les mâles en faveur d'une adaptation environnementale, tandis que les femelles conserveraient une stabilité phylogénétique. La variabilité accrue observée chez les hommes dans les trajectoires distributionnelles (Figures \ref{fig:age-sex_FR_cumulative} et \ref{fig:age-sex_KL_cumulative}), cohérente entre pays, apporte un soutien empirique quantitatif à cette perspective via la géométrie de l'information. Ces éléments contribuent au débat sur les fondements biologiques de la théorie et suggèrent d'éventuelles extensions à d'autres traits adaptatifs.
+
+\section{Implications pratiques}
+
+Sur le plan opérationnel, ces résultats ont des implications pour l'actuariat : les modèles de tarification des primes d'assurance santé pourraient intégrer les interactions âge–sexe–pollution afin d'affiner l'évaluation des risques au niveau régional. En épidémiologie, les méthodes fondées sur les distances de Fisher–Rao et les divergences de Kullback–Leibler peuvent être transposées à d'autres pathologies pour quantifier les différences sexuelles, et potentiellement informées a priori par la théorie de Geodakyan.
+
+En sciences de l'environnement, la corrélation observée entre pollution atmosphérique et prévalence des MRC, associée à des indications selon lesquelles la sécheresse peut accroître la mobilisation de l'arsenic dans les sols et l'eau, souligne la nécessité d'étudier les impacts indirects du changement climatique sur la santé respiratoire. En santé publique et en politiques publiques, ces résultats plaident pour une allocation des ressources sanitaires mieux ciblée, fondée sur des données d'âge, de sexe et de niveaux régionaux de pollution plutôt que sur une distribution uniforme.
+
+Ces implications motivent des recherches futures, notamment des études longitudinales et des approches permettant un meilleur contrôle des confondeurs, afin d'affiner les modèles et de confirmer les associations observées dans des contextes plus variés.
