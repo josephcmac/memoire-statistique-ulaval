@@ -22,7 +22,7 @@ create_plot <- function(df, country, period) {
                      color = color),
                  arrow = arrow(length = unit(0.2, "cm"))) +
     labs(
-      title = "Demi-plan de Poincaré",
+      title = "Trajectoire de vie de la g de Cohen",
       subtitle = paste0("Pays : ", country, "; Période : ", period),
       x = "µ", y = "𝛔",
       caption = "Source : GBD-2021\nVisualisation : José Manuel Rodríguez Caballero") +

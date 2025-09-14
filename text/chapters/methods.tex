@@ -1,113 +1,95 @@
 \chapter{Méthodes}
 \label{chap:methods}
+Ce chapitre détaille les approches méthodologiques employées pour analyser les données sur les maladies respiratoires chroniques (MRC), issues de la base GBD-2021. Les méthodes sont organisées par effet étudié : l'âge stratifié par sexe, le sexe stratifié par âge, et l'exposition à l'arsenic dans les PM$_{2.5}$. Elles reposent sur un cadre probabiliste où les taux transformés en logit (base 10) sont modélisés par des distributions normales, facilitant l'application de techniques géométriques et statistiques robustes.
 
 \section{L'effet de l'âge stratifié par le sexe}
 
-Les approches méthodologiques reposent sur une modélisation géométrique raffinée, appliquée aux données d'incidence des maladies respiratoires chroniques issues de GBD-2021, stratifiées par âge et sexe. Elles s'inscrivent dans le cadre probabiliste défini au chapitre sur les données, où chaque quadruplet $(s,t,a,g) \in \mathcal{S} \times \mathcal{T} \times \mathcal{A} \times \mathcal{G}$ est associé à une variable aléatoire $I_{s,t,a,g} \sim \mathcal{N}(\mu_{s,t,a,g}, \sigma_{s,t,a,g}^2)$ représentant la transformée logit (en base 10) du taux d'incidence.
+Cette section détaille les méthodes employées pour évaluer l'impact de l'âge sur les taux d'incidence des maladies respiratoires chroniques (MRC), stratifiés par sexe. Les analyses reposent sur des agrégations bootstrap des données GBD-2021, des projections dans l'espace hyperbolique et des mesures de dissimilarité géométrique, appliquées par pays lorsque pertinent.
 
 \subsection{Agrégation de données}
 
-Soit $n = \# (\mathcal{S} \times \mathcal{T})$ le nombre d'événements spatio-temporels. Pour chaque paire $(a,g) \in \mathcal{A} \times \mathcal{G}$, on considère $B = 1\,000$ échantillons avec remplacement de $(s,t) \in \mathcal{S} \times \mathcal{T}$, où le $b$-ème échantillon est noté
-\begin{equation}
-(s_1^{(b)}, t_1^{(b)}), (s_2^{(b)}, t_2^{(b)}), \dots, (s_n^{(b)}, t_n^{(b)}),
-\end{equation}
-pour $b = 1, 2, \dots, B$. Pour le $b$-ème échantillon, on calcule la moyenne :
-\begin{equation}
+Pour chaque paire $(a, g) \in \mathcal{A} \times \mathcal{G}$, avec $\mathcal{A}$ l'ensemble des tranches d'âge et $\mathcal{G} = \{\text{mâle}, \text{femelle}\}$, un bootstrap non paramétrique est effectué avec $B = 1\,000$ rééchantillons de taille $n = \#(\mathcal{S} \times \mathcal{T})$, où $\mathcal{S}$ désigne les emplacements (pays ou régions) et $\mathcal{T}$ les années (1990-2019). Pour le $b$-ième rééchantillon, la moyenne est calculée comme suit :
+\[
 I_{a,g}^{(b)} = \frac{1}{n} \sum_{i=1}^n I_{s_i^{(b)}, t_i^{(b)}, a, g}^{(b,i)},
-\end{equation}
-où $I_{s_i^{(b)}, t_i^{(b)}, a, g}^{(b,i)}$ est une réalisation de $I_{s_i^{(b)}, t_i^{(b)}, a, g}$. On calcule ensuite la moyenne $\mu_{a,g}$ et l'écart-type $\sigma_{a,g}$ de la suite $I_{a,g}^{(1)}, I_{a,g}^{(2)}, \dots, I_{a,g}^{(B)}$. Le taux d'incidence $i_{a,g}$ est obtenu par l'inverse de la transformation logit (en base 10) :
-\begin{equation}
+\]
+où $I_{s_i^{(b)}, t_i^{(b)}, a, g}^{(b,i)} \sim \mathcal{N}(\mu_{s_i^{(b)}, t_i^{(b)}, a, g}, \sigma_{s_i^{(b)}, t_i^{(b)}, a, g}^2)$ représente la transformée logit (base 10) du taux d'incidence. Les paramètres $\mu_{a,g}$ et $\sigma_{a,g}$ sont estimés comme la moyenne et l'écart-type des $I_{a,g}^{(b)}$. Le taux d'incidence moyen $i_{a,g}$ est obtenu par inversion :
+\[
 i_{a,g} = \frac{10^5}{1 + 10^{-\mu_{a,g}}},
-\end{equation}
-avec des intervalles de confiance à 95\,\% dérivés des quantiles empiriques (2,5\,\% et 97,5\,\%) des valeurs simulées transformées, assurant une quantification précise de l'incertitude sur l'échelle originale des taux par 100\,000 habitants.
+\]
+avec des intervalles de confiance à 95\,\% dérivés des quantiles empiriques (2,5\,\% et 97,5\,\%) des valeurs transformées, assurant une quantification robuste de l'incertitude sur l'échelle des taux par 100\,000 habitants.
 
 \subsection{Dynamique hyperbolique}
 
-Les couples $(\mu_{a,g}, \sigma_{a,g})$ sont projetés dans le demi-plan hyperbolique de Poincaré $\mathbb{H} = \{ z \in \mathbb{C} \mid \Im(z) > 0 \}$, par $z_{a,g} = \mu_{a,g} + i \sigma_{a,g}$. Cette représentation exploite la structure riemannienne de l'espace des distributions normales univariées, modélisé comme une variété hyperbolique. Pour chaque sexe $g \in \mathcal{G}$, la fonction $a \mapsto (\mu_{a,g}, \sigma_{a,g})$ est interprétée comme la trajectoire d'une particule sur cette variété, avec la tranche d'âge $a$ jouant le rôle du temps.
+Les paires $(\mu_{a,g}, \sigma_{a,g})$ sont projetées dans le demi-plan de Poincaré $\mathbb{H} = \{ z \in \mathbb{C} \mid \Im(z) > 0 \}$ via $z_{a,g} = \mu_{a,g} + i \sigma_{a,g}$. Cette représentation exploite la structure riemannienne de l'espace des distributions normales univariées, modélisant les variations par âge comme des trajectoires sur une variété hyperbolique, avec l'âge jouant le rôle de paramètre temporel.
 
 \subsection{Dynamique symbolique}
 
-Pour explorer les variations qualitatives, des indicateurs directionnels sont introduits sur la base des différences entre tranches d'âge consécutives (espacées de 5 ans) :
-\begin{eqnarray}
-	S_{a,g}^{(\mu)} &=& \mathrm{sign}(\mu_{a,g} - \mu_{a-5,g}), \\
-	S_{a,g}^{(\sigma)} &=& \mathrm{sign}(\sigma_{a,g} - \sigma_{a-5,g}),
-\end{eqnarray}
-pour $a \geq 7$. Ces signes binaires, calculés pour chaque pays, mettent en évidence des motifs qualitatifs dans les données, moins apparents dans les analyses continues.
+Les variations qualitatives sont analysées via les signes des différences entre tranches d'âge consécutives (espacées de 5 ans) :
+\[
+S_{a,g}^{(\mu)} = \mathrm{sign} (\mu_{a,g} - \mu_{a-5,g}), \quad S_{a,g}^{(\sigma)} = \mathrm{sign}(\sigma_{a,g} - \sigma_{a-5,g}),
+\]
+pour $a \geq 5$ (en tenant compte des tranches commençant à 0-4 ans). Ces indicateurs, calculés et agrégés par pays, mettent en évidence des motifs directionnels dans l'évolution des paramètres $\mu$ et $\sigma$.
 
 \subsection{Distance de Fisher-Rao}
 
-La dissimilarité entre deux lois $\mathcal{N}(\mu_1, \sigma_1^2)$ et $\mathcal{N}(\mu_2, \sigma_2^2)$ est mesurée par la distance de Fisher-Rao, donnée par la formule \eqref{eq:fr_normal} du chapitre \ref{chap:math}, qui capture les géodésiques de la variété statistique. Les longueurs totales des trajectoires le long des âges, agrégées par sexe, quantifient les évolutions globales : une distance plus grande indique une évolution plus marquée, \emph{ceteris paribus}.
+La distance de Fisher-Rao entre deux distributions $\mathcal{N}(\mu_1, \sigma_1^2)$ et $\mathcal{N}(\mu_2, \sigma_2^2)$ est donnée par l'équation~\eqref{eq:fr_normal} du chapitre~\ref{chap:math}. Les sommes cumulées de ces distances le long des trajectoires par âge et sexe quantifient l'ampleur globale des évolutions distributionnelles, une valeur plus élevée indiquant des changements plus marqués.
 
 \subsection{Divergence de Kullback-Leibler}
 
-En complément, la dissimilarité est évaluée par la divergence de Kullback-Leibler, dirigée de la première vers la seconde, définie par \eqref{eq:kl_normal} du chapitre \ref{chap:math}. Cette mesure asymétrique quantifie l'information perdue lors de l'approximation d'une distribution par une autre. Les divergences totales le long des trajectoires par âges, agrégées par sexe, évaluent les évolutions directionnelles : une valeur plus élevée signale une asymétrie accrue dans les changements, \emph{ceteris paribus}.
+La divergence de Kullback-Leibler, mesure asymétrique de dissimilarité, est définie par l'équation~\eqref{eq:kl_normal} du chapitre~\ref{chap:math}. Ses sommes cumulées le long des trajectoires évaluent la directionnalité des changements, une valeur plus élevée signalant une asymétrie accrue dans les transitions distributionnelles.
 
 \section{L'effet du sexe stratifié par l'âge}
 
-Les approches méthodologiques reposent sur une modélisation géométrique raffinée, appliquée aux données d'incidence des MRC issues de GBD-2021, stratifiées par âge. Elles s'inscrivent dans le cadre probabiliste défini au chapitre sur les données, où chaque quadruplet $(s,t,a) \in \mathcal{S} \times \mathcal{T} \times \mathcal{A}$ est associé à des variables aléatoires pour les mâles et les femelles.
+Cette section détaille les méthodes employées pour évaluer l'impact du sexe sur les taux d'incidence des maladies respiratoires chroniques (MRC), stratifiés par âge. Les analyses reposent sur des agrégations bootstrap des données GBD-2021, des projections dans l'espace hyperbolique et des mesures de dissimilarité géométrique, appliquées par pays lorsque pertinent.
 
 \subsection{Agrégation de données}
 
-La statistique $g$ de Cohen est définie par la formule \eqref{eq:g_cohen} du chapitre \ref{chap:math}. Soit $n = \# (\mathcal{S} \times \mathcal{T})$. Pour chaque âge $a \in \mathcal{A}$, on considère $B = 1\,000$ échantillons avec remplacement de $(s,t) \in \mathcal{S} \times \mathcal{T}$, où le $b$-ème échantillon est noté
-\begin{equation}
-(s_1^{(b)}, t_1^{(b)}), (s_2^{(b)}, t_2^{(b)}), \dots, (s_n^{(b)}, t_n^{(b)}).
-\end{equation}
-Pour le $b$-ème échantillon, on génère les réalisations $I_{s_i^{(b)}, t_i^{(b)}, a, \mathrm{mâle}}^{(b,i)}$ et $I_{s_i^{(b)}, t_i^{(b)}, a, \mathrm{femelle}}^{(b,i)}$ pour $i = 1, \dots, n$. On calcule ensuite la statistique g de Cohen $g_a^{(b)}$ à partir de la formule 
-
-\begin{equation}
-	g_a^{(b)} = \frac{1}{2n}\sum_{i=1}^n \mathrm{sign} \left(I_{s_i^{(b)}, t_i^{(b)}, a, \mathrm{mâle}}^{(b,i)} -
-	I_{s_i^{(b)}, t_i^{(b)}, a, \mathrm{femelle}}^{(b,i)}
-	 \right).
-\end{equation}
-
-La valeur finale est
-\begin{equation}
-g_a = \frac{1}{B} \sum_{b=1}^B g_a^{(b)}.
-\end{equation}
-La distribution bootstrap de $g_a$ est approximée par $\mathcal{N}(\mu_a, \sigma_a^2)$, avec $\mu_a$ et $\sigma_a$ estimés à partir des $g_a^{(b)}$. Les intervalles de confiance à 95\,\% sont dérivés des quantiles empiriques (2,5\,\% et 97,5\,\%) des $g_a^{(b)}$.
+Pour chaque âge $a \in \mathcal{A}$, un bootstrap non paramétrique est effectué avec $B = 1\,000$ rééchantillons de taille $n = \#(\mathcal{S} \times \mathcal{T})$, où $\mathcal{S}$ désigne les emplacements (pays ou régions) et $\mathcal{T}$ les années (1990-2019). La statistique $g$ de Cohen, adaptée pour mesurer les disparités sexuelles, est calculée pour le $b$-ième rééchantillon comme suit :
+\[
+g_a^{(b)} = \frac{1}{n} \sum_{i=1}^n \mathrm{sign} \left( I_{s_i^{(b)}, t_i^{(b)}, a, \mathrm{mâle}}^{(b,i)} - I_{s_i^{(b)}, t_i^{(b)}, a, \mathrm{femelle}}^{(b,i)} \right),
+\]
+où $I_{s_i^{(b)}, t_i^{(b)}, a, g}^{(b,i)} \sim \mathcal{N}(\mu_{s_i^{(b)}, t_i^{(b)}, a, g}, \sigma_{s_i^{(b)}, t_i^{(b)}, a, g}^2)$ représente la transformée logit (base 10) du taux d'incidence, et $\mathrm{sign}$ retourne $-1$, $0$ ou $+1$. La valeur $g_a$ est la moyenne des $g_a^{(b)}$, et sa distribution est approximée par $\mathcal{N}(\mu_a, \sigma_a^2)$, avec $\mu_a$ et $\sigma_a$ estimés à partir des $g_a^{(b)}$. Les intervalles de confiance à 95\,\% sont dérivés des quantiles empiriques (2,5\,\% et 97,5\,\%) des $g_a^{(b)}$, assurant une quantification robuste des disparités.
 
 \subsection{Dynamique hyperbolique}
 
-Les couples $(\mu_a, \sigma_a)$ sont projetés dans le demi-plan hyperbolique de Poincaré $\mathbb{H} = \{ z \in \mathbb{C} \mid \Im(z) > 0 \}$, par $z_a = \mu_a + i \sigma_a$. La fonction $a \mapsto (\mu_a, \sigma_a)$ est interprétée comme la trajectoire d'une particule sur cette variété hyperbolique.
+Les paires $(\mu_a, \sigma_a)$ sont projetées dans le demi-plan de Poincaré $\mathbb{H} = \{ z \in \mathbb{C} \mid \Im(z) > 0 \}$ via $z_a = \mu_a + i \sigma_a$. Cette représentation exploite la structure riemannienne de l'espace des distributions normales univariées, modélisant les variations par âge comme des trajectoires sur une variété hyperbolique, avec l'âge jouant le rôle de paramètre temporel.
 
 \subsection{Dynamique symbolique}
 
-Des indicateurs directionnels sont introduits sur la base des différences entre tranches d'âge consécutives :
-\begin{eqnarray}
-	S_a^{(\mu)} &=& \mathrm{sign}(\mu_a - \mu_{a-5}), \\
-	S_a^{(\sigma)} &=& \mathrm{sign}(\sigma_a - \sigma_{a-5}),
-\end{eqnarray}
-pour $a \geq 7$. Ces signes binaires, calculés pour chaque pays, mettent en évidence des motifs qualitatifs.
+Les variations qualitatives sont analysées via les signes des différences entre tranches d'âge consécutives (espacées de 5 ans) :
+\[
+S_a^{(\mu)} = \mathrm{sign}(\mu_a - \mu_{a-5}), \quad S_a^{(\sigma)} = \mathrm{sign}(\sigma_a - \sigma_{a-5}),
+\]
+pour $a \geq 5$ (en tenant compte des tranches commençant à 0-4 ans). Ces indicateurs, calculés et agrégés par pays, mettent en évidence des motifs directionnels dans l'évolution des paramètres $\mu$ et $\sigma$.
 
 \subsection{Distance de Fisher-Rao}
 
-La dissimilarité entre deux lois $\mathcal{N}(\mu_1, \sigma_1^2)$ et $\mathcal{N}(\mu_2, \sigma_2^2)$ est mesurée par la distance de Fisher-Rao, donnée par \eqref{eq:fr_normal} du chapitre \ref{chap:math}. Les longueurs totales des trajectoires le long des âges quantifient les évolutions globales : une distance plus grande indique une évolution plus marquée, \emph{ceteris paribus}.
+La distance de Fisher-Rao entre deux distributions $\mathcal{N}(\mu_1, \sigma_1^2)$ et $\mathcal{N}(\mu_2, \sigma_2^2)$ est donnée par l'équation~\eqref{eq:fr_normal} du chapitre~\ref{chap:math}. Les sommes cumulées de ces distances le long des trajectoires par âge quantifient l'ampleur globale des évolutions distributionnelles, une valeur plus élevée indiquant des changements plus marqués.
 
 \subsection{Divergence de Kullback-Leibler}
 
-La dissimilarité est évaluée par la divergence de Kullback-Leibler, dirigée, définie par \eqref{eq:kl_normal} du chapitre \ref{chap:math}. Les divergences totales le long des trajectoires par âges évaluent les évolutions directionnelles : une valeur plus élevée signale une asymétrie accrue, \emph{ceteris paribus}.
+La divergence de Kullback-Leibler, mesure asymétrique de dissimilarité, est définie par l'équation~\eqref{eq:kl_normal} du chapitre~\ref{chap:math}. Ses sommes cumulées le long des trajectoires évaluent la directionnalité des changements, une valeur plus élevée signalant une asymétrie accrue dans les transitions distributionnelles.
 
 \section{L'effet de l'arsenic PM$_{2.5}$}
-Les approches méthodologiques reposent sur une modélisation probabiliste appliquée aux données de prévalence des maladies respiratoires chroniques issues de GBD-2021, stratifiées par région, année, âge et sexe. Elles s'inscrivent dans le cadre défini au chapitre sur les données, où chaque quadruplet $(s, t, a, g) \in \mathcal{S} \times \mathcal{T} \times \mathcal{A} \times \mathcal{G}$ est associé à une variable aléatoire $P_{s,t,a,g} \sim \mathcal{N}(\mu_{s,t,a,g}, \sigma_{s,t,a,g}^2)$ représentant la transformée logit (en base 10) du taux de prévalence. Les concentrations d'arsenic dans les PM$_{2.5}$, notées $C_s \sim \mathcal{N}(\mu_s, \sigma_s^2)$, sont issues des données de l'EPA agrégées par région $s \in \mathcal{S}$.
+
+Cette section détaille les méthodes employées pour évaluer l'impact des concentrations d'arsenic dans les particules fines (PM$_{2.5}$) sur la prévalence des maladies respiratoires chroniques (MRC) aux États-Unis, en utilisant des données agrégées de GBD-2021 et de l'EPA. Les analyses reposent sur des agrégations temporelles, des régressions linéaires robustes et des projections géométriques dans l'espace hyperbolique, permettant de quantifier les associations stratifiées par âge et sexe.
 
 \subsection{Agrégation de données}
-Pour chaque combinaison de région $s \in \mathcal{S}$, âge $a \in \mathcal{A}$ et sexe $g \in \mathcal{G}$, la prévalence agrégée $P_{s,a,g}$ est obtenue comme la moyenne des $P_{s,t,a,g}$ sur toutes les années $t \in \mathcal{T}$ :
-\begin{eqnarray}
-\mu_{s,a,g} &=& \frac{1}{n} \sum_{k=1}^n \mu_{s,t_k,a,g}, \\
-\sigma_{s,a,g} &=& \frac{1}{n} \sqrt{\sum_{k=1}^n \sigma_{s,t_k,a,g}^2},
-\end{eqnarray}
-où $n = \#\mathcal{T}$ et les éléments de $\mathcal{T}$ sont notés : $t_1 < t_2 < ... < t_n$. Cette agrégation réduit la variabilité temporelle en combinant les moyennes et en ajustant les écarts-types pour refléter l'incertitude cumulée, fournissant une mesure stable de la prévalence régionale stratifiée par âge et sexe.
+
+Pour chaque combinaison de région $s \in \mathcal{S}$ (États des États-Unis), âge $a \in \mathcal{A}$ et sexe $g \in \mathcal{G}$, les paramètres de la prévalence transformée en logit (base 10) sont agrégés sur les années $t \in \mathcal{T}$ (1990-2019), avec $n = \#\mathcal{T}$ :
+\[
+\mu_{s,a,g} = \frac{1}{n} \sum_{k=1}^n \mu_{s,t_k,a,g}, \quad \sigma_{s,a,g} = \frac{1}{n} \sqrt{\sum_{k=1}^n \sigma_{s,t_k,a,g}^2},
+\]
+où les éléments de $\mathcal{T}$ sont ordonnés chronologiquement comme $t_1 < t_2 < \dots < t_n$. Cette agrégation réduit la variabilité temporelle en combinant les moyennes et en ajustant les écarts-types pour refléter l'incertitude cumulée. Les concentrations d'arsenic $C_s \sim \mathcal{N}(\mu_s, \sigma_s^2)$ sont agrégées de manière similaire par État $s$, à partir des données de l'EPA.
 
 \subsection{Régression linéaire robuste}
-Pour chaque paire $(a, g) \in \mathcal{A} \times \mathcal{G}$, la relation entre la concentration d'arsenic $C_s$ (représentée par $\mu_s$) et la prévalence agrégée $P_{s,a,g}$ est modélisée par régression linéaire robuste par la méthode des médianes répétées de Siegel. Deux modèles distincts sont ajustés : l'un pour la moyenne $\mu_{s,a,g}$ en fonction de $\mu_s$, et l'autre pour le logarithme (base 10) de l'écart-type $\log_{10} \sigma_{s,a,g}$ en fonction de $\mu_s$. Cette approche duale capture à la fois les effets sur le niveau central et sur la dispersion de la prévalence.
 
-L'estimation des paramètres (pente $\hat{\beta}_{a,g}$ et ordonnée à l'origine $\hat{\alpha}_{a,g}$) repose sur des médianes itérées des pentes et intercepts partiels, assurant une robustesse aux valeurs aberrantes avec un point de rupture asymptotique de 50\,\%. Les intervalles de confiance à 95\,\% sont dérivés des quantiles empiriques obtenus par rééchantillonnage bootstrap non paramétrique ($B = 1\,000$), où les régions sont tirées avec remplacement et les régressions réexécutées.
+Pour chaque paire $(a, g) \in \mathcal{A} \times \mathcal{G}$, deux modèles de régression linéaire robuste sont ajustés par la méthode des médianes répétées de Siegel : l'un reliant $\mu_{s,a,g}$ à $\mu_s$, et l'autre reliant $\log_{10} \sigma_{s,a,g}$ à $\mu_s$. Cette approche capture les effets sur la moyenne et la dispersion de la prévalence. Les estimateurs de pente $\hat{\beta}_{a,g}$ et d'ordonnée à l'origine $\hat{\alpha}_{a,g}$ sont obtenus via des médianes itérées des pentes et intercepts partiels, offrant une robustesse aux outliers avec un point de rupture asymptotique de 50\,\%. 
 
-La déviation absolue médiane (MAD) des résidus est calculée pour quantifier la dispersion robuste autour de chaque modèle ajusté, en appliquant la constante de correction pour la consistance gaussienne. Des statistiques de test (valeur V et p-valeur) évaluent la significativité des coefficients, complétant l'analyse par une mesure de l'évidence contre l'hypothèse nulle d'absence d'effet.
+Les intervalles de confiance à 95\,\% sont dérivés par bootstrap non paramétrique ($B = 1\,000$ rééchantillons des régions $s$), où les modèles sont réajustés à chaque itération. La déviation absolue médiane (MAD) des résidus, corrigée pour la consistance gaussienne, quantifie la dispersion robuste autour des ajustements. Des statistiques de test (valeur V et p-valeur associée) évaluent la significativité des coefficients $\hat{\beta}_{a,g}$ contre l'hypothèse nulle d'absence d'effet.
 
 \subsection{Quantification géométrique des trajectoires}
-Les pentes estimées $\hat{\beta}_{a,g}$ pour chaque âge $a$ et sexe $g$ sont projetées dans le demi-plan de Poincaré $\mathbb{H} = \{ z \in \mathbb{C} \mid \Im(z) > 0 \}$, par $z_{a,g} = \hat{\beta}_{a,g} + i \cdot \mathrm{MAD}_{a,g}$, où la composante imaginaire représente la dispersion robuste des résidus. Cette représentation modélise les évolutions par âge comme des trajectoires sur une variété hyperbolique, facilitant l'analyse des dynamiques.
 
-Les dissimilarités entre tranches d'âge consécutives sont mesurées par la distance de Fisher-Rao et la divergence de Kullback-Leibler, calculées sur les distributions normales associées aux points $(\mu, \sigma)$, où $\mu = \hat{\beta}_{a,g}$ et $\sigma = \mathrm{MAD}_{a,g}$. Les sommes cumulées de ces mesures quantifient l'évolution globale des effets de l'arsenic au fil de l'âge, avec des comparaisons entre sexes pour identifier des patterns différenciés.
+Les estimateurs $\hat{\beta}_{a,g}$ et les MAD associées sont projetés dans le demi-plan de Poincaré $\mathbb{H} = \{ z \in \mathbb{C} \mid \Im(z) > 0 \}$ via $z_{a,g} = \hat{\beta}_{a,g} + i \cdot \mathrm{MAD}_{a,g}$, modélisant les évolutions par âge comme des trajectoires sur une variété hyperbolique. Les dissimilarités entre tranches d'âge consécutives sont mesurées par la distance de Fisher-Rao (équation~\eqref{eq:fr_normal} du chapitre~\ref{chap:math}) et la divergence de Kullback-Leibler (équation~\eqref{eq:kl_normal} du chapitre~\ref{chap:math}), avec leurs sommes cumulées quantifiant l'ampleur et la directionnalité des changements globaux, stratifiés par sexe.
 
-Par ailleurs, les régions sont ordonnées par niveau croissant de concentration d'arsenic $\mu_s$, puis regroupées en clusters de tailles variables (1, 3 ou 17 régions par groupe). Pour chaque cluster, des moyennes et écarts-types agrégés de la prévalence sont calculés, formant des trajectoires dans le plan $(\mu, \sigma)$. Ces chemins visualisent l'effet progressif de l'exposition, avec des segments reliant les points agrégés et des barres d'erreur indiquant l'incertitude.
+Par ailleurs, les régions $s$ sont ordonnées par valeurs croissantes de $\mu_s$ et regroupées en clusters de tailles variables (par exemple, 1, 3 ou 17 régions par groupe). Pour chaque cluster, des paramètres agrégés de prévalence ($\mu$ et $\sigma$) sont calculés, formant des trajectoires dans le plan $(\mu, \sigma)$ qui visualisent les gradients d'effet liés à l'exposition croissante à l'arsenic, avec des barres d'erreur indiquant l'incertitude.

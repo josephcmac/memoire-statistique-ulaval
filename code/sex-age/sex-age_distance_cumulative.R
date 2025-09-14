@@ -17,60 +17,64 @@ create_df <- function(age, d) {
 
 process <- function(df, f) {
   create_df(
-    age = tail(df,-1)$age,
-    d = sapply(2:nrow(df), function(i) 
+    age = tail(df, -1)$age,
+    d = sapply(2:nrow(df), function(i)
       f(
-        mu1=df$mu[i-1], sigma1=df$sigma[i-1],
-        mu2=df$mu[i], sigma2=df$sigma[i]
-        )
+        mu1 = df$mu[i-1], sigma1 = df$sigma[i-1],
+        mu2 = df$mu[i], sigma2 = df$sigma[i]
       )
+    )
   )
 }
 
-process_country <- function(df, f) {
-  process(
-    df = df |> filter(country == "US") |>
-      arrange(age) |> select(age, mu, sigma),
-    f = f
-  )
+process_countries <- function(df, f) {
+  df |>
+    arrange(country, age) |>
+    select(country, age, mu, sigma) |>
+    group_by(country) |>
+    nest() |>
+    mutate(processed = map(data, ~process(., f))) |>
+    select(-data) |>
+    unnest(processed)
 }
 
 plot_df <- function(u, title, y_lab) {
   ggplot(u) +
-    geom_point(aes(age, u), color="orange") +
-    geom_line(aes(age, u), color="orange") +
+    geom_point(aes(age, u, color = country)) +
+    geom_line(aes(age, u, color = country)) +
     labs(
       title = title,
       subtitle = "Période : 1990-2019",
       x = "Tranche d'âge (± 2 ans)",
       y = y_lab,
-      caption = "Source : EPA & IHME; Visualisation : José Manuel Rodríguez Caballero"
+      caption = "Source : EPA & IHME; Visualisation : José Manuel Rodríguez Caballero",
+      color = "pays"
     ) +
-    theme_bw()  
+    theme_bw()
 }
 
 main_aux <- function(f, title, y_lab, file_name) {
-  process_country(
-    df = readr::read_csv(fs::path(here::here("data", "clean", 
-                "IHME-GBD_2021_CLEAN_incidence_g_Cohen"), ext = "csv")), 
+  process_countries(
+    df = readr::read_csv(fs::path(here::here("data", "clean",
+                   "IHME-GBD_2021_CLEAN_incidence_g_Cohen"), ext = "csv")),
     f = f
-    ) |>
+  ) |>
     plot_df(
       title = title,
       y_lab = y_lab
     ) %>%
     ggsave(
-      filename = fs::path(here::here("text", "figures", "sex-age_distance_cumulative", file_name), ext = "png"), 
+      filename = fs::path(here::here("text", "figures", 
+          "sex-age_distance_cumulative", file_name), ext = "png"),
       plot = .
     )
 }
-
 
 main <- function() {
   c(
     main_aux(
       f = Fisher_Rao,
-      title = "Distance de Fisher-Rao cumulée entre âges consécutives", 
+      title = "Distance de Fisher-Rao cumulée entre âges consécutives",
       y_lab = "Distance de Fisher-Rao cumulée",
       file_name = "Fisher-Rao"
     ),
@@ -79,10 +83,8 @@ main <- function() {
       title = "Divergence de Kullback-Leibler cumulée entre âges consécutives",
       y_lab = "Divergence de Kullback-Leibler cumulée",
       file_name = "Kullback-Leibler"
-    ) 
+    )
   )
 }
 
 main()
-
-

@@ -1,74 +1,183 @@
 \chapter{Résultats}
 \label{chap:results}
-
 Ce chapitre présente les résultats empiriques obtenus à partir des analyses décrites dans le chapitre~\ref{chap:methods}. Les résultats sont organisés en sections correspondant aux approches méthodologiques principales.
 
 \section{L'effet de l'âge stratifié par le sexe}
 
 \subsection{Intervales de confiance}
-
-Les intervalles de confiance des taux d'incidence des maladies respiratoires chroniques (MRC) sont présentés dans les Figures~\ref{fig:CI-age-sex-males} et~\ref{fig:CI-age-sex-females}.
-
+Les intervalles de confiance des taux d'incidence des maladies respiratoires chroniques (MRC) sont présentés dans la Figure~\ref{fig:CI-age-sex}.
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth]{figures/age-sex_data_analysis/Male.png}
-	\caption{Intervalles de confiance des taux d'incidence des MRC par âge pour les mâles.}
-	\label{fig:CI-age-sex-males}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.8\textwidth]{figures/age-sex_data_analysis/Female.png}
-	\caption{Intervalles de confiance des taux d'incidence des MRC par âge pour les femelles.}
-	\label{fig:CI-age-sex-females}
+	\subfloat[Mâles]{
+		\includegraphics[width=0.48\textwidth]{figures/age-sex_data_analysis/Male.png}
+		\label{fig:CI-age-sex-males}
+	}
+	\subfloat[Femelles]{
+		\includegraphics[width=0.48\textwidth]{figures/age-sex_data_analysis/Female.png}
+		\label{fig:CI-age-sex-females}
+	}
+	\caption{Intervalles de confiance des taux d'incidence des MRC par âge, stratifiés par sexe (1990-2019).}
+	\label{fig:CI-age-sex}
 \end{figure}
 
 \subsection{Trajectoires de vie dans le demi-plan de Poincaré}
-
-Les trajectoires dans le demi-plan de Poincaré des paramètres \((\mu, \sigma)\) par âge et sexe sont présentées dans les Figures~\ref{fig:age-sex_Poincare_male} et~\ref{fig:age-sex_Poincare_female}.
+\subsection{Trajectoires hyperbolique}
+Les trajectoires dans le demi-plan de Poincaré des paramètres \((\mu, \sigma)\) par âge et sexe sont présentées pour les États-Unis et le Royaume-Uni dans la Figure~\ref{fig:age-sex_Poincare_US_UK}, et pour la Norvège et l'Italie dans la Figure~\ref{fig:age-sex_Poincare_NO_IT}.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth]{figures/age-sex_Poincare/US-Male.png}
-	\caption{Trajectoires hyperboliques des paramètres \((\mu, \sigma)\) par âge pour les mâles.}
-	\label{fig:age-sex_Poincare_male}
+	\begin{subfigure}{0.48\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{figures/age-sex_Poincare/US-Male.png}
+		\caption{Mâles, États-Unis.}
+		\label{fig:age-sex_Poincare_US_male}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.48\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{figures/age-sex_Poincare/US-Female.png}
+		\caption{Femelles, États-Unis.}
+		\label{fig:age-sex_Poincare_US_female}
+	\end{subfigure}
+	
+	\vspace{1em}
+	
+	\begin{subfigure}{0.48\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{figures/age-sex_Poincare/UK-Male.png}
+		\caption{Mâles, Royaume-Uni.}
+		\label{fig:age-sex_Poincare_UK_male}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.48\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{figures/age-sex_Poincare/UK-Female.png}
+		\caption{Femelles, Royaume-Uni.}
+		\label{fig:age-sex_Poincare_UK_female}
+	\end{subfigure}
+	\caption{Trajectoires hyperboliques des paramètres \((\mu, \sigma)\) en fonction de l'âge, stratifiées par sexe, pour les États-Unis et le Royaume-Uni (1990-2019).}
+	\label{fig:age-sex_Poincare_US_UK}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth]{figures/age-sex_Poincare/US-Female.png}
-	\caption{Trajectoires hyperboliques des paramètres \((\mu, \sigma)\) par âge pour les femelles.}
-	\label{fig:age-sex_Poincare_female}
+	\begin{subfigure}{0.48\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{figures/age-sex_Poincare/NO-Male.png}
+		\caption{Mâles, Norvège.}
+		\label{fig:age-sex_Poincare_NO_male}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.48\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{figures/age-sex_Poincare/NO-Female.png}
+		\caption{Femelles, Norvège.}
+		\label{fig:age-sex_Poincare_NO_female}
+	\end{subfigure}
+	
+	\vspace{1em}
+	
+	\begin{subfigure}{0.48\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{figures/age-sex_Poincare/IT-Male.png}
+		\caption{Mâles, Italie.}
+		\label{fig:age-sex_Poincare_IT_male}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.48\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{figures/age-sex_Poincare/IT-Female.png}
+		\caption{Femelles, Italie.}
+		\label{fig:age-sex_Poincare_IT_female}
+	\end{subfigure}
+	\caption{Trajectoires hyperboliques des paramètres \((\mu, \sigma)\) en fonction de l'âge, stratifiées par sexe, pour la Norvège et l'Italie (1990-2019).}
+	\label{fig:age-sex_Poincare_NO_IT}
 \end{figure}
+
+
+\subsection{Trajectoires symboliques}
+Les signes des différences entre tranches d'âge consécutives pour les paramètres $\mu$ et $\sigma$, stratifiés par sexe, sont présentés dans les Tables~\ref{tab:age-sex-symbol-mu-male}, \ref{tab:age-sex-symbol-mu-female}, \ref{tab:age-sex-symbol-sigma-male} et \ref{tab:age-sex-symbol-sigma-female}.
+
+\begin{table}[H]
+	\centering
+	\input{tables/age-sex_path/mu-Male}
+	\captionof{table}{Signes des différences de $\mu$ entre tranches d'âge consécutives pour les mâles, par pays et total.}
+	\label{tab:age-sex-symbol-mu-male}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\input{tables/age-sex_path/mu-Female.tex}
+	\captionof{table}{Signes des différences de $\mu$ entre tranches d'âge consécutives pour les femelles, par pays et total.}
+	\label{tab:age-sex-symbol-mu-female}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\input{tables/age-sex_path/sigma-Male.tex}
+	\captionof{table}{Signes des différences de $\sigma$ entre tranches d'âge consécutives pour les mâles, par pays et total.}
+	\label{tab:age-sex-symbol-sigma-male}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\input{tables/age-sex_path/sigma-Female.tex}
+	\captionof{table}{Signes des différences de $\sigma$ entre tranches d'âge consécutives pour les femelles, par pays et total.}
+	\label{tab:age-sex-symbol-sigma-female}
+\end{table}
 
 \subsection{Distance de Fisher-Rao}
-
 La somme cumulée des distances de Fisher-Rao le long des trajectoires par sexe pour chaque pays est présentée dans la Figure~\ref{fig:age-sex_FR_cumulative}.
-
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth]{figures/age-sex_distance_cumulative/Fisher-Rao.png}
-	\caption{Somme cumulée des distances de Fisher-Rao le long des trajectoires d'âge, stratifiées par sexe.}
+	\subfloat[États-Unis]{
+		\includegraphics[width=0.48\textwidth]{figures/age-sex_distance_cumulative/US_Fisher-Rao.png}
+		\label{fig:age-sex_FR_US}
+	}
+	\subfloat[Royaume-Uni]{
+		\includegraphics[width=0.48\textwidth]{figures/age-sex_distance_cumulative/UK_Fisher-Rao.png}
+		\label{fig:age-sex_FR_UK}
+	}\\
+	\subfloat[Norvège]{
+		\includegraphics[width=0.48\textwidth]{figures/age-sex_distance_cumulative/NO_Fisher-Rao.png}
+		\label{fig:age-sex_FR_NO}
+	}
+	\subfloat[Italie]{
+		\includegraphics[width=0.48\textwidth]{figures/age-sex_distance_cumulative/IT_Fisher-Rao.png}
+		\label{fig:age-sex_FR_IT}
+	}
+	\caption{Sommes cumulées des distances de Fisher-Rao le long des trajectoires d'âge, stratifiées par sexe, pour chaque pays (1990-2019).}
 	\label{fig:age-sex_FR_cumulative}
 \end{figure}
 
 \subsection{Divergence de Kullback-Leibler}
-
 La somme cumulée des divergences de Kullback-Leibler le long des trajectoires par sexe pour chaque pays est présentée dans la Figure~\ref{fig:age-sex_KL_cumulative}.
-
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth]{figures/age-sex_distance_cumulative/Kullback-Leibler.png}
-	\caption{Somme cumulée des divergences de Kullback-Leibler le long des trajectoires d'âge, stratifiées par sexe.}
+	\subfloat[États-Unis]{
+		\includegraphics[width=0.48\textwidth]{figures/age-sex_distance_cumulative/US_Kullback-Leibler.png}
+		\label{fig:age-sex_KL_US}
+	}
+	\subfloat[Royaume-Uni]{
+		\includegraphics[width=0.48\textwidth]{figures/age-sex_distance_cumulative/UK_Kullback-Leibler.png}
+		\label{fig:age-sex_KL_UK}
+	}\\
+	\subfloat[Norvège]{
+		\includegraphics[width=0.48\textwidth]{figures/age-sex_distance_cumulative/NO_Kullback-Leibler.png}
+		\label{fig:age-sex_KL_NO}
+	}
+	\subfloat[Italie]{
+		\includegraphics[width=0.48\textwidth]{figures/age-sex_distance_cumulative/IT_Kullback-Leibler.png}
+		\label{fig:age-sex_KL_IT}
+	}
+	\caption{Sommes cumulées des divergences de Kullback-Leibler le long des trajectoires d'âge, stratifiées par sexe, pour chaque pays (1990-2019).}
 	\label{fig:age-sex_KL_cumulative}
 \end{figure}
 
 \section{L'effet du sexe stratifié par l'âge}
 
 \subsection{Intervales de confiance}
-
 Les intervalles de confiance de la statistique \(g\) de Cohen sont présentés dans la Figure~\ref{fig:sex-age_plot_country-sex}.
-
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{figures/sex-age_plot_country-sex/all.png}
@@ -77,20 +186,31 @@ Les intervalles de confiance de la statistique \(g\) de Cohen sont présentés d
 \end{figure}
 
 \subsection{Dynamique hyperbolique}
-
-La trajectoire dans le demi-plan de Poincaré des paramètres \((\mu, \sigma)\) de \(g\) par âge est présentée dans la Figure~\ref{fig:sex-age_Poincare-US}.
-
+Les trajectoires dans le demi-plan de Poincaré des paramètres \((\mu, \sigma)\) de \(g\) par âge sont présentées dans la Figure~\ref{fig:sex-age_Poincare}.
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth]{figures/sex-age_Poincare/US.png}
-	\caption{Trajectoires hyperboliques des paramètres \((\mu, \sigma)\) par âge.}
-	\label{fig:sex-age_Poincare-US}
+	\subfloat[États-Unis]{
+		\includegraphics[width=0.48\textwidth]{figures/sex-age_Poincare/US.png}
+		\label{fig:sex-age_Poincare_US}
+	}
+	\subfloat[Royaume-Uni]{
+		\includegraphics[width=0.48\textwidth]{figures/sex-age_Poincare/UK.png}
+		\label{fig:sex-age_Poincare_UK}
+	}\\
+	\subfloat[Norvège]{
+		\includegraphics[width=0.48\textwidth]{figures/sex-age_Poincare/NO.png}
+		\label{fig:sex-age_Poincare_NO}
+	}
+	\subfloat[Italie]{
+		\includegraphics[width=0.48\textwidth]{figures/sex-age_Poincare/IT.png}
+		\label{fig:sex-age_Poincare_IT}
+	}
+	\caption{Trajectoires hyperboliques des paramètres \((\mu, \sigma)\) en fonction de l'âge pour chaque pays (1990-2019).}
+	\label{fig:sex-age_Poincare}
 \end{figure}
 
 \subsection{Distance de Fisher-Rao}
-
 La longueur cumulée des trajectoires de Fisher-Rao par pays est présentée dans la Figure~\ref{fig:sex-age_distance_cumulative-Fisher-Rao}.
-
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{figures/sex-age_distance_cumulative/Fisher-Rao.png}
@@ -99,9 +219,7 @@ La longueur cumulée des trajectoires de Fisher-Rao par pays est présentée dan
 \end{figure}
 
 \subsection{Divergence de Kullback-Leibler}
-
 La somme cumulée des divergences de Kullback-Leibler par pays est présentée dans la Figure~\ref{fig:sex-age_distance_cumulative-Kullback-Leibler}.
-
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{figures/sex-age_distance_cumulative/Kullback-Leibler.png}
@@ -109,96 +227,100 @@ La somme cumulée des divergences de Kullback-Leibler par pays est présentée d
 	\label{fig:sex-age_distance_cumulative-Kullback-Leibler}
 \end{figure}
 
+\subsection{Trajectoires symboliques}
+Les signes des différences entre tranches d'âge consécutives pour les paramètres $\mu$ et $\sigma$, sont présentés dans les Tables~\ref{tab:age-sex-symbol-mu} et \ref{tab:age-sex-symbol-sigma}.
+
+\begin{table}[H]
+	\centering
+	\input{tables/age-sex_path/mu-Male}
+	\captionof{table}{Signes des différences de $\mu$ entre tranches d'âge consécutives, par pays et total.}
+	\label{tab:age-sex-symbol-mu}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\input{tables/age-sex_path/sigma-Male.tex}
+	\captionof{table}{Signes des différences de $\sigma$ entre tranches d'âge consécutives, par pays et total.}
+	\label{tab:age-sex-symbol-sigma}
+\end{table}
+
+
 \section{L'effet de l'arsenic PM\(_{2.5}\)}
 
 \subsection{Distribution géographique}
-
 Les paramètres \(\mu_s\) sont visualisés sur la carte de la Figure~\ref{fig:arsenic-map}, qui illustre les concentrations moyennes par État. Les paramètres \((\mu_s, \sigma_s)\) sont représentés dans la Figure~\ref{fig:arsenic_Poincare}.
-
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\textwidth]{figures/arsenic_map/arsenic_map.png}
+	\includegraphics[width=\textwidth]{figures/arsenic_map/arsenic_map.png}
 	\caption{Concentrations moyennes d'arsenic PM\(_{2.5}\) par État aux États-Unis (1990-2019).}
 	\label{fig:arsenic-map}
 \end{figure}
-
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\textwidth]{figures/arsenic_Poincare/arsenic_Poincare.png}
+	\includegraphics[width=\textwidth]{figures/arsenic_Poincare/arsenic_Poincare.png}
 	\caption{Paramètres \((\mu_s, \sigma_s)\) par État aux États-Unis (1990-2019).}
 	\label{fig:arsenic_Poincare}
 \end{figure}
-
 Les paramètres \(\mu_{s,a,g}\) sont visualisés sur la carte de la Figure~\ref{fig:GBD-map}, qui illustre les log-cotes moyennes de la prévalence des MRC par État. Les paramètres \((\mu_{s,a,g}, \sigma_{s,a,g})\) sont représentés dans la Figure~\ref{fig:GBD_Poincare}.
-
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\textwidth]{figures/GBD_map/GBD_map.png}
+	\includegraphics[width=\textwidth]{figures/GBD_map/GBD_map.png}
 	\caption{Log-cotes de la prévalence des MRC par État aux États-Unis (1990-2019).}
 	\label{fig:GBD-map}
 \end{figure}
-
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\textwidth]{figures/GBD_Poincare/GBD_Poincare.png}
+	\includegraphics[width=\textwidth]{figures/GBD_Poincare/GBD_Poincare.png}
 	\caption{Paramètres \((\mu_{s,a,g}, \sigma_{s,a,g})\) par État aux États-Unis (1990-2019).}
 	\label{fig:GBD_Poincare}
 \end{figure}
 
 \subsection{Intervales de confiance}
-
-Les intervalles de confiance des \(\hat{\beta}_{a,g}\) sont présentés dans les Figures~\ref{fig:CI-arsenic-males} et~\ref{fig:CI-arsenic-females}.
-
+Les intervalles de confiance des \(\hat{\beta}_{a,g}\) sont présentés dans la Figure~\ref{fig:CI-arsenic}.
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth]{figures/arsenic_data_analysis/Male.png}
-	\caption{Intervalles de confiance des pentes par âge pour les mâles.}
-	\label{fig:CI-arsenic-males}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.8\textwidth]{figures/arsenic_data_analysis/Female.png}
-	\caption{Intervalles de confiance des pentes par âge pour les femelles.}
-	\label{fig:CI-arsenic-females}
+	\subfloat[Mâles]{
+		\includegraphics[width=0.48\textwidth]{figures/arsenic_data_analysis/Male.png}
+		\label{fig:CI-arsenic-males}
+	}
+	\subfloat[Femelles]{
+		\includegraphics[width=0.48\textwidth]{figures/arsenic_data_analysis/Female.png}
+		\label{fig:CI-arsenic-females}
+	}
+	\caption{Intervalles de confiance des pentes par âge et sexe.}
+	\label{fig:CI-arsenic}
 \end{figure}
 
 \subsection{Trajectoires de vie dans le demi-plan de Poincaré}
-
-Les trajectoires dans le demi-plan de Poincaré des \(\hat{\beta}_{a,g} + i \cdot \mathrm{MAD}_{a,g}\) par âge et sexe, les sommes cumulées des distances de Fisher-Rao et des divergences de Kullback-Leibler par sexe, ainsi que les trajectoires agrégées par clusters de régions ordonnées par \(\mu_s\) sont présentées dans les Figures~\ref{fig:trajectoires-arsenic-males} et~\ref{fig:trajectoires-arsenic-females}.
-
+Les trajectoires dans le demi-plan de Poincaré des \(\hat{\beta}_{a,g} + i \cdot \mathrm{MAD}_{a,g}\) par âge et sexe, les sommes cumulées des distances de Fisher-Rao et des divergences de Kullback-Leibler par sexe, ainsi que les trajectoires agrégées par clusters de régions ordonnées par \(\mu_s\) sont présentées dans la Figure~\ref{fig:trajectoires-arsenic}.
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth]{figures/arsenic_Poincare_slopes/Male.png}
-	\caption{Trajectoires des effets de l'arsenic sur l'incidence des MRC par âge pour les mâles.}
-	\label{fig:trajectoires-arsenic-males}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.8\textwidth]{figures/arsenic_Poincare_slopes/Female.png}
-	\caption{Trajectoires des effets de l'arsenic sur l'incidence des MRC par âge pour les femelles.}
-	\label{fig:trajectoires-arsenic-females}
+	\subfloat[Mâles]{
+		\includegraphics[width=0.48\textwidth]{figures/arsenic_Poincare_slopes/Male.png}
+		\label{fig:trajectoires-arsenic-males}
+	}
+	\subfloat[Femelles]{
+		\includegraphics[width=0.48\textwidth]{figures/arsenic_Poincare_slopes/Female.png}
+		\label{fig:trajectoires-arsenic-females}
+	}
+	\caption{Trajectoires dans le demi-plan de Poincaré des effets de l'arsenic par âge et sexe (1990-2019).}
+	\label{fig:trajectoires-arsenic}
 \end{figure}
 
 \subsection{Distance de Fisher-Rao cumulée}
-
 Les sommes cumulées des distances de Fisher-Rao pour les trajectoires des effets de l'arsenic sont présentées dans la Figure~\ref{fig:arsenic_distance_cumulative-Fisher-Rao}.
-
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{figures/arsenic_distance_cumulative/Fisher-Rao.png}
-	\caption{Distance de Fisher-Rao cumulée.}
+	\caption{Distance de Fisher-Rao cumulée pour les trajectoires des effets de l'arsenic.}
 	\label{fig:arsenic_distance_cumulative-Fisher-Rao}
 \end{figure}
 
 \subsection{Divergence de Kullback-Leibler cumulée}
-
 Les sommes cumulées des divergences de Kullback-Leibler pour les trajectoires des effets de l'arsenic sont présentées dans la Figure~\ref{fig:arsenic_distance_cumulative-Kullback-Leibler}.
-
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{figures/arsenic_distance_cumulative/Kullback-Leibler.png}
-	\caption{Divergence de Kullback-Leibler cumulée.}
+	\caption{Divergence de Kullback-Leibler cumulée pour les trajectoires des effets de l'arsenic.}
 	\label{fig:arsenic_distance_cumulative-Kullback-Leibler}
 \end{figure}

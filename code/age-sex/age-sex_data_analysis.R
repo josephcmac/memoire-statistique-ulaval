@@ -59,20 +59,21 @@ create_graphics_sex <- function(df, sex_label, period_label, y_min, y_max, dodge
       x = "Âge (± 2 ans)", y = "Nouveaux cas pour 100 000",
       caption = "Source : GBD-2021\nVisualisation : José Manuel Rodríguez Caballero") +
     ylim(y_min, y_max) +
-    theme_bw()
+    theme_bw() +
+    theme(legend.position = "bottom")
 }
 
 create_all_graphics <- function(df) {
   list(
     "Male" = df |> filter(sex == "Male") |>
       create_graphics_sex(
-        sex_label = "Mâle",
+        sex_label = "mâle",
         period_label = "1990-2019",
         y_min=0, y_max=6000
       ),
    "Female" = df |> filter(sex == "Female") |>
       create_graphics_sex(
-        sex_label = "Femelle",
+        sex_label = "femelle",
         period_label = "1990-2019",
         y_min=0, y_max=6000
       )

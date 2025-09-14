@@ -11,20 +11,20 @@ color_age <- function(n) {
 }
 
 create_plot <- function(df, x_min, x_max, y_min, y_max,
-                        country, sex, period) {
+                        country, sex, period, q = qnorm(0.975)) {
   df |>
-    mutate(ci_lower = mu - 1.96 * sigma, ci_upper = mu + 1.96 * sigma) |>
+    mutate(ci_lower = mu - q*sigma, ci_upper = mu + q*sigma) |>
     mutate(color = color_age(nrow(df))) |>
     mutate(mu_end = lead(mu), sigma_end = lead(sigma)) |>
+    mutate(age = as.numeric(age)) |>
+    arrange(age) |>
   ggplot() +
     geom_point(aes(mu, sigma)) +
-    geom_segment(aes(x = ci_lower, y = sigma, xend = ci_upper, yend = sigma),
-                 color = "black") +
     geom_segment(data = . %>% filter(!is.na(mu_end) & !is.na(sigma_end)),
                  aes(x = mu, y = sigma, xend = mu_end, yend = sigma_end, color = color),
                  arrow = arrow(length = unit(0.2, "cm"))) +
     labs(
-      title = "Demi-plan de Poincaré",
+      title = "Trajectoire de vie du taux d'incidence des MRC",
       subtitle = paste0("Pays : ", country, "; Sexe : ", sex, "; Période : ", period),
       x = "µ", y = "𝛔",
       caption = "Source : GBD-2021\nVisualisation : José Manuel Rodríguez Caballero") +

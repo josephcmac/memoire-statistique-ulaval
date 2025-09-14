@@ -18,82 +18,79 @@ create_df <- function(age, d_male, d_female) {
 
 process <- function(df_male, df_female, f) {
   create_df(
-    age = tail(df_male,-1)$age,
-    d_male = sapply(2:nrow(df_male), function(i) 
+    age = tail(df_male, -1)$age,
+    d_male = sapply(2:nrow(df_male), function(i)
       f(
-        mu1=df_male$mu[i-1], sigma1=df_male$sigma[i-1],
-        mu2=df_male$mu[i], sigma2=df_male$sigma[i]
-        )
-      ),
-    d_female = sapply(2:nrow(df_female), function(i) 
-      f(
-        mu1=df_female$mu[i-1], sigma1=df_female$sigma[i-1],
-        mu2=df_female$mu[i], sigma2=df_female$sigma[i]
-        )
+        mu1 = df_male$mu[i-1], sigma1 = df_male$sigma[i-1],
+        mu2 = df_male$mu[i], sigma2 = df_male$sigma[i]
       )
+    ),
+    d_female = sapply(2:nrow(df_female), function(i)
+      f(
+        mu1 = df_female$mu[i-1], sigma1 = df_female$sigma[i-1],
+        mu2 = df_female$mu[i], sigma2 = df_female$sigma[i]
+      )
+    )
   )
 }
 
-process_sex <- function(df, f) {
+process_sex <- function(df, f, country) {
   process(
-    df_male = df |> filter(country == "US", sex == "Male") |>
+    df_male = df |> filter(sex == "Male") |>
       arrange(age) |> select(age, mu, sigma),
-    df_female = df |> filter(country == "US", sex == "Female") |>
+    df_female = df |> filter(sex == "Female") |>
       arrange(age) |> select(age, mu, sigma),
     f = f
   )
 }
 
-plot_df <- function(u, title, y_lab) {
+plot_df <- function(u, title, y_lab, country) {
   ggplot(u) +
-    geom_point(aes(age, u_male), color="blue") +
-    geom_line(aes(age, u_male), color="blue") +
-    geom_point(aes(age, u_female), color="pink") +
-    geom_line(aes(age, u_female), color="pink") +
+    geom_point(aes(age, u_male), color = "blue") +
+    geom_line(aes(age, u_male), color = "blue") +
+    geom_point(aes(age, u_female), color = "pink") +
+    geom_line(aes(age, u_female), color = "pink") +
     labs(
       title = title,
-      subtitle = "Mâles : bleu; Femelles : rose; Période : 1990-2019",
+      subtitle = paste0("Pays : ", country, "; Mâles : bleu; Femelles : rose; Période : 1990-2019"),
       x = "Tranche d'âge (± 2 ans)",
       y = y_lab,
       caption = "Source : EPA & IHME; Visualisation : José Manuel Rodríguez Caballero"
     ) +
-    theme_bw()  
+    theme_bw()
 }
 
-main_aux <- function(f, title, y_lab, file_name) {
-  process_sex(
-    df = readr::read_csv(fs::path(here::here("data", "clean", 
-                "IHME-GBD_2021_CLEAN_incidence_bootstrapping"), ext = "csv")), 
-    f = f
-    ) |>
-    plot_df(
-      title = title,
-      y_lab = y_lab
-    ) %>%
+main_aux <- function(f, title, y_lab, file_name_base, country0) {
+  df <- readr::read_csv(fs::path(here::here("data", "clean",
+                                            "IHME-GBD_2021_CLEAN_incidence_bootstrapping"), ext = "csv"))
+  process_sex(df = df |>
+                filter(country == country0), f = f, country = country0) |>
+    plot_df(title = title, y_lab = y_lab, country = country0) %>%
     ggsave(
-      filename = fs::path(here::here("text", "figures", "age-sex_distance_cumulative", file_name), ext = "png"), 
+      filename = fs::path(here::here("text", "figures", "age-sex_distance_cumulative",
+                                     paste(country0, file_name_base, sep = "_")), ext = "png"),
       plot = .
     )
 }
 
-
 main <- function() {
-  c(
+  countries <- c("US", "UK", "NO", "IT")
+  for (country in countries) {
     main_aux(
       f = Fisher_Rao,
-      title = "Distance de Fisher-Rao cumulée entre âges consécutives", 
+      title = "Distance de Fisher-Rao cumulée entre âges consécutives",
       y_lab = "Distance de Fisher-Rao cumulée",
-      file_name = "Fisher-Rao"
-    ),
+      file_name_base = "Fisher-Rao",
+      country0 = country
+    )
     main_aux(
       f = Kullback_Leibler,
       title = "Divergence de Kullback-Leibler cumulée entre âges consécutives",
       y_lab = "Divergence de Kullback-Leibler cumulée",
-      file_name = "Kullback-Leibler"
-    ) 
-  )
+      file_name_base = "Kullback-Leibler",
+      country0 = country
+    )
+  }
 }
 
 main()
-
-
