@@ -4,6 +4,9 @@ library(ggrepel)
 library(viridis)
 library(ggplot2)
 library(usmap)
+
+setwd(fs::path(here::here("text", "figures", "diagnostic_graphics")))
+
 # Reload updated CSVs (assuming main() has been run previously)
 ds <- read_csv(fs::path(here::here("data", "clean", "diagnostic_summary"), ext = "csv"))
 inf <- read_csv(fs::path(here::here("data", "clean", "influence_measures"), ext = "csv"))
@@ -39,11 +42,11 @@ p_global_p <- ggplot(ds, aes(x = slope_p)) +
   theme_bw()
 ggsave("fig_metrics_global_p.png", p_global_p, width = 6, height = 4)
 # Figure: RMSE (CV) vs R-carré, with color by age and shape by sex (one graphic)
-ds <- ds %>% mutate(sex_shape = ifelse(sex == "Male", "Homme", "Femme"))  # Translate sex for legend
+ds <- ds %>% mutate(sex_shape = ifelse(sex == "Male", "Homme", "Femme")) # Translate sex for legend
 p_val_comp <- ggplot(ds, aes(x = r_squared, y = rmse_cv, color = factor(age), shape = sex_shape)) +
   geom_point(size = 3, alpha = 0.8) +
   geom_text_repel(aes(label = ifelse(slope_p < 0.05, paste(age, sex_shape, sep = "-"), "")), size = 3) +
-  scale_shape_manual(values = c("Homme" = 17, "Femme" = 16)) +  # Triangle for Male, Circle for Female
+  scale_shape_manual(values = c("Homme" = 17, "Femme" = 16)) + # Triangle for Male, Circle for Female
   labs(title = "RMSE (CV) vs R-carré", x = "R-carré", y = "RMSE (CV à 10 plis)", color = "Âge", shape = "Sexe") +
   theme_bw()
 ggsave("fig_validation_comparison.png", p_val_comp, width = 8, height = 6)
@@ -51,27 +54,27 @@ ggsave("fig_validation_comparison.png", p_val_comp, width = 8, height = 6)
 trends_data <- ds %>%
   pivot_longer(cols = c(r_squared, rmse_cv, num_influential), names_to = "metric", values_to = "value") %>%
   group_by(age, sex, metric) %>%
-  summarise(mean_value = mean(value, na.rm = TRUE), 
-            sd_value = sd(value, na.rm = TRUE), 
+  summarise(mean_value = mean(value, na.rm = TRUE),
+            sd_value = sd(value, na.rm = TRUE),
             n_val = n(), .groups = "drop") %>%
   mutate(se = ifelse(n_val > 1, sd_value / sqrt(n_val), 0))
 # Figure: Tendances du R-carré par âge et sexe (separate)
 p_trends_r2 <- ggplot(filter(trends_data, metric == "r_squared"), aes(x = age, y = mean_value, color = sex, group = sex)) +
-  geom_line(size = 1) +
+  geom_line(linewidth = 1) +
   geom_ribbon(aes(ymin = mean_value - se, ymax = mean_value + se, fill = sex), alpha = 0.2, color = NA) +
   labs(title = "Tendances du R-carré par âge et sexe", x = "Âge", y = "R-carré moyen", color = "Sexe", fill = "Sexe") +
   theme_bw()
 ggsave("fig_trends_r_squared.png", p_trends_r2, width = 8, height = 5)
 # Figure: Tendances du RMSE (CV) par âge et sexe (separate)
 p_trends_rmse <- ggplot(filter(trends_data, metric == "rmse_cv"), aes(x = age, y = mean_value, color = sex, group = sex)) +
-  geom_line(size = 1) +
+  geom_line(linewidth = 1) +
   geom_ribbon(aes(ymin = mean_value - se, ymax = mean_value + se, fill = sex), alpha = 0.2, color = NA) +
   labs(title = "Tendances du RMSE (CV) par âge et sexe", x = "Âge", y = "RMSE (CV) moyen", color = "Sexe", fill = "Sexe") +
   theme_bw()
 ggsave("fig_trends_rmse_cv.png", p_trends_rmse, width = 8, height = 5)
 # Figure: Tendances du nombre de points influents par âge et sexe (separate)
 p_trends_infl <- ggplot(filter(trends_data, metric == "num_influential"), aes(x = age, y = mean_value, color = sex, group = sex)) +
-  geom_line(size = 1) +
+  geom_line(linewidth = 1) +
   geom_ribbon(aes(ymin = mean_value - se, ymax = mean_value + se, fill = sex), alpha = 0.2, color = NA) +
   labs(title = "Tendances du nombre de points influents par âge et sexe", x = "Âge", y = "Nombre moyen de points influents", color = "Sexe", fill = "Sexe") +
   theme_bw()
@@ -84,8 +87,6 @@ p_outliers <- ggplot(ds, aes(x = factor(age), y = num_outliers, fill = sex)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ggsave("fig_outliers_distribution.png", p_outliers, width = 10, height = 6)
 # Figure: Boîtes à moustaches des valeurs de levier par âge, faceté par sexe (leverage points)
-
-
 p_leverage <- inf |> mutate(sex = ifelse(sex == "Male", "mâle", "femelle")) |> ggplot(aes(x = factor(age), y = leverage, fill = sex)) +
   geom_boxplot() +
   geom_hline(yintercept = mean(inf$leverage_threshold, na.rm = TRUE), linetype = "dashed", color = "red") +
@@ -139,7 +140,7 @@ pct_positive_slopes <- mean(ds$slope_est > 0, na.rm = TRUE) * 100
 p3 <- ggplot(ds, aes(x = slope_est)) +
   geom_histogram(bins = 15, color = "black", alpha = 0.8) +
   geom_vline(xintercept = 0, linetype = "dashed") +
-  labs(title = sprintf("Distribution des estimations de pente (%.1f%% positives)", pct_positive_slopes), 
+  labs(title = sprintf("Distribution des estimations de pente (%.1f%% positives)", pct_positive_slopes),
        x = "Estimation de pente (Δ prévalence / unité arsenic)", y = "Nombre de modèles âge-sexe") +
   theme_bw(base_size = 13)
 ggsave("plot_slope_histogram.png", p3, width = 8, height = 4.5)
@@ -150,7 +151,99 @@ p4 <- ggplot(ds, aes(x = slope_est, y = neglog10_p)) +
   scale_size_continuous(range = c(2, 8)) +
   geom_hline(yintercept = -log10(0.05), linetype = "dashed") +
   geom_text_repel(data = filter(ds, slope_p < 0.05), aes(label = paste0(age, "-", sex)), size = 3) +
-  labs(title = "Pente vs signification", x = "Estimation de pente (Δ prévalence / unité arsenic)", 
+  labs(title = "Pente vs signification", x = "Estimation de pente (Δ prévalence / unité arsenic)",
        y = expression(-log[10](p["pente"])), size = "Nombre d'observations\ninfluentes", shape = "Signification") +
   theme_bw(base_size = 13)
 ggsave("plot_slope_vs_significance.png", p4, width = 9, height = 6)
+
+# Ajouts pour les tests non illustrés précédemment
+
+# Étendre trends_data pour inclure les valeurs p des tests diagnostiques
+trends_data_diag <- ds %>%
+  pivot_longer(cols = c(reset_p, shapiro_p, bp_p, dw_p), names_to = "diag_metric", values_to = "p_value") %>%
+  group_by(age, sex, diag_metric) %>%
+  summarise(mean_p = mean(p_value, na.rm = TRUE),
+            sd_p = sd(p_value, na.rm = TRUE),
+            n_val = n(), .groups = "drop") %>%
+  mutate(se_p = ifelse(n_val > 1, sd_p / sqrt(n_val), 0))
+
+# Figure: Distribution des valeurs p du test RESET
+p_reset_hist <- ggplot(ds, aes(x = reset_p)) +
+  geom_histogram(bins = 20, fill = "green", alpha = 0.7) +
+  geom_density(aes(y = after_stat(count)), color = "darkgreen") +
+  geom_vline(xintercept = 0.05, linetype = "dashed", color = "black") +
+  labs(title = "Distribution des valeurs p du test RESET", x = "Valeur p", y = "Nombre") +
+  theme_bw()
+ggsave("fig_reset_p_histogram.png", p_reset_hist, width = 6, height = 4)
+
+# Figure: Distribution des valeurs p du test de Shapiro-Wilk
+p_shapiro_hist <- ggplot(ds, aes(x = shapiro_p)) +
+  geom_histogram(bins = 20, fill = "purple", alpha = 0.7) +
+  geom_density(aes(y = after_stat(count)), color = "#9932CC") +  # Violet foncé valide
+  geom_vline(xintercept = 0.05, linetype = "dashed", color = "black") +
+  labs(title = "Distribution des valeurs p du test de Shapiro-Wilk", x = "Valeur p", y = "Nombre") +
+  theme_bw()
+ggsave("fig_shapiro_p_histogram.png", p_shapiro_hist, width = 6, height = 4)
+
+# Figure: Distribution des valeurs p du test de Breusch-Pagan
+p_bp_hist <- ggplot(ds, aes(x = bp_p)) +
+  geom_histogram(bins = 20, fill = "orange", alpha = 0.7) +
+  geom_density(aes(y = after_stat(count)), color = "darkorange") +
+  geom_vline(xintercept = 0.05, linetype = "dashed", color = "black") +
+  labs(title = "Distribution des valeurs p du test de Breusch-Pagan", x = "Valeur p", y = "Nombre") +
+  theme_bw()
+ggsave("fig_bp_p_histogram.png", p_bp_hist, width = 6, height = 4)
+
+# Figure: Distribution des valeurs p du test de Durbin-Watson
+p_dw_hist <- ggplot(ds, aes(x = dw_p)) +
+  geom_histogram(bins = 20, fill = "brown", alpha = 0.7) +
+  geom_density(aes(y = after_stat(count)), color = "#8B4513") +  # Brun foncé valide
+  geom_vline(xintercept = 0.05, linetype = "dashed", color = "black") +
+  labs(title = "Distribution des valeurs p du test de Durbin-Watson", x = "Valeur p", y = "Nombre") +
+  theme_bw()
+ggsave("fig_dw_p_histogram.png", p_dw_hist, width = 6, height = 4)
+
+# Figure: Tendances des valeurs p moyennes du test RESET par âge et sexe
+p_trends_reset <- ggplot(filter(trends_data_diag, diag_metric == "reset_p"), aes(x = age, y = mean_p, color = sex, group = sex)) +
+  geom_line(linewidth = 1) +
+  geom_ribbon(aes(ymin = mean_p - se_p, ymax = mean_p + se_p, fill = sex), alpha = 0.2, color = NA) +
+  geom_hline(yintercept = 0.05, linetype = "dashed", color = "black") +
+  labs(title = "Tendances des valeurs p du test RESET par âge et sexe", x = "Âge", y = "Valeur p moyenne", color = "Sexe", fill = "Sexe") +
+  theme_bw()
+ggsave("fig_trends_reset_p.png", p_trends_reset, width = 8, height = 5)
+
+# Figure: Tendances des valeurs p moyennes du test de Shapiro-Wilk par âge et sexe
+p_trends_shapiro <- ggplot(filter(trends_data_diag, diag_metric == "shapiro_p"), aes(x = age, y = mean_p, color = sex, group = sex)) +
+  geom_line(linewidth = 1) +
+  geom_ribbon(aes(ymin = mean_p - se_p, ymax = mean_p + se_p, fill = sex), alpha = 0.2, color = NA) +
+  geom_hline(yintercept = 0.05, linetype = "dashed", color = "black") +
+  labs(title = "Tendances des valeurs p du test de Shapiro-Wilk par âge et sexe", x = "Âge", y = "Valeur p moyenne", color = "Sexe", fill = "Sexe") +
+  theme_bw()
+ggsave("fig_trends_shapiro_p.png", p_trends_shapiro, width = 8, height = 5)
+
+# Figure: Tendances des valeurs p moyennes du test de Breusch-Pagan par âge et sexe
+p_trends_bp <- ggplot(filter(trends_data_diag, diag_metric == "bp_p"), aes(x = age, y = mean_p, color = sex, group = sex)) +
+  geom_line(linewidth = 1) +
+  geom_ribbon(aes(ymin = mean_p - se_p, ymax = mean_p + se_p, fill = sex), alpha = 0.2, color = NA) +
+  geom_hline(yintercept = 0.05, linetype = "dashed", color = "black") +
+  labs(title = "Tendances des valeurs p du test de Breusch-Pagan par âge et sexe", x = "Âge", y = "Valeur p moyenne", color = "Sexe", fill = "Sexe") +
+  theme_bw()
+ggsave("fig_trends_bp_p.png", p_trends_bp, width = 8, height = 5)
+
+# Figure: Tendances des valeurs p moyennes du test de Durbin-Watson par âge et sexe
+p_trends_dw <- ggplot(filter(trends_data_diag, diag_metric == "dw_p"), aes(x = age, y = mean_p, color = sex, group = sex)) +
+  geom_line(linewidth = 1) +
+  geom_ribbon(aes(ymin = mean_p - se_p, ymax = mean_p + se_p, fill = sex), alpha = 0.2, color = NA) +
+  geom_hline(yintercept = 0.05, linetype = "dashed", color = "black") +
+  labs(title = "Tendances des valeurs p du test de Durbin-Watson par âge et sexe", x = "Âge", y = "Valeur p moyenne", color = "Sexe", fill = "Sexe") +
+  theme_bw()
+ggsave("fig_trends_dw_p.png", p_trends_dw, width = 8, height = 5)
+
+# Figure supplémentaire : Distribution des statistiques du test de Durbin-Watson (dw_stat)
+p_dw_stat_hist <- ggplot(ds, aes(x = dw_stat)) +
+  geom_histogram(bins = 20, fill = "gray", alpha = 0.7) +
+  geom_density(aes(y = after_stat(count)), color = "black") +
+  geom_vline(xintercept = 2, linetype = "dashed", color = "red") +  # Seuil théorique pour absence d'autocorrélation
+  labs(title = "Distribution des statistiques du test de Durbin-Watson", x = "Statistique DW", y = "Nombre") +
+  theme_bw()
+ggsave("fig_dw_stat_histogram.png", p_dw_stat_hist, width = 6, height = 4)

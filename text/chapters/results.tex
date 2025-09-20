@@ -278,7 +278,226 @@ Les paramètres \(\mu_{s,a,g}\) sont visualisés sur la carte de la Figure~\ref{
 
 \subsection{Méthode des moindres carrés ordinaires}
 
-\lipsum[1-3]
+Ici, on présente les résultats des visualisations générées à partir des modèles de régression linéaire ordinaire, en mettant l'accent sur les tests diagnostiques et les métriques de performance. Chaque graphique est décrit en détail, avec une explication de sa relation au test correspondant ou à la métrique évaluée. Les figures illustrent les distributions, tendances et diagnostics stratifiés par âge et sexe, facilitant l'interprétation des hypothèses sous-jacentes aux modèles.
+
+\paragraph{Métriques Globales de Performance}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/fig_metrics_global_r2.png}
+	\caption{Distribution du coefficient de détermination $R^2$ sur l'ensemble des modèles. Ce graphique montre la variabilité de la qualité d'ajustement des modèles, sans lien direct à un test spécifique, mais il reflète l'explication globale de la variance par les concentrations d'arsenic.}
+	\label{fig:global_r2}
+\end{figure}
+
+Le graphique de la Figure~\ref{fig:global_r2} illustre la distribution du $R^2$, indiquant comment les modèles capturent les associations entre l'exposition à l'arsenic et la prévalence des maladies respiratoires.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/fig_metrics_global_p.png}
+	\caption{Distribution des valeurs $p$ associées à la pente des modèles de régression. La ligne pointillée à 0,05 marque le seuil de signification statistique, aidant à identifier les associations significatives sans référence à un test diagnostique spécifique.}
+	\label{fig:global_p}
+\end{figure}
+
+La Figure~\ref{fig:global_p} met en évidence la proportion de modèles où la pente est significative, soutenant l'évaluation de l'impact de l'arsenic.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/fig_validation_comparison.png}
+	\caption{Comparaison entre le RMSE (validation croisée à 10 plis) et le $R^2$, coloré par âge et avec formes par sexe. Ce graphique évalue la performance prédictive, liée à la validation du modèle plutôt qu'à un test diagnostique.}
+	\label{fig:val_comp}
+\end{figure}
+
+La Figure~\ref{fig:val_comp} démontre les relations entre précision et ajustement, avec des étiquettes pour les cas significatifs.
+
+\paragraph{Tendances par Âge et Sexe}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/fig_trends_r_squared.png}
+	\caption{Tendances du $R^2$ moyen par âge et sexe, avec intervalles de confiance. Ce graphique révèle des variations démographiques dans la qualité d'ajustement des modèles.}
+	\label{fig:trends_r2}
+\end{figure}
+
+La Figure~\ref{fig:trends_r2} illustre comment le $R^2$ évolue avec l'âge, informant sur les groupes les plus affectés.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/fig_trends_rmse_cv.png}
+	\caption{Tendances du RMSE moyen (validation croisée) par âge et sexe. Il évalue la précision prédictive stratifiée.}
+	\label{fig:trends_rmse}
+\end{figure}
+
+La Figure~\ref{fig:trends_rmse} complète l'analyse de performance, montrant des tendances similaires au $R^2$.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/fig_trends_num_influential.png}
+	\caption{Tendances du nombre moyen de points influents par âge et sexe, lié aux mesures d'influence comme la distance de Cook et le levier.}
+	\label{fig:trends_infl}
+\end{figure}
+
+La Figure~\ref{fig:trends_infl} identifie les groupes où les observations influentes sont plus fréquentes, aidant à détecter les points atypiques.
+
+\paragraph{Diagnostics des Outliers et de l'Influence}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/fig_outliers_distribution.png}
+	\caption{Distribution du nombre de valeurs aberrantes par âge et sexe, basée sur le test des résidus studentisés avec correction de Bonferroni. Ce graphique quantifie les violations potentielles des hypothèses de normalité et d'homoscédasticité.}
+	\label{fig:outliers}
+\end{figure}
+
+La Figure~\ref{fig:outliers} relie directement au test des outliers, montrant où les valeurs aberrantes impactent les modèles.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/fig_leverage_boxplot.png}
+	\caption{Boîtes à moustaches des valeurs de levier par âge et sexe. Le seuil indique les points à fort levier, liés à la détection d'influence.}
+	\label{fig:leverage}
+\end{figure}
+
+La Figure~\ref{fig:leverage} visualise les leviers, aidant à identifier les observations extrêmes dans l'espace des prédicteurs.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/fig_cooks_distance_boxplot.png}
+	\caption{Boîtes à moustaches des distances de Cook par âge et sexe. Ce graphique évalue l'influence globale des observations sur les coefficients du modèle.}
+	\label{fig:cooks}
+\end{figure}
+
+La Figure~\ref{fig:cooks} est liée aux mesures d'influence, indiquant les points qui altèrent significativement les estimations.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/fig_regions_map_improved.png}
+	\caption{Carte choroplèthe des leviers moyens par région. Elle spatialise l'influence, complémentant les diagnostics par âge et sexe.}
+	\label{fig:map}
+\end{figure}
+
+La Figure~\ref{fig:map} fournit une perspective géographique sur les leviers.
+
+\paragraph{Diagnostics des Tests sur les Résidus}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/fig_reset_p_histogram.png}
+	\caption{Distribution des valeurs $p$ du test RESET. Ce graphique évalue la spécification fonctionnelle du modèle, avec le seuil à 0,05 indiquant une forme linéaire adéquate sous l'hypothèse nulle.}
+	\label{fig:reset_hist}
+\end{figure}
+
+La Figure~\ref{fig:reset_hist} montre que la plupart des modèles respectent la linéarité, validant l'hypothèse.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/fig_shapiro_p_histogram.png}
+	\caption{Distribution des valeurs $p$ du test de Shapiro-Wilk. Il teste la normalité des résidus, essentiel pour les inférences valides.}
+	\label{fig:shapiro_hist}
+\end{figure}
+
+La Figure~\ref{fig:shapiro_hist} révèle les cas de non-normalité, potentiellement affectant la fiabilité des tests t et F.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/fig_bp_p_histogram.png}
+	\caption{Distribution des valeurs $p$ du test de Breusch-Pagan. Ce test vérifie l'homoscédasticité des résidus.}
+	\label{fig:bp_hist}
+\end{figure}
+
+La Figure~\ref{fig:bp_hist} identifie les hétéroscédasticités, suggérant des ajustements si nécessaire.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/fig_dw_p_histogram.png}
+	\caption{Distribution des valeurs $p$ du test de Durbin-Watson. Il détecte l'autocorrélation des résidus.}
+	\label{fig:dw_hist}
+\end{figure}
+
+La Figure~\ref{fig:dw_hist} évalue l'indépendance des résidus, critique pour les données agrégées spatialement.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/fig_dw_stat_histogram.png}
+	\caption{Distribution des statistiques du test de Durbin-Watson. La ligne à 2 indique l'absence d'autocorrélation.}
+	\label{fig:dw_stat}
+\end{figure}
+
+La Figure~\ref{fig:dw_stat} complète l'analyse en montrant les valeurs brutes des statistiques.
+
+\paragraph{Tendances des Tests Diagnostiques}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/fig_trends_reset_p.png}
+	\caption{Tendances des valeurs $p$ moyennes du test RESET par âge et sexe.}
+	\label{fig:trends_reset}
+\end{figure}
+
+La Figure~\ref{fig:trends_reset} stratifie les résultats du test RESET, montrant des variations démographiques.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/fig_trends_shapiro_p.png}
+	\caption{Tendances des valeurs $p$ moyennes du test de Shapiro-Wilk par âge et sexe.}
+	\label{fig:trends_shapiro}
+\end{figure}
+
+La Figure~\ref{fig:trends_shapiro} illustre des tendances en normalité.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/fig_trends_bp_p.png}
+	\caption{Tendances des valeurs $p$ moyennes du test de Breusch-Pagan par âge et sexe.}
+	\label{fig:trends_bp}
+\end{figure}
+
+La Figure~\ref{fig:trends_bp} évalue l'homoscédasticité stratifiée.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/fig_trends_dw_p.png}
+	\caption{Tendances des valeurs $p$ moyennes du test de Durbin-Watson par âge et sexe.}
+	\label{fig:trends_dw}
+\end{figure}
+
+La Figure~\ref{fig:trends_dw} montre des tendances en autocorrélation.
+
+\paragraph{Analyses Supplémentaires}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/plot_r2_histogram.png}
+	\caption{Distribution alternative du $R^2$.}
+	\label{fig:plot_r2}
+\end{figure}
+
+La Figure~\ref{fig:plot_r2} fournit une vue complémentaire.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/plot_r2_heatmap.png}
+	\caption{Carte de chaleur du $R^2$ moyen par âge et sexe.}
+	\label{fig:heatmap_r2}
+\end{figure}
+
+La Figure~\ref{fig:heatmap_r2} synthétise les variations.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/plot_slope_histogram.png}
+	\caption{Distribution des estimations de pente.}
+	\label{fig:slope_hist}
+\end{figure}
+
+La Figure~\ref{fig:slope_hist} indique la direction des associations.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figures/diagnostic_graphics/plot_slope_vs_significance.png}
+	\caption{Diagramme de dispersion de la pente versus $-\log_{10}(p)$, avec taille par nombre de points influents.}
+	\label{fig:slope_sig}
+\end{figure}
+
+La Figure~\ref{fig:slope_sig} identifie les associations significatives, intégrant les mesures d'influence.
 
 
 
