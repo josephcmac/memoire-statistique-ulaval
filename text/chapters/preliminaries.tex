@@ -69,6 +69,97 @@ où $B$ est le nombre d'échantillons bootstrap, $\hat{\theta}^{*b}$ est la stat
 
 Des variantes incluent le bootstrap paramétrique, où les rééchantillons sont tirés d'une distribution ajustée à l'échantillon original.
 
+\section{Méthode des moindres carrés ordinaire}
+
+La méthode des moindres carrés ordinaires est un outil statistique fondamental pour modéliser la relation linéaire entre une variable réponse $y$ et une ou plusieurs variables explicatives $x$. Elle sera employée dans la méthodologie pour estimer les associations entre les concentrations d'arsenic atmosphérique (transformée par le logarithme) et la prévalence des maladies respiratoires chroniques (transformée par log-cotes), stratifiées par âge et sexe. Cette section introduit le modèle, ses hypothèses, les méthodes d'estimation, ainsi que les outils de validation et de diagnostic essentiels pour en vérifier la validité des modèles linéaires.
+
+\subsection{Modèle et hypothèses}
+Considérons un échantillon de $n$ observations bivariées $(x_i, y_i)$ pour $i = 1, \dots, n$. Le modèle de régression linéaire simple postule :
+\begin{equation}
+	y_i = \alpha + \beta x_i + \epsilon_i,
+\end{equation}
+où $\alpha$ est l'ordonnée à l'origine, $\beta$ la pente (coefficient de régression), et $\epsilon_i$ les termes d'erreur, supposés indépendants et identiquement distribués selon une loi normale $\mathcal{N}(0, \sigma^2)$.
+
+Les hypothèses principales de la méthode des moindres carrés ordinaires, avec une seule variable explicative $x$, sont :
+\begin{enumerate}
+	\item \emph{Linéarité} : La relation entre $x$ et $y$ est linéaire en les paramètres.
+	\item \emph{Indépendance} : Les erreurs $\epsilon_i$ sont indépendantes.
+	\item \emph{Homoscédasticité} : La variance des erreurs est constante, $\mathrm{Var}(\epsilon_i) = \sigma^2$.
+	\item \emph{Normalité} : Les erreurs suivent une distribution normale.
+\end{enumerate}
+La violation de ces hypothèses peut entraîner des estimations biaisées ou inefficaces, rendant nécessaire des diagnostics rigoureux.
+
+\subsection{Estimation des paramètres}
+En vertu du théorème de Gauss–Markov \citep{monahan2008primer}, l'estimateur des moindres carrés, qui minimise la somme des carrés des résidus
+\begin{equation}
+	\left(\hat{\alpha}, \hat{\beta}\right) = \arg\min_{\left(\alpha, \beta \right)} \sum_{i=1}^n (y_i - \alpha - \beta x_i)^2,
+\end{equation}
+est le meilleur estimateur linéaire non biaisé. Les solutions explicites sont :
+\begin{eqnarray}
+	\hat{\beta} &=& \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^n (x_i - \bar{x})^2}, \\
+	\hat{\alpha} &=& \bar{y} - \hat{\beta} \bar{x},
+\end{eqnarray}
+où $\bar{x}$ et $\bar{y}$ sont les moyennes empiriques. La variance résiduelle est estimée par
+\begin{equation}
+	\hat{\sigma}^2 = \frac{1}{n-2} \sum_{i=1}^n \hat{\epsilon}_i^2,
+\end{equation}
+avec
+\begin{equation}
+	\hat{\epsilon}_i = y_i - \hat{\alpha} - \hat{\beta} x_i.
+\end{equation}
+Les métriques de qualité d'ajustement incluent le coefficient de détermination
+\begin{equation}
+	R^2 = 1 - \frac{\sum_{i=1}^n \hat{\epsilon}_i^2}{\sum_{i=1}^n (y_i - \bar{y})^2},
+\end{equation}
+qui mesure la proportion de variance expliquée par le modèle, et le $R^2$ ajusté tenant compte du nombre de paramètres :
+\begin{equation}
+	R^2_{\mathrm{adj}} = 1 - (1 - R^2) \frac{n-1}{n-2}.
+\end{equation}
+La significativité globale est évaluée par la statistique
+\begin{equation}
+	F = \frac{(n-2) R^2}{1 - R^2},
+\end{equation}
+suivant une loi de Fisher $F(1, n-2)$ sous l'hypothèse nulle $\beta = 0$. Les tests individuels pour $\alpha$ et $\beta$ reposent sur des statistiques $t$,
+\begin{equation}
+	t = \frac{\hat{\beta}}{\mathrm{SE}(\hat{\beta})},
+\end{equation}
+suivant une loi de Student $t(n-2)$, où
+\begin{equation}
+	\mathrm{SE}(\hat{\beta}) = \frac{\hat{\sigma}}{\sqrt{\sum_{i=1}^n (x_i - \bar{x})^2}}.
+\end{equation}
+
+\subsection{Validation du modèle}
+La validation croisée \citep{James2021, hastie2009elements} évalue la performance prédictive. Dans la validation croisée à $k$ plis (e.g., $k=10$), l'échantillon est divisé en $k$ sous-ensembles ; le modèle est ajusté sur $k-1$ plis et testé sur le pli restant, répété $k$ fois. La racine carrée de l'erreur quadratique moyenne (RMSE) agrégée mesure l'erreur prédictive :
+\begin{equation}
+	\mathrm{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^n (y_i - \hat{y}_i^{(-i)})^2},
+\end{equation}
+où $\hat{y}_i^{(-i)}$ est la prédiction pour l'observation $i$ exclue de l'ajustement. Cela aide à détecter le surajustement et à comparer des modèles.
+
+\subsection{Diagnostics du modèle}
+Pour valider les hypothèses, ainsi que pour détecter des points d'influence \citep{cook1982residuals}, plusieurs tests et mesures sont employés :
+\begin{itemize}
+	\item \emph{Linéarité et spécification} : Le test RESET\footnote{Acronyme en anglais : \emph{Regression Equation Specification Error Test}.} \citep{ramsey1969tests} vérifie si des puissances supérieures des prédictions améliorent le modèle, testant l'hypothèse nulle d'une forme linéaire adéquate.
+	\item \emph{Normalité des résidus} : Le test de Shapiro-Wilk \citep{shapiro1965analysis} évalue si les résidus $\hat{\epsilon}_i$ suivent une distribution normale, avec statistique $W$ proche de 1 indiquant la normalité.
+	\item \emph{Homoscédasticité} : Le test de Breusch-Pagan \citep{breusch1979simple} examine si la variance des résidus dépend des prédicteurs, via une régression auxiliaire des carrés des résidus sur $x$.
+	\item \emph{Indépendance des résidus} : Le test de Durbin-Watson \citep{durbin1950testing} détecte l'autocorrélation de premier ordre, avec statistique $d \approx 2(1 - \rho)$, où $\rho$ est le coefficient d'autocorrélation ; des valeurs proches de 2 indiquent l'absence d'autocorrélation.
+	\item \emph{Valeurs aberrantes} : Les résidus studentisés \citep{belsley1980regression} $|r_i| > 3$ signalent des outliers potentiels ; un test formel avec correction de Bonferroni ajuste les valeurs $p$ pour des comparaisons multiples.
+	\item \emph{Points influents} : Le levier \citep{belsley1980regression}
+	\begin{equation}
+		h_{ii} = \frac{\partial\hat{y}_i}{\partial y_i}
+	\end{equation}
+	mesure l'éloignement de $x_i$ ; un seuil courant est $2 \times 2 / n = 4/n$. La distance de Cook
+	\begin{equation}
+		D_i = \frac { \sum_{j=1}^n \left( \widehat{y\,}_j - \widehat{y\,}_{j}^{(-i)} \right)^2 } {p \hat{\sigma}^2},
+	\end{equation}
+	où $p$ est le rang du modèle et $\hat{\sigma}^2$ est l'erreur quadratique moyenne,
+	quantifie l'influence sur les coefficients du modèle de régression, avec seuil $4/(n-2)$. DFFITS \citep{belsley1980regression}
+	\begin{equation}
+		\text{DFFITS} = t_{i}^{(-i)} \sqrt{\frac{h_{ii}}{1-h_{ii}}},
+	\end{equation}
+	où $t_{i}^{(-i)}$ est le résidu studentisé extérieurement,
+	mesure le changement standardisé dans les prédictions.
+\end{itemize}
+
 \section{Régression robuste}
 La régression robuste \citep{andersen2008modern} vise à estimer les paramètres d'un modèle linéaire en minimisant l'impact des valeurs aberrantes, contrairement à la méthode des moindres carrés ordinaire qui est sensible à ces anomalies. Elle est particulièrement utile dans les contextes où les données peuvent contenir des outliers ou être distribuées selon une loi à queues épaisses \citep{taleb2020statistical}.
 

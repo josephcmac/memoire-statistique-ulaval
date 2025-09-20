@@ -71,25 +71,38 @@ La distance de Fisher-Rao entre deux distributions $\mathcal{N}(\mu_1, \sigma_1^
 La divergence de Kullback-Leibler, mesure asymétrique de dissimilarité, est définie par l'équation~\eqref{eq:kl_normal} du chapitre~\ref{chap:math}. Ses sommes cumulées le long des trajectoires évaluent la directionnalité des changements, une valeur plus élevée signalant une asymétrie accrue dans les transitions distributionnelles.
 
 \section{L'effet de l'arsenic PM$_{2.5}$}
-
 Cette section détaille les méthodes employées pour évaluer l'impact des concentrations d'arsenic dans les particules fines (PM$_{2.5}$) sur la prévalence des maladies respiratoires chroniques (MRC) aux États-Unis, en utilisant des données agrégées de GBD-2021 et de l'EPA. Les analyses reposent sur des agrégations temporelles, des régressions linéaires robustes et des projections géométriques dans l'espace hyperbolique, permettant de quantifier les associations stratifiées par âge et sexe.
 
 \subsection{Agrégation de données}
-
 Pour chaque combinaison de région $s \in \mathcal{S}$ (États des États-Unis), âge $a \in \mathcal{A}$ et sexe $g \in \mathcal{G}$, les paramètres de la prévalence transformée en logit (base 10) sont agrégés sur les années $t \in \mathcal{T}$ (1990-2019), avec $n = \#\mathcal{T}$ :
 \[
 \mu_{s,a,g} = \frac{1}{n} \sum_{k=1}^n \mu_{s,t_k,a,g}, \quad \sigma_{s,a,g} = \frac{1}{n} \sqrt{\sum_{k=1}^n \sigma_{s,t_k,a,g}^2},
 \]
 où les éléments de $\mathcal{T}$ sont ordonnés chronologiquement comme $t_1 < t_2 < \dots < t_n$. Cette agrégation réduit la variabilité temporelle en combinant les moyennes et en ajustant les écarts-types pour refléter l'incertitude cumulée. Les concentrations d'arsenic $C_s \sim \mathcal{N}(\mu_s, \sigma_s^2)$ sont agrégées de manière similaire par État $s$, à partir des données de l'EPA.
 
-\subsection{Régression linéaire robuste}
+\subsection{Méthode des moindres carrés ordinaires}
+Pour chaque combinaison d'âge $a \in \mathcal{A}$ et de sexe $g \in \mathcal{G}$, les données agrégées de prévalence ($\mu_{s,a,g}$) et d'exposition à l'arsenic ($\mu_s$) sont préparées par filtrage et agrégation par région $s \in \mathcal{S}$, en excluant les valeurs manquantes, afin de former un ensemble de régression comportant au moins trois observations par combinaison $(a, g)$. Ces données sont renommées en $x = \mu_s$ et $y = \mu_{s,a,g}$.
 
-Pour chaque paire $(a, g) \in \mathcal{A} \times \mathcal{G}$, deux modèles de régression linéaire robuste sont ajustés par la méthode des médianes répétées de Siegel : l'un reliant $\mu_{s,a,g}$ à $\mu_s$, et l'autre reliant $\log_{10} \sigma_{s,a,g}$ à $\mu_s$. Cette approche capture les effets sur la moyenne et la dispersion de la prévalence. Les estimateurs de pente $\hat{\beta}_{a,g}$ et d'ordonnée à l'origine $\hat{\alpha}_{a,g}$ sont obtenus via des médianes itérées des pentes et intercepts partiels, offrant une robustesse aux outliers avec un point de rupture asymptotique de 50\,\%. 
+Un modèle de régression linéaire ordinaire est ajusté par la méthode des moindres carrés : $y = \alpha + \beta x + \epsilon$, où $\epsilon \sim \mathcal{N}(0, \sigma^2)$. Les coefficients $\hat{\alpha}$ (ordonnée à l'origine) et $\hat{\beta}$ (pente) sont estimés, accompagnés de leurs valeurs $p$ associées. Les métriques de performance comprennent le coefficient de détermination $R^2$, le $R^2$ ajusté, la statistique $F$ et sa valeur $p$.
+
+Des tests diagnostiques sont réalisés pour valider les hypothèses du modèle (voir sous-section des diagnostics du modèle dans le chapitre~\ref{chap:math}) :
+\begin{itemize}
+	\item Le test RESET évalue la spécification fonctionnelle (hypothèse nulle : forme linéaire adéquate).
+	\item Le test de Shapiro-Wilk vérifie la normalité des résidus.
+	\item Le test de Breusch-Pagan examine l'homoscédasticité des résidus.
+	\item Le test de Durbin-Watson détecte l'autocorrélation des résidus.
+	\item Le test des outliers, basé sur les résidus studentisés, identifie les valeurs aberrantes avec correction de Bonferroni.
+\end{itemize}
+Les points influents sont détectés via la distance de Cook (seuil : $4 / n$, où $n$ est le nombre d'observations) et le levier (seuil : $2p / n$, où $p = 2$ est le nombre de paramètres). Les mesures d'influence, incluant les DFFITS, sont calculées pour chaque observation.
+
+Les résultats diagnostiques (coefficients, métriques, valeurs $p$ des tests, nombre d'outliers et de points influents) sont compilés dans un tableau récapitulatif par combinaison $(a, g)$. Les mesures d'influence détaillées par région sont également enregistrées. Ces sorties soutiennent des visualisations, telles que des histogrammes de $R^2$ et des valeurs $p$ de la pente, des graphiques de tendances par âge et sexe pour $R^2$, le RMSE (évalué par validation croisée à 10 plis, voir sous-section de la validation du modèle dans le chapitre~\ref{chap:math}), et le nombre de points influents, des boîtes à moustaches pour les leviers et distances de Cook, ainsi qu'une carte choroplèthe des leviers moyens par région. Des cartes de chaleur et des diagrammes de dispersion (pente vs. $-\log_{10}(p)$) complètent l'analyse afin d'identifier les associations significatives.
+
+\subsection{Régression linéaire robuste}
+Pour chaque paire $(a, g) \in \mathcal{A} \times \mathcal{G}$, deux modèles de régression linéaire robuste sont ajustés par la méthode des médianes répétées de Siegel : l'un reliant $\mu_{s,a,g}$ à $\mu_s$, et l'autre reliant $\log_{10} \sigma_{s,a,g}$ à $\mu_s$. Cette approche capture les effets sur la moyenne et la dispersion de la prévalence. Les estimateurs de pente $\hat{\beta}_{a,g}$ et d'ordonnée à l'origine $\hat{\alpha}_{a,g}$ sont obtenus via des médianes itérées des pentes et intercepts partiels, offrant une robustesse aux outliers avec un point de rupture asymptotique de 50\,\%.
 
 Les intervalles de confiance à 95\,\% sont dérivés par bootstrap non paramétrique ($B = 1\,000$ rééchantillons des régions $s$), où les modèles sont réajustés à chaque itération. La déviation absolue médiane (MAD) des résidus, corrigée pour la consistance gaussienne, quantifie la dispersion robuste autour des ajustements. Des statistiques de test (valeur V et p-valeur associée) évaluent la significativité des coefficients $\hat{\beta}_{a,g}$ contre l'hypothèse nulle d'absence d'effet.
 
 \subsection{Quantification géométrique des trajectoires}
-
 Les estimateurs $\hat{\beta}_{a,g}$ et les MAD associées sont projetés dans le demi-plan de Poincaré $\mathbb{H} = \{ z \in \mathbb{C} \mid \Im(z) > 0 \}$ via $z_{a,g} = \hat{\beta}_{a,g} + i \cdot \mathrm{MAD}_{a,g}$, modélisant les évolutions par âge comme des trajectoires sur une variété hyperbolique. Les dissimilarités entre tranches d'âge consécutives sont mesurées par la distance de Fisher-Rao (équation~\eqref{eq:fr_normal} du chapitre~\ref{chap:math}) et la divergence de Kullback-Leibler (équation~\eqref{eq:kl_normal} du chapitre~\ref{chap:math}), avec leurs sommes cumulées quantifiant l'ampleur et la directionnalité des changements globaux, stratifiés par sexe.
 
 Par ailleurs, les régions $s$ sont ordonnées par valeurs croissantes de $\mu_s$ et regroupées en clusters de tailles variables (par exemple, 1, 3 ou 17 régions par groupe). Pour chaque cluster, des paramètres agrégés de prévalence ($\mu$ et $\sigma$) sont calculés, formant des trajectoires dans le plan $(\mu, \sigma)$ qui visualisent les gradients d'effet liés à l'exposition croissante à l'arsenic, avec des barres d'erreur indiquant l'incertitude.
